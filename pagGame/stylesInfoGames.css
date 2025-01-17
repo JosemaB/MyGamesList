@@ -1,12 +1,36 @@
-#visuales{
-    max-width: 1200px;
+/* Media Query para pantallas de escritorio (mayores a 1024px) */
+@media (min-width: 992px) {}
+
+/* Media Query para tabletas y móviles grandes (entre 768px y 1024px) */
+@media (max-width: 1023px) and (min-width: 768px) {}
+
+/* Media Query para móviles pequeños (menos de 768px) */
+@media (max-width: 767px) {}
+
+
+.row>* {
+    /*Quitamos el padin y margin por decto de bostrap*/
+    padding-left: 0;
+    padding-right: 0;
+    border-radius: 0;
 }
-#visuales .img-principalV img{
+
+.img-principalV img {
     max-height: 700px;
+    object-fit: cover;
+    object-position: center;
 }
-#visuales .img-SecundariaV img{
-    max-height: 400px; 
+
+.card {
+    border: 0;
+    background: none;
+    align-items: center;
 }
-.img-4V  img{
-    max-height: 200px;
+
+img {
+    /* Se ajusta al ancho de la celda */
+    /* Mantiene la proporción */
+    padding: 5px;
+    border-radius: 20px;
+    /* Bordes redondeados */
 }

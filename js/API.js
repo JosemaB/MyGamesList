@@ -60,6 +60,16 @@ export async function detallesDelJuego(id) {
     }
 }
 
+export async function mostrarCapturas(id) {
+    try {
+        const resultado = await fetch(`https://api.rawg.io/api/games/${id}/screenshots?key=${apiKey}`);
+        const trailer = await resultado.json();
+        return trailer;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 export async function listaDeJuegosPorNombre(input) {
     const resultadosForm = document.querySelector('#resultadosForm');
 

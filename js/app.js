@@ -267,7 +267,7 @@ function iniciarApp() {
             const imgElement = document.createElement('img');
             imgElement.src = juego['background_image']; // Fuente de la imagen
             imgElement.classList.add('img-fluid');
-            imgElement.alt = '...'; // Texto alternativo
+            imgElement.alt = juego['name']; // Texto alternativo
 
             // Agregar la imagen a la columna
             colImageDiv.appendChild(imgElement);
@@ -282,7 +282,7 @@ function iniciarApp() {
 
             // Crear el título <h5 class="card-title">
             const titleElement = document.createElement('h5');
-            titleElement.classList.add('card-title');
+            titleElement.classList.add('card-title', 'fw-bold');
             titleElement.textContent = juego['name']; // Texto del título
 
             // Agregar el título al contenedor de la tarjeta

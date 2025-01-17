@@ -1,9 +1,20 @@
-/*Pantallas grandes*/
+/* Media Query para pantallas de escritorio (mayores a 1024px) */
 @media (min-width: 992px) {
   #form {
-      width: 500px;
+    width: 500px;
   }
 }
+
+/* Media Query para tabletas y móviles grandes (entre 768px y 1024px) */
+@media (max-width: 1023px) and (min-width: 768px) {
+
+}
+
+/* Media Query para móviles pequeños (menos de 768px) */
+@media (max-width: 767px) {
+  
+}
+
 /* Aplica la fuente Oswald a todo el contenido */
 body {
   font-family: 'Oswald', sans-serif;
@@ -74,7 +85,7 @@ body {
 /*Search*/
 #form {
   position: relative;
-
+  
 }
 
 .form-control:focus {
@@ -111,17 +122,22 @@ body {
   border-radius: 0;
   padding: 0;
   color: white;
+  text-overflow: ellipsis;
+  text-wrap: nowrap;
+  overflow: hidden;
 }
 
 #resultadosForm .card-title {
   font-size: 15px;
 
 }
+
 #resultadosForm img {
   height: 100px;
-  width: 150px;
-  object-fit: cover;
+  width: 250px;
+  object-position: center;
 }
+
 
 
 #resultadosForm a.text-decoration-none:hover .card-title {
@@ -129,6 +145,7 @@ body {
   /* Cambia el color del título al pasar el ratón */
   transition: color 0.3s ease;
   /* Animación suave para el título */
+
 }
 
 #resultadosForm button {
