@@ -1,0 +1,318 @@
+import { listaJuegosPorFiltro, catalogoPrincipal, cardsMain, listaDeJuegosPorNombre } from "./API.js";
+import { mostrarPlataforma, adjustSelectToSelectedOption, limpiarHTML, quitarContenidoAdulto, generos, spinner } from "./funciones.js";
+
+document.addEventListener('DOMContentLoaded', iniciarApp);
+function iniciarApp() {
+    //Dejo los query selector aqui para que sean mas intuitivos
+    const resultado20Games = document.querySelector('#resultado20Juegos');
+    const catalogoMain = document.querySelector('#catalogoPrincipal');
+    const cards = document.querySelector('#targetasPrincipales');
+    const select = document.querySelector('#dropdownSelect');
+
+    /*Form*/
+    const resultadosForm = document.querySelector('#resultadosForm');
+    // Obtener el campo de búsqueda
+    const searchInput = document.querySelector('#searchInput');
+
+    //Eventos
+    // Ajustar el ancho al cambiar la selección select
+    select.addEventListener('change', (e) => {
+        adjustSelectToSelectedOption(select);
+        limpiarHTML(resultado20Games); //Limpiamos para que se refresque los juegos y no se pongan en si los otros 20 hacia abajo
+        mostrarJuegos(e);
+    });
+
+    // Añadir un event listener para el evento 'input'
+    searchInput.addEventListener('input', () => {
+
+        // Si ya hay un intervalo en ejecución, lo detenemos
+        clearInterval(searchInput.intervalId);
+
+        // Iniciar un nuevo intervalo de 500ms
+        searchInput.intervalId = setInterval(() => {
+
+            if (searchInput.value) {
+                mostrarBuscador(searchInput.value); //Aqui seria la funcion
+            } else {
+                limpiarHTML(resultadosForm); //Borramos el div creado
+            }
+        }, 500); // Se ejecuta cada 500ms mientras el usuario escribe
+
+        // Resetear el temporizador para detectar cuando el usuario deja de escribir
+        clearTimeout(searchInput.typingTimer);
+        searchInput.typingTimer = setTimeout(() => {
+            clearInterval(searchInput.intervalId);  // Detener el intervalo cuando el usuario deje de escribir
+        }, 500); // Detener después de 500ms sin que el usuario escriba
+    });
+
+    /*Para cuando el usuario quitae el foco*/ 
+    searchInput.addEventListener('focus', () => {/*Por si hay contenido en el foco buscaria */
+        if(searchInput.value){
+            mostrarBuscador(searchInput.value); 
+        }
+     });
+    /*Para cuando el usuario quitae el foco*/ 
+    searchInput.addEventListener('focusout', () => {
+       limpiarHTML(resultadosForm);
+    });
+
+
+    mostrarCatalogoPrincipal();
+    mostrarMainCards();
+    mostrarJuegos();
+
+    async function mostrarCatalogoPrincipal() {
+        const catalogo = await catalogoPrincipal();
+
+        catalogo["results"].forEach((juego, index) => {
+            const indicators = catalogoMain.querySelector('.carousel-indicators');
+            indicators.innerHTML += `<button type="button" data-bs-target="#catalogoPrincipal" data-bs-slide-to="${index}" ${index === 0 ? 'class="active' : ''} 
+            aria-current="true" aria-label="Slide ${index}"></button>`;
+
+            const divCarousel = catalogoMain.querySelector('.carousel-inner');
+            const divItem = document.createElement('div');
+            divItem.classList.add('carousel-item'); // Añadimos las clases de Bootstrap
+            if (index === 0) {
+                divItem.classList.add('active', 'data-bs-interval="8000"');
+            } else {
+                divItem.classList.add('data-bs-interval="2000"');
+            }
+            divItem.innerHTML +=
+                ` 
+                    <img src="${juego["background_image"]}?q=50" class="d-block" alt=""${juego["name"]}"">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5 class="fw-bold">${juego["name"]}</h5>
+                    </div>
+            `;
+            divCarousel.appendChild(divItem);
+        });
+
+
+    }
+
+    async function mostrarMainCards() {
+        const articulos = await cardsMain();
+        articulos["results"].forEach((juego) => {
+            const div = document.createElement('div');
+
+            div.classList.add('card', 'custom-card', 'text-bg-dark', 'col-2', 'col-xxl-12');
+
+            div.innerHTML +=
+                ` 
+                <img src="${juego["background_image"]}" class="card-img" alt="${juego["name"]}">
+                <div class="card-img-overlay">
+                    <h5 class=" bordeNegro card-title">${juego["name"]}</h5>
+                    <p class="card-text d-flex justify-content-between text-uniform">
+                        <span class="d-none d-sm-inline">
+                            <strong>Calificación:</strong> 
+                            <span class="badge bg-success">${juego["rating"] * 2}</span>
+                        </span>
+                        <span class="bg-dark text-warning fw-bold rounded-3 p-1 d-none d-xxl-inline">
+                            <i class="bi bi-star-fill"></i> ${juego["ratings_count"]} valoraciones
+                        </span>
+                    </p>
+                </div>
+            `;
+            cards.appendChild(div);
+        });
+
+    }
+
+    async function mostrarJuegos(event = null) {
+        let ordering = "";  //Esta variable recogera el tipo de filtro que se hara
+        if (event) {
+            if (event.target.value === "mejorValorados") {
+                ordering = "-rating ";
+
+            } else if (event.target.value === "masRecientes") {
+                // Obtener la fecha actual
+                const currentDate = new Date();
+
+                // Obtener el año actual
+                const currentYear = currentDate.getFullYear();
+
+                // Calcular la fecha de 6 meses antes
+                const sixMonthsAgo = new Date(currentDate);
+                sixMonthsAgo.setMonth(currentDate.getMonth() - 6);
+
+                // Formatear las fechas a formato "YYYY-MM-DD"
+                const formattedCurrentDate = currentDate.toISOString().split('T')[0]; // Año actual en formato YYYY-MM-DD
+                const formattedSixMonthsAgo = sixMonthsAgo.toISOString().split('T')[0]; // 6 meses antes en formato YYYY-MM-DD
+
+                ordering = `-released&dates=${formattedSixMonthsAgo},${formattedCurrentDate}`;
+
+            } else {
+                ordering = "-metacritic";
+
+            }
+        } else {
+            ordering = "-metacritic";
+        }
+
+        const listaDeJuegos = await listaJuegosPorFiltro(ordering);
+
+        const juegosFiltrados = await quitarContenidoAdulto(listaDeJuegos); //Filtramos los juegos para que no haya ningun contenido erotico
+
+        //Usamos Promise.all para esperar todas las promesas
+        juegosFiltrados.slice(0, 20).forEach((juego, index) => {
+            const articulo = document.createElement('article');
+            // Añadiendo múltiples clases correctamente card col-lg-3 
+            articulo.classList.add('card', 'hover-card', 'zindex-0', 'col-lg-3', 'col-md-4', 'col-sm-6', 'mb-2'); // Añadimos las clases de Bootstrap
+            const divTest = document.createElement('div');
+            divTest.classList.add('containerCardTest');
+
+
+            /*Creamos el carrusel para la card de juegos*/
+            const divCarrusel = document.createElement('div');
+            divCarrusel.classList.add('carousel', 'slide', 'carousel-fade');
+            divCarrusel.id = "carousel" + index;
+            divCarrusel.innerHTML +=
+                `
+                <div class="carousel-inner">
+                </div>
+                    `;
+
+            // Seleccionamos la sección interna del carrusel donde irán las imágenes
+            const innerDiv = divCarrusel.querySelector('.carousel-inner');
+
+            juego["short_screenshots"].slice(0, 3).forEach((img, index) => {
+
+                const div = document.createElement('div');
+                div.classList.add('custom-img-size', 'carousel-item'); // Añadimos las clases de Bootstrap
+                if (index === 0) {
+                    div.classList.add('active');
+                }
+
+                div.innerHTML +=
+                    ` 
+                    <img src="${img["image"]}?q=50" class="d-block" alt="${juego["name"]}">
+                    `;
+                innerDiv.appendChild(div);
+            });
+            divCarrusel.innerHTML +=
+                ` 
+                
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousel${index}" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel${index}" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+                `;
+
+            divTest.appendChild(divCarrusel);
+            const geners = generos(juego); //Nos devuelve una lista de generos
+            //Despues de agregar el carrusel agregamos el contenido de la  targeta
+            divTest.innerHTML +=
+                ` 
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">${juego["name"]}</h5>   
+                        <div id="plataformas"></div> 
+                    </div>
+                    <div class="extra-content">
+                        <ul class="list-group fw-bold ">
+                            <li class="list-group-item letraPequena d-flex justify-content-between"><span>Fecha de lanzamiento: </span>${juego["released"]}</li>
+                            <li class="list-group-item letraPequena d-flex justify-content-between"><span>Géneros: </span> ${geners}</li>
+                            <li class="list-group-item letraPequena d-flex justify-content-between"><span>Promedio jugado: </span>${juego["playtime"] == 0 ? "No Disponible" : `${juego["playtime"]} horas`} </li>
+                        </ul>
+                        <p class="d-flex card-text d-flex justify-content-between text-uniform m-2">
+                            <span class="fs-7 d-none d-sm-inline">
+                                <strong class="fw-bold">Calificación:</strong> 
+                                <span class="rounded-5 bg-success fw-bold p-1"> ${!juego["metacritic"] ? "?" : juego["metacritic"]} </span>
+                            </span>
+                            <span class="text-warning fs-7">
+                                <i class="bi bi-star-fill"></i> <span class="fw-bold">${juego["ratings_count"]}  valoraciones </span>
+                            </span>
+                        </p>
+                    </div>
+            `;
+            divTest.querySelector('#plataformas').appendChild(mostrarPlataforma(juego));
+            articulo.appendChild(divTest);
+            resultado20Games.appendChild(articulo);
+        });
+
+    }
+
+    async function mostrarBuscador(input) {
+        
+        limpiarHTML(resultadosForm);
+        
+        const juegos = await listaDeJuegosPorNombre(input);
+        console.log(juegos);
+
+        const juegosFiltrados = await quitarContenidoAdulto(juegos);
+        console.log(juegosFiltrados);
+
+        juegosFiltrados.slice(0, 5).forEach(juego => {
+            // Crear el enlace <a>
+            const aElement = document.createElement('a');
+            aElement.href = 'URL_DESTINO'; // URL de destino
+            aElement.classList.add('text-decoration-none', 'text-dark'); // Clases CSS
+
+            // Crear el contenedor de la tarjeta <div class="card">
+            const cardDiv = document.createElement('div');
+            cardDiv.classList.add('card');
+
+            // Crear la fila <div class="row g-0">
+            const rowDiv = document.createElement('div');
+            rowDiv.classList.add('row', 'g-0');
+
+            // Crear la columna con la imagen <div class="col-md-4">
+            const colImageDiv = document.createElement('div');
+            colImageDiv.classList.add('col-md-4');
+
+            // Crear la imagen <img src="img/logo.png" class="img-fluid" alt="...">
+            const imgElement = document.createElement('img');
+            imgElement.src = juego['background_image']; // Fuente de la imagen
+            imgElement.classList.add('img-fluid');
+            imgElement.alt = '...'; // Texto alternativo
+
+            // Agregar la imagen a la columna
+            colImageDiv.appendChild(imgElement);
+
+            // Crear la columna de texto <div class="col-md-8 d-flex align-items-center">
+            const colTextDiv = document.createElement('div');
+            colTextDiv.classList.add('col-md-8', 'd-flex', 'align-items-center');
+
+            // Crear el contenedor de texto <div class="card-body">
+            const cardBodyDiv = document.createElement('div');
+            cardBodyDiv.classList.add('card-body');
+
+            // Crear el título <h5 class="card-title">
+            const titleElement = document.createElement('h5');
+            titleElement.classList.add('card-title');
+            titleElement.textContent = juego['name']; // Texto del título
+
+            // Agregar el título al contenedor de la tarjeta
+            cardBodyDiv.appendChild(titleElement);
+
+            // Agregar el contenedor de texto a la columna
+            colTextDiv.appendChild(cardBodyDiv);
+
+            // Agregar las columnas (imagen y texto) a la fila
+            rowDiv.appendChild(colImageDiv);
+            rowDiv.appendChild(colTextDiv);
+
+            // Agregar la fila al contenedor de la tarjeta
+            cardDiv.appendChild(rowDiv);
+
+            // Agregar la tarjeta al enlace <a>
+            aElement.appendChild(cardDiv);
+            // Ahora puedes agregar el <a> a cualquier parte de tu documento, por ejemplo, al body:
+            resultadosForm.appendChild(aElement);
+        });
+
+        if (juegosFiltrados.length > 5) {
+            // Crear el botón <button>
+            const buttonElement = document.createElement('button');
+            buttonElement.type = 'button'; // Tipo de botón
+            buttonElement.classList.add('fw-bold', 'btn', 'btn-lg', 'btn-block'); // Clases CSS
+            buttonElement.textContent = 'Más resultados'; // Texto del botón
+
+            // Agregar el botón al body o a cualquier contenedor
+            resultadosForm.appendChild(buttonElement);
+        }
+    }
+}

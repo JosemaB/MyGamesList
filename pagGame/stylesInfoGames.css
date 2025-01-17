@@ -1,0 +1,12 @@
+#visuales{
+    max-width: 1200px;
+}
+#visuales .img-principalV img{
+    max-height: 700px;
+}
+#visuales .img-SecundariaV img{
+    max-height: 400px; 
+}
+.img-4V  img{
+    max-height: 200px;
+}
