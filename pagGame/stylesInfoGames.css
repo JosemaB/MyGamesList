@@ -15,22 +15,116 @@
     border-radius: 0;
 }
 
+
+/*Targeta Pricipal*/
 .img-principalV img {
-    max-height: 700px;
+    height: 100%;
     object-fit: cover;
-    object-position: center;
+    border-radius: 15px;
+    max-height: 500px;
+
 }
 
 .card {
     border: 0;
     background: none;
-    align-items: center;
 }
 
-img {
+.estiloTargetaPrincipal {
+    background-color: #1A233A;
+    /* Fondo oscuro */
+    border-radius: 8px;
+    /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    /* Sombra suave */
+    color: white;
+    /* Texto blanco */
+    /* Espaciado interno */
+    overflow: hidden;
+    /* Evita que el contenido desborde */
+    font-family: 'Arial', sans-serif;
+    /* Fuente legible */
+    line-height: 1.6;
+    /* Espaciado entre líneas */
+ 
+}
+
+
+.estiloTargetaPrincipal .card-title,
+.tituloDelJuego {
+    text-align: center;
+    font-size: 40px;
+    color: white; /* Texto blanco */
+    font-weight: bold; /* Hacer el texto más grueso para destacar */
+    text-transform: uppercase; /* Opcional: poner el texto en mayúsculas */
+    
+    /* Añadir un contorno alrededor del texto */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+
+    /* Fondo de color oscuro para el contorno */
+    padding: 10px 20px; /* Espaciado interno para que el texto no esté pegado al borde */
+    background-color: #2c376e; /* Fondo negro con algo de transparencia */
+    border-radius: 15px; /* Bordes redondeados */
+    
+    /* Agregar un borde de color negro */
+    border: 2px solid black; 
+    
+    /* Opcional: agregar un leve efecto de sombra */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    margin-bottom: 20px;
+    text-wrap: balance;
+}
+
+.estiloTargetaPrincipal .card-text {
+    color: white;
+}
+
+.estiloTargetaPrincipal h1,
+.estiloTargetaPrincipal h2,
+.estiloTargetaPrincipal h3,
+.estiloTargetaPrincipal h4,
+.estiloTargetaPrincipal h5 {
+    font-size: 24px;
+    /* Título grande */
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #e6e1e1;
+    /* Destaca el título con color dorado */
+    text-align: center;
+    /* Centrado */
+    border-radius: 20px;
+    border: 1px solid;
+    padding: 5px;
+}
+
+.estiloTargetaPrincipal p {
+    margin: 10px 0;
+    color: #c9d2db;
+    text-align: justify;
+
+}
+
+
+
+
+/*Lista De Detalles del Juego*/
+#myTab .nav-link{
+    color: white;
+}
+#myTab button{
+    background-color: #1A233A;
+    margin: 2px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+
+}
+#myTab button.active {
+    background-color: #2c376e; /* Color de fondo del botón activo */
+}
+.capturasJuego img {
     /* Se ajusta al ancho de la celda */
     /* Mantiene la proporción */
     padding: 5px;
-    border-radius: 20px;
+    border-radius: 10px;
     /* Bordes redondeados */
+    max-height: 380px;
 }

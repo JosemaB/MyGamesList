@@ -40,16 +40,6 @@ export async function listaJuegosPorFiltro(ordering) {
     }
 }
 
-export async function mostrarTrailer(id) {
-    try {
-        const resultado = await fetch(`https://api.rawg.io/api/games/${id}/movies?key=${apiKey}&page_size=5&page=1`);
-        const trailer = await resultado.json();
-        return trailer;
-    } catch (error) {
-        console.log(error);
-    }
-}
-
 export async function detallesDelJuego(id) {
     try {
         const resultado = await fetch(`https://api.rawg.io/api/games/${id}?key=${apiKey}`);
@@ -75,8 +65,7 @@ export async function listaDeJuegosPorNombre(input) {
 
     // Crear y agregar el spinner al contenedor
     const spinnerElement = spinner();
-    spinnerElement.style.margin = '20px auto 0'; // Ajusta el valor según tus necesidades
-
+    spinnerElement.style.margin = '20px auto 20px'; // Ajusta el valor según tus necesidades
     resultadosForm.appendChild(spinnerElement);
     try {
         const resultado = await fetch(`https://api.rawg.io/api/games?search=${input}&key=${apiKey}`);

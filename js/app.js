@@ -1,5 +1,5 @@
 import { listaJuegosPorFiltro, catalogoPrincipal, cardsMain, listaDeJuegosPorNombre } from "./API.js";
-import { mostrarPlataforma, adjustSelectToSelectedOption, limpiarHTML, quitarContenidoAdulto, generos, spinner } from "./funciones.js";
+import { mostrarPlataforma, adjustSelectToSelectedOption, limpiarHTML, quitarContenidoAdulto, generos } from "./funciones.js";
 
 document.addEventListener('DOMContentLoaded', iniciarApp);
 function iniciarApp() {
@@ -16,7 +16,7 @@ function iniciarApp() {
 
     //Eventos
     // Ajustar el ancho al cambiar la selección select
-    select.addEventListener('change', (e) => {
+    select?.addEventListener('change', (e) => {
         adjustSelectToSelectedOption(select);
         limpiarHTML(resultado20Games); //Limpiamos para que se refresque los juegos y no se pongan en si los otros 20 hacia abajo
         mostrarJuegos(e);
@@ -45,21 +45,32 @@ function iniciarApp() {
         }, 500); // Detener después de 500ms sin que el usuario escriba
     });
 
-    /*Para cuando el usuario quitae el foco*/ 
+    /*Para cuando el usuario quitae el foco*/
     searchInput.addEventListener('focus', () => {/*Por si hay contenido en el foco buscaria */
-        if(searchInput.value){
-            mostrarBuscador(searchInput.value); 
+        if (searchInput.value) {
+            mostrarBuscador(searchInput.value);
         }
-     });
-    /*Para cuando el usuario quitae el foco*/ 
-    searchInput.addEventListener('focusout', () => {
-       limpiarHTML(resultadosForm);
+    });
+    /*Para cuando el usuario quitae el foco*/
+    searchInput.addEventListener('focusout', (event) => {
+        // Verifica si el foco va hacia un enlace 'A' o un div con una clase específica
+        const relatedElement = event.relatedTarget;
+
+        if (relatedElement && relatedElement.tagName === 'A') {
+            // Si el foco va hacia un enlace, no limpiamos
+            console.log('Foco hacia un enlace');
+        } else {
+            // Si no es ninguno de los casos anteriores, limpiamos
+            limpiarHTML(resultadosForm);
+        }
     });
 
 
-    mostrarCatalogoPrincipal();
-    mostrarMainCards();
-    mostrarJuegos();
+    if (catalogoMain && resultado20Games) { /*Compruebo si existen para la pagina principal */
+        mostrarCatalogoPrincipal();
+        mostrarMainCards();
+        mostrarJuegos();
+    }
 
     async function mostrarCatalogoPrincipal() {
         const catalogo = await catalogoPrincipal();
@@ -79,7 +90,9 @@ function iniciarApp() {
             }
             divItem.innerHTML +=
                 ` 
-                    <img src="${juego["background_image"]}?q=50" class="d-block" alt=""${juego["name"]}"">
+                    <a href="../pagGame/infoGame.html?id=${juego['id']}" >
+                        <img src="${juego["background_image"]}?q=50" class="d-block" alt=""${juego["name"]}"">
+                    </a>
                     <div class="carousel-caption d-none d-md-block">
                         <h5 class="fw-bold">${juego["name"]}</h5>
                     </div>
@@ -98,8 +111,9 @@ function iniciarApp() {
             div.classList.add('card', 'custom-card', 'text-bg-dark', 'col-2', 'col-xxl-12');
 
             div.innerHTML +=
-                ` 
-                <img src="${juego["background_image"]}" class="card-img" alt="${juego["name"]}">
+                `  
+                <a class="text-decoration-none text-reset" href="../pagGame/infoGame.html?id=${juego['id']}" >
+                    <img src="${juego["background_image"]}" class="card-img" alt="${juego["name"]}">
                 <div class="card-img-overlay">
                     <h5 class=" bordeNegro card-title">${juego["name"]}</h5>
                     <p class="card-text d-flex justify-content-between text-uniform">
@@ -112,6 +126,7 @@ function iniciarApp() {
                         </span>
                     </p>
                 </div>
+                </a>
             `;
             cards.appendChild(div);
         });
@@ -161,13 +176,13 @@ function iniciarApp() {
             const divTest = document.createElement('div');
             divTest.classList.add('containerCardTest');
 
-
             /*Creamos el carrusel para la card de juegos*/
             const divCarrusel = document.createElement('div');
             divCarrusel.classList.add('carousel', 'slide', 'carousel-fade');
             divCarrusel.id = "carousel" + index;
             divCarrusel.innerHTML +=
                 `
+                <a href="../pagGame/infoGame.html?id=${juego['id']}" >
                 <div class="carousel-inner">
                 </div>
                     `;
@@ -200,6 +215,7 @@ function iniciarApp() {
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Next</span>
                 </button>
+                </a>
                 `;
 
             divTest.appendChild(divCarrusel);
@@ -208,9 +224,12 @@ function iniciarApp() {
             divTest.innerHTML +=
                 ` 
                     <div class="card-body">
-                        <h5 class="card-title fw-bold">${juego["name"]}</h5>   
+                        <a class="text-decoration-none text-white link-primary" href="../pagGame/infoGame.html?id=${juego['id']}" >
+                            <h5 class="card-title fw-bold">${juego["name"]}</h5>   
+                        </a>
                         <div id="plataformas"></div> 
                     </div>
+                    
                     <div class="extra-content">
                         <ul class="list-group fw-bold ">
                             <li class="list-group-item letraPequena d-flex justify-content-between"><span>Fecha de lanzamiento: </span>${juego["released"]}</li>
@@ -236,83 +255,100 @@ function iniciarApp() {
     }
 
     async function mostrarBuscador(input) {
-        
+
         limpiarHTML(resultadosForm);
-        
+
         const juegos = await listaDeJuegosPorNombre(input);
         console.log(juegos);
 
         const juegosFiltrados = await quitarContenidoAdulto(juegos);
         console.log(juegosFiltrados);
+        if (juegosFiltrados.length === 0) {
+            const resultadoDiv = document.createElement('div');
+            const sinResultado = document.createElement('p');
+            sinResultado.classList.add('fw-bold');
+            sinResultado.textContent = 'No se encontraron resultados';
+            sinResultado.style.textAlign = 'center';
+            sinResultado.style.margin = '20px auto 20px';
 
-        juegosFiltrados.slice(0, 5).forEach(juego => {
-            // Crear el enlace <a>
-            const aElement = document.createElement('a');
-            aElement.href = 'URL_DESTINO'; // URL de destino
-            aElement.classList.add('text-decoration-none', 'text-dark'); // Clases CSS
+            resultadoDiv.appendChild(sinResultado);
+            resultadosForm.appendChild(resultadoDiv);
+        } else {
+            juegosFiltrados.slice(0, 5).forEach(juego => {
+                // Crear el enlace <a>
+                const aElement = document.createElement('a');
+                aElement.href = `../pagGame/infoGame.html?id=${juego['id']}`; // URL de destino
+                aElement.classList.add('text-decoration-none', 'text-dark'); // Clases CSS
 
-            // Crear el contenedor de la tarjeta <div class="card">
-            const cardDiv = document.createElement('div');
-            cardDiv.classList.add('card');
+                // Crear el contenedor de la tarjeta <div class="card">
+                const cardDiv = document.createElement('div');
+                cardDiv.classList.add('card');
 
-            // Crear la fila <div class="row g-0">
-            const rowDiv = document.createElement('div');
-            rowDiv.classList.add('row', 'g-0');
+                // Crear la fila <div class="row g-0">
+                const rowDiv = document.createElement('div');
+                rowDiv.classList.add('row', 'g-0');
 
-            // Crear la columna con la imagen <div class="col-md-4">
-            const colImageDiv = document.createElement('div');
-            colImageDiv.classList.add('col-md-4');
+                // Crear la columna con la imagen <div class="col-md-4">
+                const colImageDiv = document.createElement('div');
+                colImageDiv.classList.add('imgForm', 'col-4');
 
-            // Crear la imagen <img src="img/logo.png" class="img-fluid" alt="...">
-            const imgElement = document.createElement('img');
-            imgElement.src = juego['background_image']; // Fuente de la imagen
-            imgElement.classList.add('img-fluid');
-            imgElement.alt = juego['name']; // Texto alternativo
+                // Crear la imagen <img src="img/logo.png" class="img-fluid" alt="...">
+                const imgElement = document.createElement('img');
+                imgElement.src = juego['background_image']; // Fuente de la imagen
+                imgElement.classList.add('imgForm', 'col-12');
+                imgElement.alt = juego['name']; // Texto alternativo
 
-            // Agregar la imagen a la columna
-            colImageDiv.appendChild(imgElement);
+                // Agregar la imagen a la columna
+                colImageDiv.appendChild(imgElement);
 
-            // Crear la columna de texto <div class="col-md-8 d-flex align-items-center">
-            const colTextDiv = document.createElement('div');
-            colTextDiv.classList.add('col-md-8', 'd-flex', 'align-items-center');
+                // Crear la columna de texto <div class="col-md-8 d-flex align-items-center">
+                const colTextDiv = document.createElement('div');
+                colTextDiv.classList.add('col-8', 'd-flex', 'align-items-center');
 
-            // Crear el contenedor de texto <div class="card-body">
-            const cardBodyDiv = document.createElement('div');
-            cardBodyDiv.classList.add('card-body');
+                // Crear el contenedor de texto <div class="card-body">
+                const cardBodyDiv = document.createElement('div');
+                cardBodyDiv.classList.add('card-body');
 
-            // Crear el título <h5 class="card-title">
-            const titleElement = document.createElement('h5');
-            titleElement.classList.add('card-title', 'fw-bold');
-            titleElement.textContent = juego['name']; // Texto del título
+                // Crear el título <h5 class="card-title">
+                const titleElement = document.createElement('h5');
+                titleElement.classList.add('col-12', 'card-title', 'fw-bold');
+                titleElement.textContent = juego['name']; // Texto del título
 
-            // Agregar el título al contenedor de la tarjeta
-            cardBodyDiv.appendChild(titleElement);
+                // Agregar el título al contenedor de la tarjeta
+                cardBodyDiv.appendChild(titleElement);
 
-            // Agregar el contenedor de texto a la columna
-            colTextDiv.appendChild(cardBodyDiv);
+                /*Plataforma de juego iconos */
+                const plataformasDelJuego = mostrarPlataforma(juego);
+                plataformasDelJuego.classList.add('col-12');
+                cardBodyDiv.appendChild(plataformasDelJuego);
 
-            // Agregar las columnas (imagen y texto) a la fila
-            rowDiv.appendChild(colImageDiv);
-            rowDiv.appendChild(colTextDiv);
+                // Agregar el contenedor de texto a la columna
+                colTextDiv.appendChild(cardBodyDiv);
 
-            // Agregar la fila al contenedor de la tarjeta
-            cardDiv.appendChild(rowDiv);
+                // Agregar las columnas (imagen y texto) a la fila
+                rowDiv.appendChild(colImageDiv);
+                rowDiv.appendChild(colTextDiv);
 
-            // Agregar la tarjeta al enlace <a>
-            aElement.appendChild(cardDiv);
-            // Ahora puedes agregar el <a> a cualquier parte de tu documento, por ejemplo, al body:
-            resultadosForm.appendChild(aElement);
-        });
+                // Agregar la fila al contenedor de la tarjeta
+                cardDiv.appendChild(rowDiv);
 
-        if (juegosFiltrados.length > 5) {
-            // Crear el botón <button>
-            const buttonElement = document.createElement('button');
-            buttonElement.type = 'button'; // Tipo de botón
-            buttonElement.classList.add('fw-bold', 'btn', 'btn-lg', 'btn-block'); // Clases CSS
-            buttonElement.textContent = 'Más resultados'; // Texto del botón
+                // Agregar la tarjeta al enlace <a>
+                aElement.appendChild(cardDiv);
+                // Ahora puedes agregar el <a> a cualquier parte de tu documento, por ejemplo, al body:
+                resultadosForm.appendChild(aElement);
+            });
 
-            // Agregar el botón al body o a cualquier contenedor
-            resultadosForm.appendChild(buttonElement);
+            if (juegosFiltrados.length > 5) {
+                // Crear el botón <button>
+                const buttonElement = document.createElement('button');
+                buttonElement.type = 'button'; // Tipo de botón
+                buttonElement.classList.add('fw-bold', 'btn', 'btn-lg', 'btn-block'); // Clases CSS
+                buttonElement.textContent = 'Más resultados'; // Texto del botón
+
+                // Agregar el botón al body o a cualquier contenedor
+                resultadosForm.appendChild(buttonElement);
+            }
         }
+
     }
 }

@@ -14,19 +14,102 @@
 
     <!-- Importar JS desde node_modules -->
     <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script>
-    <script type="module" src="./gameScript.js" ></script>
-
-
+    <script type="module" src="./gameScript.js"></script>
+    <script type="module" src="../js/app.js"></script>
 
     <title>Game Info</title>
 </head>
 
 <body>
+    <header class="sticky-top mb-3">
+        <div class="contentNav">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start p-2">
+                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
+                    <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
+                        <use xlink:href="#bootstrap"></use>
+                    </svg>
+                </a>
+
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li><a href="#" class="nav-link px-2 text-white">PC</a></li>
+                    <li><a href="#" class="nav-link px-2 text-white">PlayStation</a></li>
+                    <li><a href="#" class="nav-link px-2 text-white">Xbox</a></li>
+                    <li><a href="#" class="nav-link px-2 text-white">Nintendo</a></li>
+                </ul>
+
+                <!--Poner iconos form-->
+
+                <form id="form" class="col-12 col-lg-auto mb-3 mb-lg-0" role="search">
+                    <input type="search" id="searchInput" class="custom-search form-control" placeholder="Search..."
+                        aria-label="Search">
+                    <div id="resultadosForm">
+                    </div>
+                </form>
+
+
+                <div class="dropdown px-2 text-end">
+                    <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="../img/agregar-usuario.png" alt="mdo" width="45" height="45" class="rounded-circle">
+                    </a>
+                    <ul class="dropdown-menu text-small">
+                        <li><a class="dropdown-item text-white fw-bold" href="#">Iniciar sesion</a></li>
+                        <li><a class="dropdown-item text-white fw-bold" href="#">Resgistrar Usuario</a></li>
+                        <li><a class="dropdown-item text-white fw-bold" href="#">Wishlist</a></li>
+                        <li><a class="dropdown-item text-white fw-bold" href="#">Configuracion</a></li>
+                        <li><a class="dropdown-item text-white fw-bold" href="#">Cerrar Sesion</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </header>
     <main>
         <div class="mainContent">
             <div class="container">
+
                 <div class="row d-flex justify-content-center align-items-center" id="visuales">
-                    
+
+                </div>
+                <div class="row mt-5">
+                    <!-- Navegación de pestañas -->
+                    <ul class="nav" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="info-tab" data-bs-toggle="tab" data-bs-target="#info"
+                                type="button" role="tab" aria-controls="info" aria-selected="true">INFORMACIÓN</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="screenshots-tab" data-bs-toggle="tab"
+                                data-bs-target="#screenshots" type="button" role="tab" aria-controls="screenshots"
+                                aria-selected="false">CAPTURAS DE PANTALLA</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews"
+                                type="button" role="tab" aria-controls="reviews" aria-selected="false">RESEÑAS</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="activation-tab" data-bs-toggle="tab"
+                                data-bs-target="#activation" type="button" role="tab" aria-controls="activation"
+                                aria-selected="false">ACTIVACIÓN</button>
+                        </li>
+                    </ul>
+
+                    <!-- Contenido de las pestañas -->
+                    <!-- Contenido de las pestañas dentro de myTabContent -->
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="info" role="tabpanel" aria-labelledby="info-tab">
+                            
+                        </div>
+                        <div class="tab-pane fade d-flex" id="screenshots" role="tabpanel" aria-labelledby="screenshots-tab">
+                          
+                        </div>
+                        <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+                            
+                        </div>
+                        <div class="tab-pane fade" id="activation" role="tabpanel" aria-labelledby="activation-tab">
+                           
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
