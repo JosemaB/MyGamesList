@@ -1,5 +1,10 @@
 /* Media Query para pantallas de escritorio (mayores a 1024px) */
-@media (min-width: 992px) {}
+@media (min-width: 992px) {
+    .carruselPersonalizadoDJuego {
+        height: auto;
+        width: 800px;
+    }
+}
 
 /* Media Query para tabletas y móviles grandes (entre 768px y 1024px) */
 @media (max-width: 1023px) and (min-width: 768px) {}
@@ -46,7 +51,7 @@
     /* Fuente legible */
     line-height: 1.6;
     /* Espaciado entre líneas */
- 
+
 }
 
 
@@ -54,21 +59,27 @@
 .tituloDelJuego {
     text-align: center;
     font-size: 40px;
-    color: white; /* Texto blanco */
-    font-weight: bold; /* Hacer el texto más grueso para destacar */
-    text-transform: uppercase; /* Opcional: poner el texto en mayúsculas */
-    
+    color: white;
+    /* Texto blanco */
+    font-weight: bold;
+    /* Hacer el texto más grueso para destacar */
+    text-transform: uppercase;
+    /* Opcional: poner el texto en mayúsculas */
+
     /* Añadir un contorno alrededor del texto */
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 
     /* Fondo de color oscuro para el contorno */
-    padding: 10px 20px; /* Espaciado interno para que el texto no esté pegado al borde */
-    background-color: #2c376e; /* Fondo negro con algo de transparencia */
-    border-radius: 15px; /* Bordes redondeados */
-    
+    padding: 10px 20px;
+    /* Espaciado interno para que el texto no esté pegado al borde */
+    background-color: #2c376e;
+    /* Fondo negro con algo de transparencia */
+    border-radius: 15px;
+    /* Bordes redondeados */
+
     /* Agregar un borde de color negro */
-    border: 2px solid black; 
-    
+    border: 2px solid black;
+
     /* Opcional: agregar un leve efecto de sombra */
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
     margin-bottom: 20px;
@@ -108,23 +119,46 @@
 
 
 /*Lista De Detalles del Juego*/
-#myTab .nav-link{
+#myTab .nav-link {
     color: white;
 }
-#myTab button{
-    background-color: #1A233A;
-    margin: 2px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 
+#myTabContent {
+    background-color: #1A233A;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    
 }
+
+#myTab button {
+    background-color: #1A233A;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
 #myTab button.active {
-    background-color: #2c376e; /* Color de fondo del botón activo */
+    background-color: #2c376e;
+    /* Color de fondo del botón activo */
 }
-.capturasJuego img {
-    /* Se ajusta al ancho de la celda */
-    /* Mantiene la proporción */
-    padding: 5px;
+
+#carouselExampleIndicators {
+    /* Amplía el espacio hacia abajo */
+    padding-top: 20px;
+    padding-bottom: 90px;
+}
+.carousel-item img{
     border-radius: 10px;
-    /* Bordes redondeados */
-    max-height: 380px;
+}
+ .carousel-control-prev-icon, .carousel-control-next-icon {
+    background-color: black;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    background-size: 50%;
+    background-position: center;
+}
+
+#carouselExampleIndicators .custom-control-prev {
+    width: 100px;
+    /* Ancho personalizado */
+    height: auto;
+    /* Mantén la proporción */
 }
