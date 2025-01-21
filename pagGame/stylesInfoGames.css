@@ -126,7 +126,7 @@
 #myTabContent {
     background-color: #1A233A;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    
+
 }
 
 #myTab button {
@@ -141,10 +141,10 @@
 
 #carouselExampleIndicators {
     /* Amplía el espacio hacia abajo */
-    padding-top: 20px;
-    padding-bottom: 90px;
+    padding: 20px 0 90px 0;
 }
-.carousel-item img{
+
+#carouselExampleIndicators .carousel-inner {
     border-radius: 10px;
 }
  .carousel-control-prev-icon, .carousel-control-next-icon {

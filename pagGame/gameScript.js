@@ -4,14 +4,35 @@ import { limpiarHTML } from '../js/funciones.js';
 /*Eventos*/
 document.addEventListener('DOMContentLoaded', iniciarInfoGame);
 
+// Declaración del objeto global de estado
+const estado = {
+    juego: null, // Aquí se guardarán los detalles del juego
+    capturasJuego: null, // Aquí se guardarán las capturas del juego
+};
 
+// Función para inicializar el juego
+async function inicializarJuego(juegoId) {
+    try {
+        estado.juego = await detallesDelJuego(juegoId); // Cargar detalles del juego
+        estado.capturasJuego = await mostrarCapturas(juegoId); // Cargar capturas del juego
+        console.log("Juego y capturas inicializados correctamente.");
+    } catch (error) {
+        console.error("Error al inicializar el juego:", error);
+        throw error; // Propaga el error si ocurre algo
+    }
+}
 
 async function iniciarInfoGame() {
+
+    // Obtener el valor del parámetro 'id' desde la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    await inicializarJuego(urlParams.get('id')); // Esto te dará el ID del juego y la funcion dara las capturas y la informacion 
+    mostrarVisuales();
+
     /* Selectores */
     const myTabContent = document.querySelectorAll('#myTabContent .tab-pane');
     // Obtener todos los botones de las pestañas
     const tabs = document.querySelectorAll('#myTab .nav-link');
-
 
     /* Evento de Botones Lista */
     // Escuchar los clics en cada botón
@@ -38,16 +59,22 @@ async function iniciarInfoGame() {
         });
     });
 
-    // Obtener el valor del parámetro 'id' desde la URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const juegoId = urlParams.get('id'); // Esto te dará el ID del juego
+    async function inicializarJuego(juegoId) {
+        estado.juego = await detallesDelJuego(juegoId);
+        estado.capturasJuego = await mostrarCapturas(estado.juego['id']);
+    }
 
-    /*Falta hacer el error del juego */
-    const juego = await detallesDelJuego(juegoId);
-    mostrarVisuales();
+    function obtenerJuego() {
+        return estado.juego;
+    }
+
+    function obtenerCapturasJuego() {
+        return estado.capturasJuego;
+    }
 
     async function mostrarVisuales() {
-        console.log(juego);
+        console.log(obtenerJuego());
+        const juego = obtenerJuego();
         const container = document.getElementById('visuales');
         const tituloJuego = document.createElement('h5');
         tituloJuego.classList.add('tituloDelJuego');
@@ -59,12 +86,15 @@ async function iniciarInfoGame() {
     }
 
     async function listaMostrarCapturas() {
-
         const divScreenShots = document.querySelector('#myTabContent #screenshots');
-        const juego = await detallesDelJuego(juegoId);
-        const capturasJuego = await mostrarCapturas(juego['id']);
+        const capturasJuego = obtenerCapturasJuego();
 
-        // Crear el contenedor principal del carrusel
+        const carruselExistente = document.querySelector('#screenshots #carouselExampleIndicators');
+        if (carruselExistente) {/*Esto arregla el bug de muchos carruseles generados =)*/
+            carruselExistente.remove(); // Elimina el carrusel existente del DOM
+        }
+
+        // Crear el contenedor principal del carrusel  
         const carousel = document.createElement('div');
         carousel.id = 'carouselExampleIndicators';
         carousel.classList.add('carousel', 'slide', 'carruselPersonalizadoDJuego');
@@ -89,11 +119,11 @@ async function iniciarInfoGame() {
 
             // Añadir la imagen al botón
             button.appendChild(img);
-            
+
             if (index === 0) {
                 button.classList.add('active', 'custom-control-prev');
                 button.setAttribute('aria-current', 'true');
-            }else{
+            } else {
                 button.classList.add('custom-control-prev');
 
             }
@@ -105,7 +135,7 @@ async function iniciarInfoGame() {
         carouselInner.classList.add('carousel-inner');
 
         // Crear los elementos de cada slide
-        capturasJuego['results'].forEach((juego, index) => {
+        capturasJuego['results'].slice(0, 4).forEach((juego, index) => {
             const carouselItem = document.createElement('div');
             carouselItem.classList.add('carousel-item');
             if (index === 0) {
