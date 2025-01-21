@@ -1,17 +1,49 @@
 /* Media Query para pantallas de escritorio (mayores a 1024px) */
 @media (min-width: 992px) {
-    .carruselPersonalizadoDJuego {
-        height: auto;
-        width: 800px;
+    .carruselPersonalizadoDJuego .carousel-inner {
+        height: 400px;
+        width: 700px;
+    }
+
+    .carruselPersonalizadoDJuego .carousel-inner .carousel-item {
+        height: 100%;
+        width: 100%;
+    }
+
+    .carruselPersonalizadoDJuego .carousel-inner .carousel-item img {
+        height: 100%;
+        width: 100%;
+    }
+
+    .carruselPersonalizadoDJuego .carousel-indicators {
+        max-height: 76px;
+    }
+    .carruselPersonalizadoDJuego .carousel-indicators img {
+        height: 100%;
+        max-height: 56px;
+        max-width: 100px;
     }
 }
 
 /* Media Query para tabletas y móviles grandes (entre 768px y 1024px) */
-@media (max-width: 1023px) and (min-width: 768px) {}
+@media (max-width: 1023px) and (min-width: 768px) {
+    .carruselPersonalizadoDJuego .carousel-inner {
+        max-height: 241px;
+        max-width: 320px;
+    }
+}
 
 /* Media Query para móviles pequeños (menos de 768px) */
-@media (max-width: 767px) {}
+@media (max-width: 767px) {
+    .carruselPersonalizadoDJuego .carousel-inner {
+        max-height: 241px;
+        max-width: 320px;
+    }
+}
 
+.carruselPersonalizadoDJuego .carousel-item img {
+    object-fit: cover;
+}
 
 .row>* {
     /*Quitamos el padin y margin por decto de bostrap*/
@@ -21,14 +53,6 @@
 }
 
 
-/*Targeta Pricipal*/
-.img-principalV img {
-    height: 100%;
-    object-fit: cover;
-    border-radius: 15px;
-    max-height: 500px;
-
-}
 
 .card {
     border: 0;
@@ -54,8 +78,6 @@
 
 }
 
-
-.estiloTargetaPrincipal .card-title,
 .tituloDelJuego {
     text-align: center;
     font-size: 40px;
@@ -86,15 +108,11 @@
     text-wrap: balance;
 }
 
-.estiloTargetaPrincipal .card-text {
-    color: white;
-}
-
-.estiloTargetaPrincipal h1,
-.estiloTargetaPrincipal h2,
-.estiloTargetaPrincipal h3,
-.estiloTargetaPrincipal h4,
-.estiloTargetaPrincipal h5 {
+#myTabContent #info h1,
+#myTabContent #info h2,
+#myTabContent #info h3,
+#myTabContent #info h4,
+#myTabContent #info h5 {
     font-size: 24px;
     /* Título grande */
     font-weight: bold;
@@ -108,15 +126,15 @@
     padding: 5px;
 }
 
-.estiloTargetaPrincipal p {
-    margin: 10px 0;
-    color: #c9d2db;
-    text-align: justify;
+#myTabContent #info {
+    margin: 50px;
 
 }
 
-
-
+#info #DescripcionJuego p {
+    text-align: justify;
+    text-align: left;
+}
 
 /*Lista De Detalles del Juego*/
 #myTab .nav-link {
@@ -147,7 +165,9 @@
 #carouselExampleIndicators .carousel-inner {
     border-radius: 10px;
 }
- .carousel-control-prev-icon, .carousel-control-next-icon {
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
     background-color: black;
     border-radius: 50%;
     width: 40px;

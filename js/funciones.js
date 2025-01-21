@@ -54,7 +54,7 @@ export function quitarContenidoAdulto(juegos) { /*Cambialo a excluir contenido a
     const tagsExcluidos = ['Erotic', 'NSFW', 'Adult Content', 'Mature', 'sex', 'hentai', 'Nudity', 'sexy', 'Sexual Content']; //Excluimos por tag
     const juegosFiltrados = juegos["results"].filter((juego) => {
         let juegoValido = false;
-        if (juego["tags"]  && juego["tags"] && juego["short_screenshots"].length > 1 && juego["stores"] && juego["released"]) { //Retornara un false por defecto si el juego no tien tags
+        if (juego["tags"] && juego["tags"] && juego["short_screenshots"].length > 1 && juego["stores"] && juego["released"]) { //Retornara un false por defecto si el juego no tien tags
 
             const tagsJuego = juego["tags"].map(tag => tag.name); //Extraaemos los tags de todos los juegos
             // Comprueba si ningún tag del juego está en la lista de exclusión
@@ -76,9 +76,9 @@ export function limpiarHTML(selector) {
 export function generos(juego) {
     let resultado = "";
     juego["genres"].forEach((genero, index) => {
-        if(juego["genres"].length-1 === index){
+        if (juego["genres"].length - 1 === index) {
             resultado += ` ${genero["name"]}`;
-        }else{
+        } else {
             resultado += ` ${genero["name"]},`;
         }
     });
