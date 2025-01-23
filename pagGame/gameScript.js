@@ -1,5 +1,6 @@
 import { detallesDelJuego, mostrarCapturas } from '../js/API.js';
-import { limpiarHTML } from '../js/funciones.js';
+import { limpiarHTML, obtenerEstrellas } from '../js/funciones.js';
+
 
 /*Eventos*/
 document.addEventListener('DOMContentLoaded', iniciarInfoGame);
@@ -15,7 +16,6 @@ async function inicializarJuego(juegoId) {
     try {
         estado.juego = await detallesDelJuego(juegoId); // Cargar detalles del juego
         estado.capturasJuego = await mostrarCapturas(juegoId); // Cargar capturas del juego
-        console.log("Juego y capturas inicializados correctamente.");
     } catch (error) {
         console.error("Error al inicializar el juego:", error);
         throw error; // Propaga el error si ocurre algo
@@ -28,10 +28,13 @@ async function iniciarInfoGame() {
     const urlParams = new URLSearchParams(window.location.search);
     await inicializarJuego(urlParams.get('id')); // Esto te dará el ID del juego y la funcion dara las capturas y la informacion 
     /*Iniciamos las fuinciones que se deben iniciar al cargar la pagina web */
+    /*mostrarVisuales();*/
     mostrarVisuales();
     mostrarDescripcion();
+
     /* Selectores */
     const myTabContent = document.querySelectorAll('#myTabContent .tab-pane');
+
     // Obtener todos los botones de las pestañas
     const tabs = document.querySelectorAll('#myTab .nav-link');
 
@@ -61,7 +64,6 @@ async function iniciarInfoGame() {
             }
         });
     });
-
     function obtenerJuego() {
         return estado.juego;
     }
@@ -71,16 +73,53 @@ async function iniciarInfoGame() {
     }
 
     function mostrarVisuales() {
-        console.log(obtenerJuego());
+        const visuales = document.querySelector('.container #visuales');
         const juego = obtenerJuego();
-        const container = document.getElementById('visuales');
-        const tituloJuego = document.createElement('h5');
-        tituloJuego.classList.add('tituloDelJuego');
-        tituloJuego.innerHTML = juego['name'];
-        container.appendChild(tituloJuego);
-        /*Empezamos de neuvo no me gusto la idea de antes ya asabes crear boton para agregar lista recomendacio
-        etc etc modal de capturas reseñas y tal
-        zzzzzz */
+        // Crear el título
+        const titulo = document.createElement("h5");
+        titulo.className = "tituloDelJuego";
+        titulo.textContent = juego["name"];
+
+        // Crear el contenedor principal de la imagen
+        const imgPrincipal = document.createElement("div");
+        imgPrincipal.className = "imgPrincipal col-12";
+        console.log(juego);
+
+        imgPrincipal.style.setProperty('background-image', `url(${juego["background_image"]})`);
+        // Crear el contenedor de valoraciones
+        const valoracionesMain = document.createElement("div");
+        valoracionesMain.className = "valoracionesMain";
+
+        // Crear la calificación
+        const gameRating = document.createElement("div");
+        gameRating.className = "game-rating";
+        gameRating.textContent =  obtenerEstrellas(juego["rating"]) + ` (${juego["rating"]}/5)`;
+
+        // Agregar la calificación al contenedor de valoraciones
+        valoracionesMain.appendChild(gameRating);
+
+        // Crear el contenedor del modal
+        const modalMain = document.createElement("div");
+        modalMain.className = "modalMain";
+
+        // Crear el botón del modal
+        const modalButton = document.createElement("button");
+        modalButton.type = "button";
+        modalButton.className = "btn btn-primary";
+        modalButton.setAttribute("data-bs-toggle", "modal");
+        modalButton.setAttribute("data-bs-target", "#staticBackdrop");
+        modalButton.textContent = "+";
+
+        // Agregar el botón al contenedor del modal
+        modalMain.appendChild(modalButton);
+
+        // Agregar las secciones al contenedor principal
+        imgPrincipal.appendChild(valoracionesMain);
+        imgPrincipal.appendChild(modalMain);
+
+        // Insertar todo en el documento
+        visuales.appendChild(titulo);
+        visuales.appendChild(imgPrincipal);
     }
 
     function mostrarDescripcion() {

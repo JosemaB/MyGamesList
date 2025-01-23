@@ -68,9 +68,10 @@
         <div class="mainContent">
             <div class="container">
 
-                <div class="row d-flex justify-content-center align-items-center" id="visuales">
+                <div class="row" id="visuales">
 
                 </div>
+
                 <div class="row mt-5">
                     <!-- Navegación de pestañas -->
                     <ul class="nav" id="myTab" role="tablist">
@@ -88,8 +89,8 @@
                                 type="button" role="tab" aria-controls="reviews" aria-selected="false">RESEÑAS</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="required-tab" data-bs-toggle="tab"
-                                data-bs-target="#required" type="button" role="tab" aria-controls="required"
+                            <button class="nav-link" id="required-tab" data-bs-toggle="tab" data-bs-target="#required"
+                                type="button" role="tab" aria-controls="required"
                                 aria-selected="false">REQUISITOS</button>
                         </li>
                     </ul>
@@ -115,6 +116,25 @@
             </div>
         </div>
     </main>
+    <!-- Modal Contenido De Clases-->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Understood</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="footerPrincipal text-center text-lg-start text-white mt-5">

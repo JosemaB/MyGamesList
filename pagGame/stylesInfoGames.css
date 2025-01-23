@@ -18,6 +18,7 @@
     .carruselPersonalizadoDJuego .carousel-indicators {
         max-height: 76px;
     }
+
     .carruselPersonalizadoDJuego .carousel-indicators img {
         height: 100%;
         max-height: 56px;
@@ -52,30 +53,61 @@
     border-radius: 0;
 }
 
-
-
 .card {
     border: 0;
     background: none;
 }
 
-.estiloTargetaPrincipal {
-    background-color: #1A233A;
-    /* Fondo oscuro */
-    border-radius: 8px;
-    /* Bordes redondeados */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    /* Sombra suave */
-    color: white;
-    /* Texto blanco */
-    /* Espaciado interno */
-    overflow: hidden;
-    /* Evita que el contenido desborde */
-    font-family: 'Arial', sans-serif;
-    /* Fuente legible */
-    line-height: 1.6;
-    /* Espaciado entre líneas */
+.imgPrincipal {
+    background-size: cover;
+    /* Escala la imagen para cubrir todo el div */
+    background-position: center;
+    /* Centra la imagen en el div */
+    background-repeat: no-repeat;
+    /* Evita que la imagen se repita */
+    height: 600px;
+    border-radius: 15px;
+    position: relative;
+}
 
+.valoracionesMain {
+    background-color: #1A233A;
+    border-radius: 10px;
+    padding: 10px;
+    /* Espaciado interno */
+    margin: 10px;
+    position: absolute;
+    /* Posiciona el elemento dentro del contenedor */
+    bottom: 10px;
+    /* Alineado a 20px del borde inferior */
+    left: 0%;
+    /* Coloca horizontalmente en el centro del contenedor */
+    opacity: 80%;
+}
+
+.modalMain {
+    border-radius: 10px;
+    padding: 10px;
+    /* Espaciado interno */
+    margin: 10px;
+    position: absolute;
+    /* Posiciona el elemento dentro del contenedor */
+    bottom: 0;
+    /* Mueve el div al fondo */
+    right: 0;
+    /* Mueve el div a la derecha */
+}
+.modalMain button{
+    background-color: #1A233A;
+    border: none;
+    opacity: 80%;
+    font-size: 18px
+
+}
+.modalMain button:hover,
+.valoracionesMain:hover {
+    opacity: 1;
+    background-color: #1A233A;
 }
 
 .tituloDelJuego {
@@ -94,7 +126,7 @@
     /* Fondo de color oscuro para el contorno */
     padding: 10px 20px;
     /* Espaciado interno para que el texto no esté pegado al borde */
-    background-color: #2c376e;
+    background-color: #1d2e59;
     /* Fondo negro con algo de transparencia */
     border-radius: 15px;
     /* Bordes redondeados */
