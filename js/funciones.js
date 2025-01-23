@@ -13,16 +13,20 @@ export function mostrarPlataforma(game) {
 
         } else if (plataforma["platform"]["slug"].toLowerCase().includes("playstation")) {
             img.src = '../img/Plataformas/sony.png';
-            img.alt = 'Windows';
+            img.alt = 'Playstation';
+            img.title = 'Playstation';
         } else if (plataforma["platform"]["slug"].toLowerCase().includes("nintendo")) {
             img.src = '../img/Plataformas/nintendo.png';
-            img.alt = 'Windows';
+            img.alt = 'Nintendo';
+            img.title = 'Nintendo';
         } else if (plataforma["platform"]["slug"].toLowerCase().includes("android")) {
             img.src = '../img/Plataformas/android.png';
-            img.alt = 'Windows';
+            img.alt = 'Android';
+            img.title = 'Android';
         } else if (plataforma["platform"]["slug"].toLowerCase().includes("ios")) {
             img.src = '../img/Plataformas/ios.png';
-            img.alt = 'Windows';
+            img.alt = 'Ios';
+            img.title = 'Ios';
         }
 
         /*Si el img tiene imagen lo agregamos sino sagregara un cotenido  vacio*/
@@ -94,3 +98,19 @@ export function spinner() {
     return divSpinner;
 }
 
+export function obtenerEstrellas(numero) {
+    // Convertir el número de 1-10 a 0-5 Redondeamos a su numero entero
+    const estrellas = Math.round(numero);
+
+    // Construir las estrellas
+    let resultado = '';
+    for (let i = 1; i <= 5; i++) {
+        if (i <= estrellas) {
+            resultado += '⭐';
+        } else {
+            resultado += '☆';
+        }
+    }
+
+    return resultado;
+}

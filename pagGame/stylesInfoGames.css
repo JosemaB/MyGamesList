@@ -40,6 +40,9 @@
         max-height: 241px;
         max-width: 320px;
     }
+    .imgPrincipal{
+        max-height: 300px;
+    }
 }
 
 .carruselPersonalizadoDJuego .carousel-item img {
@@ -97,13 +100,14 @@
     right: 0;
     /* Mueve el div a la derecha */
 }
-.modalMain button{
+
+.modalMain button {
     background-color: #1A233A;
     border: none;
     opacity: 80%;
     font-size: 18px
-
 }
+
 .modalMain button:hover,
 .valoracionesMain:hover {
     opacity: 1;
@@ -213,4 +217,11 @@
     /* Ancho personalizado */
     height: auto;
     /* Mantén la proporción */
+}
+
+/*Requisitos minimos*/
+.parrafoRequisitos {
+    text-align: justify;
+    font-size: 15px;
+    padding: 25px;
 }
