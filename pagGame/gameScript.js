@@ -371,62 +371,65 @@ async function iniciarInfoGame() {
 
 
             /*Agregamos las reseñas */
+            if (juego["ratings"]) { /*Por si esta vacio para que no de error */
+                juego["ratings"].forEach(resena => {
+                    // Crear el contenedor principal
+                    const mensajePersonalizado = document.createElement('div');
+                    mensajePersonalizado.className = 'col-12 mensajePersonalizado m-2 p-3 card';
+                    console.log(resena);
 
-            juego["ratings"].forEach(resena => {
-                // Crear el contenedor principal
-                const mensajePersonalizado = document.createElement('div');
-                mensajePersonalizado.className = 'col-12 mensajePersonalizado m-2 p-3 card';
-                console.log(resena);
+                    // Crear el encabezado de la tarjeta
+                    const cardHeader = document.createElement('div');
+                    cardHeader.className = 'col-12 card-header fw-bold';
 
-                // Crear el encabezado de la tarjeta
-                const cardHeader = document.createElement('div');
-                cardHeader.className = 'col-12 card-header fw-bold';
+                    // Crear el contenedor que contendrá el nombre y la imagen
+                    const userContainer = document.createElement('div');
+                    userContainer.className = 'd-flex align-items-center'; // Usamos Flexbox para alinear
 
-                // Crear el contenedor que contendrá el nombre y la imagen
-                const userContainer = document.createElement('div');
-                userContainer.className = 'd-flex align-items-center'; // Usamos Flexbox para alinear
+                    // Crear el elemento del nombre del usuario
+                    const nombreUsuarioElement = document.createElement('span');
+                    nombreUsuarioElement.className = 'nombre-usuario';
+                    nombreUsuarioElement.textContent = nombreUsuario(resena["id"]);
 
-                // Crear el elemento del nombre del usuario
-                const nombreUsuarioElement = document.createElement('span');
-                nombreUsuarioElement.className = 'nombre-usuario';
-                nombreUsuarioElement.textContent = nombreUsuario(resena["id"]);
+                    // Crear el elemento de la imagen del perfil
+                    const perfilImg = document.createElement('img');
+                    perfilImg.className = 'perfil-img';
+                    perfilImg.src = fotoUsuario(resena["id"]); // Cambia por la ruta real de la imagen
+                    perfilImg.alt = 'Perfil';
 
-                // Crear el elemento de la imagen del perfil
-                const perfilImg = document.createElement('img');
-                perfilImg.className = 'perfil-img';
-                perfilImg.src = fotoUsuario(resena["id"]); // Cambia por la ruta real de la imagen
-                perfilImg.alt = 'Perfil';
+                    // Agregar el nombre y la imagen al contenedor
+                    userContainer.appendChild(perfilImg);
+                    userContainer.appendChild(nombreUsuarioElement);
 
-                // Agregar el nombre y la imagen al contenedor
-                userContainer.appendChild(perfilImg);
-                userContainer.appendChild(nombreUsuarioElement);
+                    // Agregar el contenedor al encabezado de la tarjeta
+                    cardHeader.appendChild(userContainer);
+                    mensajePersonalizado.appendChild(cardHeader);
 
-                // Agregar el contenedor al encabezado de la tarjeta
-                cardHeader.appendChild(userContainer);
-                mensajePersonalizado.appendChild(cardHeader);
+                    // Crear el cuerpo de la tarjeta
+                    const cardBody = document.createElement('div');
+                    cardBody.className = 'card-body';
 
-                // Crear el cuerpo de la tarjeta
-                const cardBody = document.createElement('div');
-                cardBody.className = 'card-body';
+                    // Crear el bloque de cita
+                    const blockquote = document.createElement('blockquote');
+                    blockquote.className = 'blockquote mb-0';
 
-                // Crear el bloque de cita
-                const blockquote = document.createElement('blockquote');
-                blockquote.className = 'blockquote mb-0';
+                    // Crear el párrafo de la cita
+                    const quoteText = document.createElement('p');
+                    quoteText.textContent = resena["title"];
+                    blockquote.appendChild(quoteText);
 
-                // Crear el párrafo de la cita
-                const quoteText = document.createElement('p');
-                quoteText.textContent = resena["title"];
-                blockquote.appendChild(quoteText);
+                    // Añadir el bloque de cita al cuerpo de la tarjeta
+                    cardBody.appendChild(blockquote);
 
-                // Añadir el bloque de cita al cuerpo de la tarjeta
-                cardBody.appendChild(blockquote);
+                    // Añadir el cuerpo de la tarjeta al contenedor principal
+                    mensajePersonalizado.appendChild(cardBody);
 
-                // Añadir el cuerpo de la tarjeta al contenedor principal
-                mensajePersonalizado.appendChild(cardBody);
+                    resenas.appendChild(mensajePersonalizado);
 
-                resenas.appendChild(mensajePersonalizado);
-                divResenas.appendChild(resenas);
-            });
+                });
+            }
+
+            divResenas.appendChild(resenas);
 
         } catch (error) {
             console.log(error);
