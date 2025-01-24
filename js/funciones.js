@@ -7,28 +7,33 @@ export function mostrarPlataforma(game) {
     game["parent_platforms"].forEach(plataforma => {
         const img = document.createElement('img');
 
-        if (plataforma["platform"]["slug"].toLowerCase().includes("pc")) {
-            img.src = '../img/Plataformas/windows.png';
-            img.alt = 'Windows';
-
-        } else if (plataforma["platform"]["slug"].toLowerCase().includes("playstation")) {
-            img.src = '../img/Plataformas/sony.png';
-            img.alt = 'Playstation';
-            img.title = 'Playstation';
-        } else if (plataforma["platform"]["slug"].toLowerCase().includes("nintendo")) {
-            img.src = '../img/Plataformas/nintendo.png';
-            img.alt = 'Nintendo';
-            img.title = 'Nintendo';
-        } else if (plataforma["platform"]["slug"].toLowerCase().includes("android")) {
-            img.src = '../img/Plataformas/android.png';
-            img.alt = 'Android';
-            img.title = 'Android';
-        } else if (plataforma["platform"]["slug"].toLowerCase().includes("ios")) {
-            img.src = '../img/Plataformas/ios.png';
-            img.alt = 'Ios';
-            img.title = 'Ios';
+        switch (plataforma["platform"]["slug"].toLowerCase()) {
+            case "pc":
+                img.src = '../img/Plataformas/windows.png';
+                img.alt = 'Windows';
+                img.title = 'Windows';
+                break;
+            case "playstation":
+                img.src = '../img/Plataformas/sony.png';
+                img.alt = 'Playstation';
+                img.title = 'Playstation';
+                break;
+            case "nintendo":
+                img.src = '../img/Plataformas/nintendo.png';
+                img.alt = 'Nintendo';
+                img.title = 'Nintendo';
+                break;
+            case "android":
+                img.src = '../img/Plataformas/android.png';
+                img.alt = 'Android';
+                img.title = 'Android';
+                break;
+            case "ios":
+                img.src = '../img/Plataformas/ios.png';
+                img.alt = 'Ios';
+                img.title = 'Ios';
+                break;
         }
-
         /*Si el img tiene imagen lo agregamos sino sagregara un cotenido  vacio*/
         if (img.src) {
             img.classList.add('icon', 'p-1');
@@ -113,4 +118,55 @@ export function obtenerEstrellas(numero) {
     }
 
     return resultado;
+}
+
+export function nombreUsuario(id) {
+    let usuario = "";
+    switch (id) {
+        case 5:
+            usuario = "TonyElMolon";
+            break;
+        case 4:
+            usuario = "Josemab26";
+            break;
+
+        case 3:
+            usuario = "Narita";
+            break;
+
+        case 1:
+            usuario = "Vegetta777";
+            break;
+
+        default:
+            usuario = "Nombre desconocido";
+            break;
+
+    }
+    return usuario;
+}
+export function fotoUsuario(id) {
+    let fotoUsuario = "";
+    switch (id) {
+        case 5:
+            fotoUsuario = "../img/usuarios/TonyElMolon.png";
+            break;
+        case 4:
+            fotoUsuario = "../img/usuarios/Josemab26.jpg";
+            break;
+
+        case 3:
+            fotoUsuario = "../img/usuarios/Narita.jfif";
+            break;
+
+        case 1:
+            fotoUsuario = "../img/usuarios/Replip.jpg";
+            break;
+
+        default:
+            fotoUsuario = "../img/usuarios/UsuarioDesconocido.png";
+            break;
+
+    }
+    return fotoUsuario;
 }

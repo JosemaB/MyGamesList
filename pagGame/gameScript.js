@@ -1,5 +1,5 @@
 import { detallesDelJuego, mostrarCapturas } from '../js/API.js';
-import { limpiarHTML, obtenerEstrellas, mostrarPlataforma } from '../js/funciones.js';
+import { limpiarHTML, obtenerEstrellas, mostrarPlataforma, fotoUsuario, nombreUsuario } from '../js/funciones.js';
 
 
 /*Eventos*/
@@ -58,6 +58,7 @@ async function iniciarInfoGame() {
                         listaMostrarCapturas();
                         break;
                     case "reviews-tab":
+                        mostrarResenas();
                         break;
                     case "required-tab":
                         mostrarRequisitos();
@@ -134,13 +135,13 @@ async function iniciarInfoGame() {
                 enlace.style.textDecoration = 'none';  // Elimina el subrayado
                 enlace.style.color = 'inherit';        // Elimina el color predeterminado (hereda el color del contenedor)
                 enlace.title = `Visitar la página oficial de ${juego["name"]}`;
-                
+
                 // Agregar evento al enlace
                 enlace.addEventListener('click', (event) => {
                     // Si el clic ocurrió en la imagen, detener el enlace
                     console.log(event.target.className);
-                    if((event.target.className === "valoracionesMain" || event.target.className === "game-rating") || event.target.className === "btn btn-primary" 
-                    || event.target.className === "modalMain" ){
+                    if ((event.target.className === "valoracionesMain" || event.target.className === "game-rating") || event.target.className === "btn btn-primary"
+                        || event.target.className === "modalMain") {
                         event.preventDefault(); // Evitar la acción del enlace
                     }
                 });
@@ -312,26 +313,125 @@ async function iniciarInfoGame() {
                 // Agregar el carrusel al body o un contenedor específico de tu HTML
                 divScreenShots.appendChild(carousel);
             }
-
-            function mostrarRseñas() {
-
-            }
-
-            function mostrarRequisitos() {
-                const juego = obtenerJuego();
-
-                juego['platforms'].forEach(requisitos => {
-                    if (requisitos['platform']['name'] == 'PC') {
-                        console.log(requisitos);
-                    }
-
-                });
-            }
         } catch (error) {
             console.log(error);
         }
     }
 
+    function mostrarResenas() {
+        try {
+            const juego = obtenerJuego();
+            console.log(juego);
+            const divResenas = document.querySelector('#myTabContent #reviews');
+            const textoExistente = document.querySelector('#reviews #resenas');
+            if (textoExistente) { /*Esto arregla el bug de muchos textos generados*/
+                textoExistente.remove(); // Elimina el carrusel existente del DOM
+            }
+
+            //Creamos un div para las reseñas
+            const resenas = document.createElement('div');
+            resenas.classList.add('row', 'd-flex', 'justify-content-center', 'm-3');
+            resenas.id = 'resenas';
+
+            // Crear el contenedor principal
+            const reviewCard = document.createElement("div"); // Cambiado de card a reviewCard
+            reviewCard.className = "review-card escribir-resena card p-3 m-2"; // Cambié también la clase a "review-card"
+
+            // Crear y configurar el encabezado
+            const cardTitle = document.createElement("div"); // Cambiado de cardHeader a cardTitle
+            cardTitle.className = "text-center fw-bold card-header";
+            cardTitle.textContent = "Puntuación media de las reseñas";
+            reviewCard.appendChild(cardTitle);
+
+            // Crear el cuerpo de la tarjeta
+            const cardContent = document.createElement("div"); // Cambiado de cardBody a cardContent
+            cardContent.className = "card-content d-flex flex-column align-items-center text-center"; // Cambié el nombre de la clase a "card-content"
+
+            // Crear el párrafo de la puntuación
+            const ratingParagraph = document.createElement("p");
+            ratingParagraph.className = "rating mb-3";
+            ratingParagraph.setAttribute("aria-label", "Puntuación media: 4.48 sobre 5");
+            ratingParagraph.innerHTML = obtenerEstrellas(juego["rating"]) + ` (${juego["rating"]}/5)`;
+            cardContent.appendChild(ratingParagraph);
+
+            // Crear el botón
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "btn";
+            button.setAttribute("data-bs-toggle", "modal");
+            button.setAttribute("data-bs-target", "#staticBackdrop");
+            button.innerHTML = "¡Valora este juego! <i class=\"bi bi-pencil-square ms-2\" aria-hidden=\"true\"></i>";
+            cardContent.appendChild(button);
+
+            // Añadir el contenido de la tarjeta al contenedor principal
+            reviewCard.appendChild(cardContent);
+
+            // Añadir el contenedor principal al DOM
+            resenas.appendChild(reviewCard); // Cambia esto según el lugar donde desees insertar el div
+
+
+            /*Agregamos las reseñas */
+
+            juego["ratings"].forEach(resena => {
+                // Crear el contenedor principal
+                const mensajePersonalizado = document.createElement('div');
+                mensajePersonalizado.className = 'col-12 mensajePersonalizado m-2 p-3 card';
+                console.log(resena);
+
+                // Crear el encabezado de la tarjeta
+                const cardHeader = document.createElement('div');
+                cardHeader.className = 'col-12 card-header fw-bold';
+
+                // Crear el contenedor que contendrá el nombre y la imagen
+                const userContainer = document.createElement('div');
+                userContainer.className = 'd-flex align-items-center'; // Usamos Flexbox para alinear
+
+                // Crear el elemento del nombre del usuario
+                const nombreUsuarioElement = document.createElement('span');
+                nombreUsuarioElement.className = 'nombre-usuario';
+                nombreUsuarioElement.textContent = nombreUsuario(resena["id"]);
+
+                // Crear el elemento de la imagen del perfil
+                const perfilImg = document.createElement('img');
+                perfilImg.className = 'perfil-img';
+                perfilImg.src = fotoUsuario(resena["id"]); // Cambia por la ruta real de la imagen
+                perfilImg.alt = 'Perfil';
+
+                // Agregar el nombre y la imagen al contenedor
+                userContainer.appendChild(perfilImg);
+                userContainer.appendChild(nombreUsuarioElement);
+
+                // Agregar el contenedor al encabezado de la tarjeta
+                cardHeader.appendChild(userContainer);
+                mensajePersonalizado.appendChild(cardHeader);
+
+                // Crear el cuerpo de la tarjeta
+                const cardBody = document.createElement('div');
+                cardBody.className = 'card-body';
+
+                // Crear el bloque de cita
+                const blockquote = document.createElement('blockquote');
+                blockquote.className = 'blockquote mb-0';
+
+                // Crear el párrafo de la cita
+                const quoteText = document.createElement('p');
+                quoteText.textContent = resena["title"];
+                blockquote.appendChild(quoteText);
+
+                // Añadir el bloque de cita al cuerpo de la tarjeta
+                cardBody.appendChild(blockquote);
+
+                // Añadir el cuerpo de la tarjeta al contenedor principal
+                mensajePersonalizado.appendChild(cardBody);
+
+                resenas.appendChild(mensajePersonalizado);
+                divResenas.appendChild(resenas);
+            });
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
     function mostrarRequisitos() {
         try {
             const divRequisitos = document.querySelector('#myTabContent #required');
@@ -418,4 +518,5 @@ async function iniciarInfoGame() {
         }
 
     }
+
 }
