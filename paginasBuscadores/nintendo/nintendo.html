@@ -1,23 +1,25 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SuperGamesList</title>
+    <title>Explora el catalogo de Nintendo</title>
 
     <!-- Importar CSS desde node_modules -->
-    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../estilosBuscadores.css">
+
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
     <!-- Importar JS desde node_modules -->
-    <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script>
+    <script src="../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script>
 
     <!-- Declarar app.js como un módulo -->
-    <script type="module" src="./js/app.js"></script>
-
+    <script type="module" src="../../js/app.js"></script>
+    <script type="module" src="./nintendo.js"></script>
 </head>
 
 <body>
@@ -46,7 +48,8 @@
                             Xbox
                         </a>
                     </li>
-                    <li><a href="/paginasBuscadores/nintendo/nintendo.html" class="nav-link px-2 text-white d-flex align-items-center">
+                    <li><a href="/paginasBuscadores/nintendo/nintendo.html"
+                            class="nav-link px-2 text-white d-flex align-items-center">
                             <img class="icon p-2" src="/img/Plataformas/nintendo.png" alt="PC">
                             Nintendo
                         </a>
@@ -70,7 +73,7 @@
                 <div class="dropdown px-2 text-end">
                     <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="../img/agregar-usuario.png" alt="mdo" width="45" height="45" class="rounded-circle">
+                        <img src="../../img/agregar-usuario.png" alt="mdo" width="45" height="45" class="rounded-circle">
                     </a>
                     <ul class="dropdown-menu text-small">
                         <li><a class="dropdown-item text-white fw-bold" href="#">Iniciar sesion</a></li>
@@ -85,53 +88,15 @@
         </div>
     </header>
     <main>
-        <div class="mainContent ">
-            <div class="container">
-                <div class="row">
-                    <!-- Carrusel -->
-                    <div id="catalogoPrincipal" class="col-xxl-8 col-12 carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-indicators">
-
-                        </div>
-                        <div class="carousel-inner">
-
-                        </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#catalogoPrincipal"
-                            data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#catalogoPrincipal"
-                            data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
-                    </div>
-
-                    <!-- Tarjetas -->
-                    <div id="targetasPrincipales" class="contentMCards d-flex flex-xxl-wrap col-xxl-4 col-12">
-
-                    </div>
-                </div>
-            </div>
-
+        <div class="container">
             <div id="containerCard" class="container">
-                <div class=" d-lg-flex justify-content-lg-start d-flex justify-content-center m-2">
-                    <select class="form-select fw-bold rounded-bottom" id="dropdownSelect"
-                        aria-label="Default select example">
-                        <option class="fw-bold" value="masPopulares">Mejor Puntuacion (Metacritic)</option>
-                        <option class="fw-bold" value="mejorValorados">Más valorados</option>
-                        <option class="fw-bold" value="masRecientes">Más recientes</option>
-                    </select>
-                </div>
-                <div class="row justify-content-center  align-items-start" id="resultado20Juegos">
+                <div class="row justify-content-center  align-items-start" id="resultadoJuegos">
 
                 </div>
             </div>
-        </div>
+
         </div>
     </main>
-
 
     <!-- Footer -->
     <footer class="footerPrincipal text-center text-lg-start text-white mt-5">
@@ -156,7 +121,6 @@
             <!-- Right -->
         </section>
         <!-- Section: Social media -->
-
 
         <div class="container text-center text-md-start mt-5">
             <!-- Grid row -->
@@ -238,7 +202,6 @@
         </div>
         <!-- Copyright -->
     </footer>
-    <!-- Footer -->
 </body>
 
 </html>

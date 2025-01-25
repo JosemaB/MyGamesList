@@ -1,7 +1,7 @@
 /* Media Query para pantallas de escritorio (mayores a 1024px) */
 @media (min-width: 992px) {
   #form {
-    width: 400px;
+    width: 350px;
   }
 
   #resultadosForm .card-title {
@@ -35,6 +35,13 @@ body {
   font-family: 'Oswald', sans-serif;
   background-color: #121829;
   color: #E3E8FF;
+}
+
+/*Logo Pagina*/
+.logo {
+  border-radius: 20px;
+  width: 70px;
+  height: 70px;
 }
 
 /*header*/
@@ -106,11 +113,21 @@ body {
   position: relative;
 
 }
+/*BTN BUSCADOR*/
+.btnForm {
+  background-color: #2A3B5F;
+  color: #E3E8FF;
 
+}
+
+.btnForm:hover {
+  border-color: white;
+  color: #E3E8FF;
+}
 .form-control:focus {
   border-color: #1A233A;
   /* Cambia el color del borde */
-  box-shadow: 0 0 0 0.25rem #374A73;
+  box-shadow: 0 0 0 0.10rem #374A73;
   /* Cambia el color de la sombra */
   outline: none;
   /* Opcional: elimina el contorno predeterminado */
@@ -415,7 +432,7 @@ body {
   text-overflow: unset;
   white-space: normal;
   overflow: visible;
-  
+
 }
 
 /* Mostrar el contenido adicional al hacer hover */

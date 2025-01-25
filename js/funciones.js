@@ -9,27 +9,27 @@ export function mostrarPlataforma(game) {
 
         switch (plataforma["platform"]["slug"].toLowerCase()) {
             case "pc":
-                img.src = '../img/Plataformas/windows.png';
+                img.src = '/img/Plataformas/windows.png';
                 img.alt = 'Windows';
                 img.title = 'Windows';
                 break;
             case "playstation":
-                img.src = '../img/Plataformas/sony.png';
+                img.src = '/img/Plataformas/sony.png';
                 img.alt = 'Playstation';
                 img.title = 'Playstation';
                 break;
             case "nintendo":
-                img.src = '../img/Plataformas/nintendo.png';
+                img.src = '/img/Plataformas/nintendo.png';
                 img.alt = 'Nintendo';
                 img.title = 'Nintendo';
                 break;
             case "android":
-                img.src = '../img/Plataformas/android.png';
+                img.src = '/img/Plataformas/android.png';
                 img.alt = 'Android';
                 img.title = 'Android';
                 break;
             case "ios":
-                img.src = '../img/Plataformas/ios.png';
+                img.src = '/img/Plataformas/ios.png';
                 img.alt = 'Ios';
                 img.title = 'Ios';
                 break;
@@ -63,7 +63,7 @@ export function quitarContenidoAdulto(juegos) { /*Cambialo a excluir contenido a
     const tagsExcluidos = ['Erotic', 'NSFW', 'Adult Content', 'Mature', 'sex', 'hentai', 'Nudity', 'sexy', 'Sexual Content']; //Excluimos por tag
     const juegosFiltrados = juegos["results"].filter((juego) => {
         let juegoValido = false;
-        if (juego["tags"] && juego["tags"] && juego["short_screenshots"].length > 1 && juego["stores"] && juego["released"]) { //Retornara un false por defecto si el juego no tien tags
+        if (juego["tags"] && juego["tags"] && juego["short_screenshots"].length > 1 && juego["tags"].length > 0 && juego["stores"] && juego["released"]) { //Retornara un false por defecto si el juego no tien tags
 
             const tagsJuego = juego["tags"].map(tag => tag.name); //Extraaemos los tags de todos los juegos
             // Comprueba si ningún tag del juego está en la lista de exclusión
@@ -135,7 +135,7 @@ export function nombreUsuario(id) {
             break;
 
         case 1:
-            usuario = "Vegetta777";
+            usuario = "Chispy2";
             break;
 
         default:
@@ -149,22 +149,22 @@ export function fotoUsuario(id) {
     let fotoUsuario = "";
     switch (id) {
         case 5:
-            fotoUsuario = "../img/usuarios/TonyElMolon.png";
+            fotoUsuario = "/img/usuarios/TonyElMolon.png";
             break;
         case 4:
-            fotoUsuario = "../img/usuarios/Josemab26.jpg";
+            fotoUsuario = "/img/usuarios/Josemab26.jpg";
             break;
 
         case 3:
-            fotoUsuario = "../img/usuarios/Narita.jfif";
+            fotoUsuario = "/img/usuarios/Narita.jfif";
             break;
 
         case 1:
-            fotoUsuario = "../img/usuarios/Replip.jpg";
+            fotoUsuario = "/img/usuarios/Chispy2.png";
             break;
 
         default:
-            fotoUsuario = "../img/usuarios/UsuarioDesconocido.png";
+            fotoUsuario = "/img/usuarios/UsuarioDesconocido.png";
             break;
 
     }

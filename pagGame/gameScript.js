@@ -376,8 +376,7 @@ async function iniciarInfoGame() {
                     // Crear el contenedor principal
                     const mensajePersonalizado = document.createElement('div');
                     mensajePersonalizado.className = 'col-12 mensajePersonalizado m-2 p-3 card';
-                    console.log(resena);
-
+                    
                     // Crear el encabezado de la tarjeta
                     const cardHeader = document.createElement('div');
                     cardHeader.className = 'col-12 card-header fw-bold';

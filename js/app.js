@@ -11,6 +11,7 @@ function iniciarApp() {
 
     /*Form*/
     const resultadosForm = document.querySelector('#resultadosForm');
+    const form = document.getElementById("form");
     // Obtener el campo de búsqueda
     const searchInput = document.querySelector('#searchInput');
 
@@ -64,6 +65,25 @@ function iniciarApp() {
             limpiarHTML(resultadosForm);
         }
     });
+
+    /*Si ha npresionado enter en el formulario */
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        // Obtén el valor del input de búsqueda
+        const searchValue = searchInput.value.trim();
+
+        if (searchValue) {
+            // Construye la URL con el valor ingresado
+            const targetUrl = `/paginasBuscadores/resultados.html?q=${encodeURIComponent(searchValue)}`;
+
+            // Redirige al usuario a la página
+            window.location.href = targetUrl;
+        } else {
+            alert("Por favor, ingrese un término de búsqueda.");
+        }
+
+    });
+
 
 
     if (catalogoMain && resultado20Games) { /*Compruebo si existen para la pagina principal */
@@ -143,9 +163,6 @@ function iniciarApp() {
                 // Obtener la fecha actual
                 const currentDate = new Date();
 
-                // Obtener el año actual
-                const currentYear = currentDate.getFullYear();
-
                 // Calcular la fecha de 6 meses antes
                 const sixMonthsAgo = new Date(currentDate);
                 sixMonthsAgo.setMonth(currentDate.getMonth() - 6);
@@ -168,7 +185,7 @@ function iniciarApp() {
 
         const juegosFiltrados = await quitarContenidoAdulto(listaDeJuegos); //Filtramos los juegos para que no haya ningun contenido erotico
 
-        //Usamos Promise.all para esperar todas las promesas
+        //Hacemos un filtro de 20 juegos maximos
         juegosFiltrados.slice(0, 20).forEach((juego, index) => {
             const articulo = document.createElement('article');
             // Añadiendo múltiples clases correctamente card col-lg-3 

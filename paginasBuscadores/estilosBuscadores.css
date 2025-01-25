@@ -1,0 +1,33 @@
+/* Media Query para pantallas de escritorio (mayores a 1024px) */
+@media (min-width: 992px) {}
+
+/* Media Query para tabletas y móviles grandes (entre 768px y 1024px) */
+@media (max-width: 1023px) and (min-width: 768px) {}
+
+/* Media Query para móviles pequeños (menos de 768px) */
+@media (max-width: 767px) {}
+
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  /* Altura mínima de la ventana */
+}
+
+main {
+  flex: 1;
+  /* Ocupa todo el espacio disponible */
+}
+
+/*Sin resultados*/
+#sinResultado .sinResultadoPersonalizado {
+  max-width: 700px;
+  border-radius: 12px;
+  background-color: #1d2e59;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+  /* Color de fondo blanco */
+  border: 2px solid black;
+  color: #e6e1e1;
+  /* Borde ligero */
+}

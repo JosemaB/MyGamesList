@@ -73,7 +73,26 @@ export async function listaDeJuegosPorNombre(input) {
         return trailer;
     } catch (error) {
         console.log(error);
-    }finally {
+    } finally {
+        // Eliminar el spinner después de completar la carga
+        resultadosForm.removeChild(spinnerElement);
+    }
+}
+
+export async function catalogoPlataformas(pagina, idPlataforma) {/*Al final para todos 250 tiene de paginacion maximo la api*/
+    const resultadosForm = document.querySelector('#resultadoJuegos');
+
+    // Crear y agregar el spinner al contenedor
+    const spinnerElement = spinner();
+    spinnerElement.style.margin = '20px auto 20px'; // Ajusta el valor según tus necesidades
+    resultadosForm.appendChild(spinnerElement);
+    try {
+        const resultado = await fetch(`https://api.rawg.io/api/games?key=${apiKey}&parent_platforms=${idPlataforma}&page=${pagina}&page_size=40`);
+        const trailer = await resultado.json();
+        return trailer;
+    } catch (error) {
+        console.log(error);
+    } finally {
         // Eliminar el spinner después de completar la carga
         resultadosForm.removeChild(spinnerElement);
     }
