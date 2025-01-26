@@ -479,7 +479,7 @@ async function iniciarInfoGame() {
                         if (plataforma['requirements']['minimum']) {/*Lo compruebo si no existe el minimo o recomendado para que no reviente la pagina */
 
                             const requisitosMinimos = plataforma['requirements']['minimum']
-                                .replace(/^Minimum:\s*[\r\n]+/, '')  // Eliminar "Minimum:" y los saltos de línea
+                                .replace(/^Minimum:\s*[\r\n]*/, '')  // Eliminar "Minimum:" y los saltos de línea
                                 .replace(/\r?\n/g, '<br>');  // Reemplazar saltos de línea por <br>
 
                             divReqMin.innerHTML += requisitosMinimos;
@@ -489,7 +489,7 @@ async function iniciarInfoGame() {
                         if (plataforma['requirements']['recommended']) {
 
                             const requisitosRecomendados = plataforma['requirements']['recommended']
-                                .replace(/^Recommended:\s*[\r\n]+/, '')  // Eliminar "Recommended:" y los saltos de línea
+                                .replace(/^Recommended:\s*[\r\n]*/, '')  // Eliminar "Recommended:" y los saltos de línea
                                 .replace(/\r?\n/g, '<br>');  // Reemplazar saltos de línea por <br>
                             /*Ponemos el texto */
 

@@ -111,7 +111,7 @@ function iniciarApp() {
                 }
                 divItem.innerHTML +=
                     ` 
-                    <a href="../pagGame/infoGame.html?id=${juego['id']}" >
+                    <a href="/pagGame/infoGame.html?id=${juego['id']}" >
                         <img src="${juego["background_image"]}?q=50" class="d-block" alt=""${juego["name"]}"">
                     </a>
                     <div class="carousel-caption d-none d-md-block">
@@ -200,7 +200,7 @@ function iniciarApp() {
                 divCarrusel.id = "carousel" + index;
                 divCarrusel.innerHTML +=
                     `
-                <a href="../pagGame/infoGame.html?id=${juego['id']}" >
+                <a href="/pagGame/infoGame.html?id=${juego['id']}" >
                 <div class="carousel-inner">
                 </div>
                     `;
@@ -242,7 +242,7 @@ function iniciarApp() {
                 divTest.innerHTML +=
                     ` 
                     <div class="card-body">
-                        <a class="text-decoration-none text-white link-primary" href="../pagGame/infoGame.html?id=${juego['id']}" >
+                        <a class="text-decoration-none text-white link-primary" href="/pagGame/infoGame.html?id=${juego['id']}" >
                             <h5 class="card-title fw-bold">${juego["name"]}</h5>   
                         </a>
                         <div id="plataformas"></div> 
@@ -295,7 +295,7 @@ function iniciarApp() {
                 juegosFiltrados.slice(0, 5).forEach(juego => {
                     // Crear el enlace <a>
                     const aElement = document.createElement('a');
-                    aElement.href = `../pagGame/infoGame.html?id=${juego['id']}`; // URL de destino
+                    aElement.href = `/pagGame/infoGame.html?id=${juego['id']}`; // URL de destino
                     aElement.classList.add('text-decoration-none', 'text-dark'); // Clases CSS
 
                     // Crear el contenedor de la tarjeta <div class="card">

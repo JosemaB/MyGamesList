@@ -8,6 +8,24 @@
     font-size: 20px;
 
   }
+
+  .logo {
+    width: 80px;
+  }
+}
+
+@media (min-width: 1200px) {
+
+  /*Para el dropdown-menu sino no me funciona*/
+  .dropdown-menu[data-bs-popper] {
+    top: 100%;
+    right: 0;
+    left: inherit;
+  }
+
+  #resultadosForm {
+    top: 53px !important;
+  }
 }
 
 /* Media Query para tabletas y móviles grandes (entre 768px y 1024px) */
@@ -15,6 +33,10 @@
   #resultadosForm .card-title {
     font-size: 20px;
 
+  }
+
+  .logo {
+    width: 80px;
   }
 }
 
@@ -28,6 +50,10 @@
     font-size: 15px;
 
   }
+
+  .logo {
+    width: 60px;
+  }
 }
 
 /* Aplica la fuente Oswald a todo el contenido */
@@ -37,13 +63,11 @@ body {
   color: #E3E8FF;
 }
 
-/*Logo Pagina*/
-.logo {
-  width: 80px;
-}
+
 
 /*header*/
-.contentNav {
+.contentNav,
+.offcanvas {
   background-color: #1A233A;
   color: white;
 }
@@ -109,7 +133,7 @@ body {
 /*Search*/
 #form {
   position: relative;
-
+  max-width: 350px;
 }
 
 /*BTN BUSCADOR*/
@@ -137,7 +161,7 @@ body {
 #resultadosForm {
   position: absolute;
   width: 100%;
-  top: 40px;
+  top: 38px;
   left: 0;
   z-index: 1000;
   background-color: #1A233A;

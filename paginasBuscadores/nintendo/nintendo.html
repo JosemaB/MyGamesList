@@ -24,67 +24,79 @@
 
 <body>
     <header class="sticky-top mb-3">
-        <div class="contentNav">
-            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start p-2">
+        <nav class="contentNav navbar navbar-expand-xl">
+            <div class="container-fluid ">
                 <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
-                    <img  class="logo" src="/img/logo.png"  alt="PC">
+                    <img class="logo" src="/img/logo.png" alt="LOGO">
                 </a>
-
-                <ul class="fw-bold nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <li><a href="/paginasBuscadores/pc/pc.html" class="nav-link px-2 text-white d-flex align-items-center">
-                            <img class="icon p-2" src="/img/Plataformas/PC.png" alt="PC">
-                            PC
-                        </a>
-                    </li>
-                    <li><a href="/paginasBuscadores/sony/sony.html" class="nav-link px-2 text-white d-flex align-items-center">
-                            <img class="icon p-2" src="/img/Plataformas/sony.png" alt="PC">
-                            PlayStation
-                        </a>
-                    </li>
-                    <li><a href="/paginasBuscadores/xbox/xbox.html" class="nav-link px-2 text-white d-flex align-items-center">
-                            <img class="icon p-2" src="/img/Plataformas/xbox.png" alt="PC">
-                            Xbox
-                        </a>
-                    </li>
-                    <li><a style="background-color: #8b0000;
-                         border-radius: 50px;" href="/paginasBuscadores/nintendo/nintendo.html"
-                            class="nav-link px-2 text-white d-flex align-items-center">
-                            <img class="icon p-2" src="/img/Plataformas/nintendo.png" alt="PC">
-                            Nintendo
-                        </a>
-                    </li>
-                </ul>
-
-                <!--Poner iconos form-->
-
-                <form id="form" class="col-12 col-lg-auto mb-3 me-2 mb-lg-0 d-flex align-items-center" role="search">
-                    <div class="input-group">
-                        <input type="search" id="searchInput" class="custom-search form-control" placeholder="Search..."
-                            aria-label="Search">
-                        <button type="submit" class="btnForm btn">
-                            <i class="bi bi-search"></i>
-                        </button>
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                    <span class="bi bi-justify text-light"></span>
+                </button>
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
+                    aria-labelledby="offcanvasNavbarLabel">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
-                    <div id="resultadosForm"></div>
-                </form>
+                    <div class="offcanvas-body">
+                        <ul class="fw-bold nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                            <li><a href="/paginasBuscadores/pc/pc.html"
+                                    class="nav-link px-2 text-white d-flex align-items-center">
+                                    <img class="icon p-2" src="/img/Plataformas/PC.png" alt="PC">
+                                    PC
+                                </a>
+                            </li>
+                            <li><a href="/paginasBuscadores/sony/sony.html"
+                                    class="nav-link px-2 text-white d-flex align-items-center">
+                                    <img class="icon p-2" src="/img/Plataformas/sony.png" alt="PC">
+                                    PlayStation
+                                </a>
+                            </li>
+                            <li><a href="/paginasBuscadores/xbox/xbox.html"
+                                    class="nav-link px-2 text-white d-flex align-items-center">
+                                    <img class="icon p-2" src="/img/Plataformas/xbox.png" alt="PC">
+                                    Xbox
+                                </a>
+                            </li>
+                            <li><a style="background-color: #8b0000; border-radius: 50px;" href="/paginasBuscadores/nintendo/nintendo.html"
+                                    class="nav-link px-2 text-white d-flex align-items-center">
+                                    <img class="icon p-2" src="/img/Plataformas/nintendo.png" alt="PC">
+                                    Nintendo
+                                </a>
+                            </li>
+                        </ul>
+                        <!--Poner iconos form-->
+                        <form id="form" class="col-12 col-lg-auto mb-3 me-2 mb-lg-0 d-flex align-items-center"
+                            role="search">
+                            <div class="input-group">
+                                <input type="search" id="searchInput" class="custom-search form-control"
+                                    placeholder="Search..." aria-label="Search">
+                                <button type="submit" class="btnForm btn">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                            <div id="resultadosForm"></div>
+                        </form>
 
-
-                <div class="dropdown px-2 text-end">
-                    <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="../../img/agregar-usuario.png" alt="mdo" width="45" height="45" class="rounded-circle">
-                    </a>
-                    <ul class="dropdown-menu text-small">
-                        <li><a class="dropdown-item text-white fw-bold" href="#">Iniciar sesion</a></li>
-                        <li><a class="dropdown-item text-white fw-bold" href="#">Resgistrar Usuario</a></li>
-                        <li><a class="dropdown-item text-white fw-bold" href="#">Wishlist</a></li>
-                        <li><a class="dropdown-item text-white fw-bold" href="#">Configuracion</a></li>
-                        <li><a class="dropdown-item text-white fw-bold" href="#">Cerrar Sesion</a></li>
-                    </ul>
+                        <div class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                <img src="/img/agregar-usuario.png" alt="mdo" width="45" height="45"
+                                    class="rounded-circle">
+                            </a>
+                            <ul class="dropdown-menu text-small">
+                                <li><a class="dropdown-item text-white fw-bold" href="#">Iniciar sesion</a></li>
+                                <li><a class="dropdown-item text-white fw-bold" href="#">Resgistrar Usuario</a></li>
+                                <li><a class="dropdown-item text-white fw-bold" href="#">Wishlist</a></li>
+                                <li><a class="dropdown-item text-white fw-bold" href="#">Configuracion</a></li>
+                                <li><a class="dropdown-item text-white fw-bold" href="#">Cerrar Sesion</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-
             </div>
-        </div>
+        </nav>
     </header>
     <main>
         <div class="container">
