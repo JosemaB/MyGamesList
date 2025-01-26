@@ -20,18 +20,6 @@ main {
   /* Ocupa todo el espacio disponible */
 }
 
-/*Sin resultados*/
-#sinResultado .sinResultadoPersonalizado {
-  max-width: 700px;
-  border-radius: 12px;
-  background-color: #1d2e59;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
-  /* Color de fondo blanco */
-  border: 2px solid black;
-  color: #e6e1e1;
-  /* Borde ligero */
-}
-
 /*Pagination*/
 .pagination {
   display: flex;

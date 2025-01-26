@@ -3,113 +3,114 @@ import { mostrarPlataforma, adjustSelectToSelectedOption, limpiarHTML, quitarCon
 
 document.addEventListener('DOMContentLoaded', iniciarApp);
 function iniciarApp() {
-    //Dejo los query selector aqui para que sean mas intuitivos
-    const resultado20Games = document.querySelector('#resultado20Juegos');
-    const catalogoMain = document.querySelector('#catalogoPrincipal');
-    const cards = document.querySelector('#targetasPrincipales');
-    const select = document.querySelector('#dropdownSelect');
+    try {
+        //Dejo los query selector aqui para que sean mas intuitivos
+        const resultado20Games = document.querySelector('#resultado20Juegos');
+        const catalogoMain = document.querySelector('#catalogoPrincipal');
+        const cards = document.querySelector('#targetasPrincipales');
+        const select = document.querySelector('#dropdownSelect');
 
-    /*Form*/
-    const resultadosForm = document.querySelector('#resultadosForm');
-    const form = document.getElementById("form");
-    // Obtener el campo de búsqueda
-    const searchInput = document.querySelector('#searchInput');
+        /*Form*/
+        const resultadosForm = document.querySelector('#resultadosForm');
+        const form = document.getElementById("form");
+        // Obtener el campo de búsqueda
+        const searchInput = document.querySelector('#searchInput');
 
-    //Eventos
-    // Ajustar el ancho al cambiar la selección select
-    select?.addEventListener('change', (e) => {
-        adjustSelectToSelectedOption(select);
-        limpiarHTML(resultado20Games); //Limpiamos para que se refresque los juegos y no se pongan en si los otros 20 hacia abajo
-        mostrarJuegos(e);
-    });
+        //Eventos
+        // Ajustar el ancho al cambiar la selección select
+        select?.addEventListener('change', (e) => {
+            adjustSelectToSelectedOption(select);
+            limpiarHTML(resultado20Games); //Limpiamos para que se refresque los juegos y no se pongan en si los otros 20 hacia abajo
+            mostrarJuegos(e);
+        });
 
-    // Añadir un event listener para el evento 'input'
-    searchInput.addEventListener('input', () => {
+        // Añadir un event listener para el evento 'input'
+        searchInput.addEventListener('input', () => {
 
-        // Si ya hay un intervalo en ejecución, lo detenemos
-        clearInterval(searchInput.intervalId);
+            // Si ya hay un intervalo en ejecución, lo detenemos
+            clearInterval(searchInput.intervalId);
 
-        // Iniciar un nuevo intervalo de 500ms
-        searchInput.intervalId = setInterval(() => {
+            // Iniciar un nuevo intervalo de 500ms
+            searchInput.intervalId = setInterval(() => {
 
+                if (searchInput.value) {
+                    mostrarBuscador(searchInput.value); //Aqui seria la funcion
+                } else {
+                    limpiarHTML(resultadosForm); //Borramos el div creado
+                }
+            }, 500); // Se ejecuta cada 500ms mientras el usuario escribe
+
+            // Resetear el temporizador para detectar cuando el usuario deja de escribir
+            clearTimeout(searchInput.typingTimer);
+            searchInput.typingTimer = setTimeout(() => {
+                clearInterval(searchInput.intervalId);  // Detener el intervalo cuando el usuario deje de escribir
+            }, 500); // Detener después de 500ms sin que el usuario escriba
+        });
+
+        /*Para cuando el usuario quitae el foco*/
+        searchInput.addEventListener('focus', () => {/*Por si hay contenido en el foco buscaria */
             if (searchInput.value) {
-                mostrarBuscador(searchInput.value); //Aqui seria la funcion
-            } else {
-                limpiarHTML(resultadosForm); //Borramos el div creado
+                mostrarBuscador(searchInput.value);
             }
-        }, 500); // Se ejecuta cada 500ms mientras el usuario escribe
+        });
+        /*Para cuando el usuario quitae el foco*/
+        searchInput.addEventListener('focusout', (event) => {
+            // Verifica si el foco va hacia un enlace 'A' o un div con una clase específica
+            const relatedElement = event.relatedTarget;
 
-        // Resetear el temporizador para detectar cuando el usuario deja de escribir
-        clearTimeout(searchInput.typingTimer);
-        searchInput.typingTimer = setTimeout(() => {
-            clearInterval(searchInput.intervalId);  // Detener el intervalo cuando el usuario deje de escribir
-        }, 500); // Detener después de 500ms sin que el usuario escriba
-    });
+            if (relatedElement && relatedElement.tagName === 'A') {
+                // Si el foco va hacia un enlace, no limpiamos
+                console.log('Foco hacia un enlace');
+            } else {
+                // Si no es ninguno de los casos anteriores, limpiamos
+                limpiarHTML(resultadosForm);
+            }
+        });
 
-    /*Para cuando el usuario quitae el foco*/
-    searchInput.addEventListener('focus', () => {/*Por si hay contenido en el foco buscaria */
-        if (searchInput.value) {
-            mostrarBuscador(searchInput.value);
-        }
-    });
-    /*Para cuando el usuario quitae el foco*/
-    searchInput.addEventListener('focusout', (event) => {
-        // Verifica si el foco va hacia un enlace 'A' o un div con una clase específica
-        const relatedElement = event.relatedTarget;
+        /*Si ha npresionado enter en el formulario */
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();
+            // Obtén el valor del input de búsqueda
+            const searchValue = searchInput.value.trim();
 
-        if (relatedElement && relatedElement.tagName === 'A') {
-            // Si el foco va hacia un enlace, no limpiamos
-            console.log('Foco hacia un enlace');
-        } else {
-            // Si no es ninguno de los casos anteriores, limpiamos
-            limpiarHTML(resultadosForm);
-        }
-    });
+            if (searchValue) {
+                // Construye la URL con el valor ingresado
+                const targetUrl = `/paginasBuscadores/resultados.html?q=${encodeURIComponent(searchValue)}`;
 
-    /*Si ha npresionado enter en el formulario */
-    form.addEventListener("submit", function (event) {
-        event.preventDefault();
-        // Obtén el valor del input de búsqueda
-        const searchValue = searchInput.value.trim();
+                // Redirige al usuario a la página
+                window.location.href = targetUrl;
+            } else {
+                alert("Por favor, ingrese un término de búsqueda.");
+            }
 
-        if (searchValue) {
-            // Construye la URL con el valor ingresado
-            const targetUrl = `/paginasBuscadores/resultados.html?q=${encodeURIComponent(searchValue)}`;
+        });
 
-            // Redirige al usuario a la página
-            window.location.href = targetUrl;
-        } else {
-            alert("Por favor, ingrese un término de búsqueda.");
+
+
+        if (catalogoMain && resultado20Games) { /*Compruebo si existen para la pagina principal */
+            mostrarCatalogoPrincipal();
+            mostrarMainCards();
+            mostrarJuegos();
         }
 
-    });
+        async function mostrarCatalogoPrincipal() {
+            const catalogo = await catalogoPrincipal();
 
-
-
-    if (catalogoMain && resultado20Games) { /*Compruebo si existen para la pagina principal */
-        mostrarCatalogoPrincipal();
-        mostrarMainCards();
-        mostrarJuegos();
-    }
-
-    async function mostrarCatalogoPrincipal() {
-        const catalogo = await catalogoPrincipal();
-
-        catalogo["results"].forEach((juego, index) => {
-            const indicators = catalogoMain.querySelector('.carousel-indicators');
-            indicators.innerHTML += `<button type="button" data-bs-target="#catalogoPrincipal" data-bs-slide-to="${index}" ${index === 0 ? 'class="active' : ''} 
+            catalogo["results"].forEach((juego, index) => {
+                const indicators = catalogoMain.querySelector('.carousel-indicators');
+                indicators.innerHTML += `<button type="button" data-bs-target="#catalogoPrincipal" data-bs-slide-to="${index}" ${index === 0 ? 'class="active' : ''} 
             aria-current="true" aria-label="Slide ${index}"></button>`;
 
-            const divCarousel = catalogoMain.querySelector('.carousel-inner');
-            const divItem = document.createElement('div');
-            divItem.classList.add('carousel-item'); // Añadimos las clases de Bootstrap
-            if (index === 0) {
-                divItem.classList.add('active', 'data-bs-interval="8000"');
-            } else {
-                divItem.classList.add('data-bs-interval="2000"');
-            }
-            divItem.innerHTML +=
-                ` 
+                const divCarousel = catalogoMain.querySelector('.carousel-inner');
+                const divItem = document.createElement('div');
+                divItem.classList.add('carousel-item'); // Añadimos las clases de Bootstrap
+                if (index === 0) {
+                    divItem.classList.add('active', 'data-bs-interval="8000"');
+                } else {
+                    divItem.classList.add('data-bs-interval="2000"');
+                }
+                divItem.innerHTML +=
+                    ` 
                     <a href="../pagGame/infoGame.html?id=${juego['id']}" >
                         <img src="${juego["background_image"]}?q=50" class="d-block" alt=""${juego["name"]}"">
                     </a>
@@ -117,21 +118,21 @@ function iniciarApp() {
                         <h5 class="fw-bold">${juego["name"]}</h5>
                     </div>
             `;
-            divCarousel.appendChild(divItem);
-        });
+                divCarousel.appendChild(divItem);
+            });
 
 
-    }
+        }
 
-    async function mostrarMainCards() {
-        const articulos = await cardsMain();
-        articulos["results"].forEach((juego) => {
-            const div = document.createElement('div');
+        async function mostrarMainCards() {
+            const articulos = await cardsMain();
+            articulos["results"].forEach((juego) => {
+                const div = document.createElement('div');
 
-            div.classList.add('card', 'custom-card', 'text-bg-dark', 'col-2', 'col-xxl-12');
+                div.classList.add('card', 'custom-card', 'text-bg-dark', 'col-2', 'col-xxl-12');
 
-            div.innerHTML +=
-                `  
+                div.innerHTML +=
+                    `  
                 <a class="text-decoration-none text-reset" href="../pagGame/infoGame.html?id=${juego['id']}" >
                     <img src="${juego["background_image"]}" class="card-img" alt="${juego["name"]}">
                 <div class="card-img-overlay">
@@ -148,81 +149,81 @@ function iniciarApp() {
                 </div>
                 </a>
             `;
-            cards.appendChild(div);
-        });
+                cards.appendChild(div);
+            });
 
-    }
-
-    async function mostrarJuegos(event = null) {
-        let ordering = "";  //Esta variable recogera el tipo de filtro que se hara
-        if (event) {
-            if (event.target.value === "mejorValorados") {
-                ordering = "-rating ";
-
-            } else if (event.target.value === "masRecientes") {
-                // Obtener la fecha actual
-                const currentDate = new Date();
-
-                // Calcular la fecha de 6 meses antes
-                const sixMonthsAgo = new Date(currentDate);
-                sixMonthsAgo.setMonth(currentDate.getMonth() - 6);
-
-                // Formatear las fechas a formato "YYYY-MM-DD"
-                const formattedCurrentDate = currentDate.toISOString().split('T')[0]; // Año actual en formato YYYY-MM-DD
-                const formattedSixMonthsAgo = sixMonthsAgo.toISOString().split('T')[0]; // 6 meses antes en formato YYYY-MM-DD
-
-                ordering = `-released&dates=${formattedSixMonthsAgo},${formattedCurrentDate}`;
-
-            } else {
-                ordering = "-metacritic";
-
-            }
-        } else {
-            ordering = "-metacritic";
         }
 
-        const listaDeJuegos = await listaJuegosPorFiltro(ordering);
+        async function mostrarJuegos(event = null) {
+            let ordering = "";  //Esta variable recogera el tipo de filtro que se hara
+            if (event) {
+                if (event.target.value === "mejorValorados") {
+                    ordering = "-rating ";
 
-        const juegosFiltrados = await quitarContenidoAdulto(listaDeJuegos); //Filtramos los juegos para que no haya ningun contenido erotico
+                } else if (event.target.value === "masRecientes") {
+                    // Obtener la fecha actual
+                    const currentDate = new Date();
 
-        //Hacemos un filtro de 20 juegos maximos
-        juegosFiltrados.slice(0, 20).forEach((juego, index) => {
-            const articulo = document.createElement('article');
-            // Añadiendo múltiples clases correctamente card col-lg-3 
-            articulo.classList.add('card', 'hover-card', 'zindex-0', 'col-lg-3', 'col-md-4', 'col-sm-6', 'mb-2'); // Añadimos las clases de Bootstrap
-            const divTest = document.createElement('div');
-            divTest.classList.add('containerCardTest');
+                    // Calcular la fecha de 6 meses antes
+                    const sixMonthsAgo = new Date(currentDate);
+                    sixMonthsAgo.setMonth(currentDate.getMonth() - 6);
 
-            /*Creamos el carrusel para la card de juegos*/
-            const divCarrusel = document.createElement('div');
-            divCarrusel.classList.add('carousel', 'slide', 'carousel-fade');
-            divCarrusel.id = "carousel" + index;
-            divCarrusel.innerHTML +=
-                `
+                    // Formatear las fechas a formato "YYYY-MM-DD"
+                    const formattedCurrentDate = currentDate.toISOString().split('T')[0]; // Año actual en formato YYYY-MM-DD
+                    const formattedSixMonthsAgo = sixMonthsAgo.toISOString().split('T')[0]; // 6 meses antes en formato YYYY-MM-DD
+
+                    ordering = `-released&dates=${formattedSixMonthsAgo},${formattedCurrentDate}`;
+
+                } else {
+                    ordering = "-metacritic";
+
+                }
+            } else {
+                ordering = "-metacritic";
+            }
+
+            const listaDeJuegos = await listaJuegosPorFiltro(ordering);
+
+            const juegosFiltrados = await quitarContenidoAdulto(listaDeJuegos); //Filtramos los juegos para que no haya ningun contenido erotico
+
+            //Hacemos un filtro de 20 juegos maximos
+            juegosFiltrados.slice(0, 20).forEach((juego, index) => {
+                const articulo = document.createElement('article');
+                // Añadiendo múltiples clases correctamente card col-lg-3 
+                articulo.classList.add('card', 'hover-card', 'zindex-0', 'col-lg-3', 'col-md-4', 'col-sm-6', 'mb-2'); // Añadimos las clases de Bootstrap
+                const divTest = document.createElement('div');
+                divTest.classList.add('containerCardTest');
+
+                /*Creamos el carrusel para la card de juegos*/
+                const divCarrusel = document.createElement('div');
+                divCarrusel.classList.add('carousel', 'slide', 'carousel-fade');
+                divCarrusel.id = "carousel" + index;
+                divCarrusel.innerHTML +=
+                    `
                 <a href="../pagGame/infoGame.html?id=${juego['id']}" >
                 <div class="carousel-inner">
                 </div>
                     `;
 
-            // Seleccionamos la sección interna del carrusel donde irán las imágenes
-            const innerDiv = divCarrusel.querySelector('.carousel-inner');
+                // Seleccionamos la sección interna del carrusel donde irán las imágenes
+                const innerDiv = divCarrusel.querySelector('.carousel-inner');
 
-            juego["short_screenshots"].slice(0, 3).forEach((img, index) => {
+                juego["short_screenshots"].slice(0, 3).forEach((img, index) => {
 
-                const div = document.createElement('div');
-                div.classList.add('custom-img-size', 'carousel-item'); // Añadimos las clases de Bootstrap
-                if (index === 0) {
-                    div.classList.add('active');
-                }
+                    const div = document.createElement('div');
+                    div.classList.add('custom-img-size', 'carousel-item'); // Añadimos las clases de Bootstrap
+                    if (index === 0) {
+                        div.classList.add('active');
+                    }
 
-                div.innerHTML +=
-                    ` 
+                    div.innerHTML +=
+                        ` 
                     <img src="${img["image"]}?q=50" class="d-block" alt="${juego["name"]}">
                     `;
-                innerDiv.appendChild(div);
-            });
-            divCarrusel.innerHTML +=
-                ` 
+                    innerDiv.appendChild(div);
+                });
+                divCarrusel.innerHTML +=
+                    ` 
                 
                 <button class="carousel-control-prev" type="button" data-bs-target="#carousel${index}" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -235,11 +236,11 @@ function iniciarApp() {
                 </a>
                 `;
 
-            divTest.appendChild(divCarrusel);
-            const geners = generos(juego); //Nos devuelve una lista de generos
-            //Despues de agregar el carrusel agregamos el contenido de la  targeta
-            divTest.innerHTML +=
-                ` 
+                divTest.appendChild(divCarrusel);
+                const geners = generos(juego); //Nos devuelve una lista de generos
+                //Despues de agregar el carrusel agregamos el contenido de la  targeta
+                divTest.innerHTML +=
+                    ` 
                     <div class="card-body">
                         <a class="text-decoration-none text-white link-primary" href="../pagGame/infoGame.html?id=${juego['id']}" >
                             <h5 class="card-title fw-bold">${juego["name"]}</h5>   
@@ -264,108 +265,111 @@ function iniciarApp() {
                         </p>
                     </div>
             `;
-            divTest.querySelector('#plataformas').appendChild(mostrarPlataforma(juego));
-            articulo.appendChild(divTest);
-            resultado20Games.appendChild(articulo);
-        });
-
-    }
-
-    async function mostrarBuscador(input) {
-
-        limpiarHTML(resultadosForm);
-
-        const juegos = await listaDeJuegosPorNombre(input);
-        console.log(juegos);
-
-        const juegosFiltrados = await quitarContenidoAdulto(juegos);
-        console.log(juegosFiltrados);
-        if (juegosFiltrados.length === 0) {
-            const resultadoDiv = document.createElement('div');
-            const sinResultado = document.createElement('p');
-            sinResultado.classList.add('fw-bold');
-            sinResultado.textContent = 'No se encontraron resultados';
-            sinResultado.style.textAlign = 'center';
-            sinResultado.style.margin = '20px auto 20px';
-
-            resultadoDiv.appendChild(sinResultado);
-            resultadosForm.appendChild(resultadoDiv);
-        } else {
-            juegosFiltrados.slice(0, 5).forEach(juego => {
-                // Crear el enlace <a>
-                const aElement = document.createElement('a');
-                aElement.href = `../pagGame/infoGame.html?id=${juego['id']}`; // URL de destino
-                aElement.classList.add('text-decoration-none', 'text-dark'); // Clases CSS
-
-                // Crear el contenedor de la tarjeta <div class="card">
-                const cardDiv = document.createElement('div');
-                cardDiv.classList.add('card');
-
-                // Crear la fila <div class="row g-0">
-                const rowDiv = document.createElement('div');
-                rowDiv.classList.add('row', 'g-0');
-
-                // Crear la columna con la imagen <div class="col-md-4">
-                const colImageDiv = document.createElement('div');
-                colImageDiv.classList.add('imgForm', 'col-4');
-
-                // Crear la imagen <img src="img/logo.png" class="img-fluid" alt="...">
-                const imgElement = document.createElement('img');
-                imgElement.src = juego['background_image']; // Fuente de la imagen
-                imgElement.classList.add('imgForm', 'col-12');
-                imgElement.alt = juego['name']; // Texto alternativo
-
-                // Agregar la imagen a la columna
-                colImageDiv.appendChild(imgElement);
-
-                // Crear la columna de texto <div class="col-md-8 d-flex align-items-center">
-                const colTextDiv = document.createElement('div');
-                colTextDiv.classList.add('col-8', 'd-flex', 'align-items-center');
-
-                // Crear el contenedor de texto <div class="card-body">
-                const cardBodyDiv = document.createElement('div');
-                cardBodyDiv.classList.add('card-body');
-
-                // Crear el título <h5 class="card-title">
-                const titleElement = document.createElement('h5');
-                titleElement.classList.add('col-12', 'card-title', 'fw-bold');
-                titleElement.textContent = juego['name']; // Texto del título
-
-                // Agregar el título al contenedor de la tarjeta
-                cardBodyDiv.appendChild(titleElement);
-
-                /*Plataforma de juego iconos */
-                const plataformasDelJuego = mostrarPlataforma(juego);
-                plataformasDelJuego.classList.add('col-12');
-                cardBodyDiv.appendChild(plataformasDelJuego);
-
-                // Agregar el contenedor de texto a la columna
-                colTextDiv.appendChild(cardBodyDiv);
-
-                // Agregar las columnas (imagen y texto) a la fila
-                rowDiv.appendChild(colImageDiv);
-                rowDiv.appendChild(colTextDiv);
-
-                // Agregar la fila al contenedor de la tarjeta
-                cardDiv.appendChild(rowDiv);
-
-                // Agregar la tarjeta al enlace <a>
-                aElement.appendChild(cardDiv);
-                // Ahora puedes agregar el <a> a cualquier parte de tu documento, por ejemplo, al body:
-                resultadosForm.appendChild(aElement);
+                divTest.querySelector('#plataformas').appendChild(mostrarPlataforma(juego));
+                articulo.appendChild(divTest);
+                resultado20Games.appendChild(articulo);
             });
 
-            if (juegosFiltrados.length > 5) {
-                // Crear el botón <button>
-                const buttonElement = document.createElement('button');
-                buttonElement.type = 'button'; // Tipo de botón
-                buttonElement.classList.add('fw-bold', 'btn', 'btn-lg', 'btn-block'); // Clases CSS
-                buttonElement.textContent = 'Más resultados'; // Texto del botón
-
-                // Agregar el botón al body o a cualquier contenedor
-                resultadosForm.appendChild(buttonElement);
-            }
         }
 
+        async function mostrarBuscador(input) {
+
+            limpiarHTML(resultadosForm);
+
+            const juegos = await listaDeJuegosPorNombre(input);
+            console.log(juegos);
+
+            const juegosFiltrados = await quitarContenidoAdulto(juegos);
+            console.log(juegosFiltrados);
+            if (juegosFiltrados.length === 0) {
+                const resultadoDiv = document.createElement('div');
+                const sinResultado = document.createElement('p');
+                sinResultado.classList.add('fw-bold');
+                sinResultado.textContent = 'No se encontraron resultados';
+                sinResultado.style.textAlign = 'center';
+                sinResultado.style.margin = '20px auto 20px';
+
+                resultadoDiv.appendChild(sinResultado);
+                resultadosForm.appendChild(resultadoDiv);
+            } else {
+                juegosFiltrados.slice(0, 5).forEach(juego => {
+                    // Crear el enlace <a>
+                    const aElement = document.createElement('a');
+                    aElement.href = `../pagGame/infoGame.html?id=${juego['id']}`; // URL de destino
+                    aElement.classList.add('text-decoration-none', 'text-dark'); // Clases CSS
+
+                    // Crear el contenedor de la tarjeta <div class="card">
+                    const cardDiv = document.createElement('div');
+                    cardDiv.classList.add('card');
+
+                    // Crear la fila <div class="row g-0">
+                    const rowDiv = document.createElement('div');
+                    rowDiv.classList.add('row', 'g-0');
+
+                    // Crear la columna con la imagen <div class="col-md-4">
+                    const colImageDiv = document.createElement('div');
+                    colImageDiv.classList.add('imgForm', 'col-4');
+
+                    // Crear la imagen <img src="img/logo.png" class="img-fluid" alt="...">
+                    const imgElement = document.createElement('img');
+                    imgElement.src = juego['background_image']; // Fuente de la imagen
+                    imgElement.classList.add('imgForm', 'col-12');
+                    imgElement.alt = juego['name']; // Texto alternativo
+
+                    // Agregar la imagen a la columna
+                    colImageDiv.appendChild(imgElement);
+
+                    // Crear la columna de texto <div class="col-md-8 d-flex align-items-center">
+                    const colTextDiv = document.createElement('div');
+                    colTextDiv.classList.add('col-8', 'd-flex', 'align-items-center');
+
+                    // Crear el contenedor de texto <div class="card-body">
+                    const cardBodyDiv = document.createElement('div');
+                    cardBodyDiv.classList.add('card-body');
+
+                    // Crear el título <h5 class="card-title">
+                    const titleElement = document.createElement('h5');
+                    titleElement.classList.add('col-12', 'card-title', 'fw-bold');
+                    titleElement.textContent = juego['name']; // Texto del título
+
+                    // Agregar el título al contenedor de la tarjeta
+                    cardBodyDiv.appendChild(titleElement);
+
+                    /*Plataforma de juego iconos */
+                    const plataformasDelJuego = mostrarPlataforma(juego);
+                    plataformasDelJuego.classList.add('col-12');
+                    cardBodyDiv.appendChild(plataformasDelJuego);
+
+                    // Agregar el contenedor de texto a la columna
+                    colTextDiv.appendChild(cardBodyDiv);
+
+                    // Agregar las columnas (imagen y texto) a la fila
+                    rowDiv.appendChild(colImageDiv);
+                    rowDiv.appendChild(colTextDiv);
+
+                    // Agregar la fila al contenedor de la tarjeta
+                    cardDiv.appendChild(rowDiv);
+
+                    // Agregar la tarjeta al enlace <a>
+                    aElement.appendChild(cardDiv);
+                    // Ahora puedes agregar el <a> a cualquier parte de tu documento, por ejemplo, al body:
+                    resultadosForm.appendChild(aElement);
+                });
+
+                if (juegosFiltrados.length > 5) {
+                    // Crear el botón <button>
+                    const buttonElement = document.createElement('button');
+                    buttonElement.type = 'button'; // Tipo de botón
+                    buttonElement.classList.add('fw-bold', 'btn', 'btn-lg', 'btn-block'); // Clases CSS
+                    buttonElement.textContent = 'Más resultados'; // Texto del botón
+
+                    // Agregar el botón al body o a cualquier contenedor
+                    resultadosForm.appendChild(buttonElement);
+                }
+            }
+
+        }
+    } catch (error) {
+        console.log(error);
     }
 }
