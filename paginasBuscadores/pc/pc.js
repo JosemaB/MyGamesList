@@ -8,12 +8,12 @@ async function buscadorNintendo() {
     const urlParams = new URLSearchParams(window.location.search);
     const page = urlParams.get('page'); // Page
     if (page) {
-        await juegosPorCatalogo(7, resultadoJuegos, page);
-        mostrarPaginador('/paginasBuscadores/nintendo/nintendo.html', resultadoJuegos, 250, parseInt(page));
+        await juegosPorCatalogo(1, resultadoJuegos, page);
+        mostrarPaginador('/paginasBuscadores/pc/pc.html', resultadoJuegos, 250, parseInt(page));
 
     } else {
-        await juegosPorCatalogo(7, resultadoJuegos);
-        mostrarPaginador('/paginasBuscadores/nintendo/nintendo.html', resultadoJuegos,250);
+        await juegosPorCatalogo(1, resultadoJuegos);
+        mostrarPaginador('/paginasBuscadores/pc/pc.html', resultadoJuegos, 250 );
 
     }
 }
