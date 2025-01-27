@@ -11,7 +11,7 @@ async function buscadorNintendo() {
         if (page) {
             await juegosPorCatalogo(2, resultadoJuegos, page);
             if (!document.querySelector('#resultadoJuegos #sinResultado')) {
-                mostrarPaginador('/paginasBuscadores/nintendo/nintendo.html', resultadoJuegos, 250, parseInt(page));
+                mostrarPaginador('/paginasBuscadores/sony/sony.html', resultadoJuegos, 250, parseInt(page));
             }
 
         } else {

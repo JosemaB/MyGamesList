@@ -112,7 +112,7 @@ function iniciarApp() {
                 divItem.innerHTML +=
                     ` 
                     <a href="/pagGame/infoGame.html?id=${juego['id']}" >
-                        <img src="${juego["background_image"]}?q=50" class="d-block" alt=""${juego["name"]}"">
+                        <img src="${juego["background_image"]}?q=50" class="d-block" alt="${juego["name"]}" title="${juego["name"]}">
                     </a>
                     <div class="carousel-caption d-none d-md-block">
                         <h5 class="fw-bold">${juego["name"]}</h5>
@@ -129,11 +129,11 @@ function iniciarApp() {
             articulos["results"].forEach((juego) => {
                 const div = document.createElement('div');
 
-                div.classList.add('card', 'custom-card', 'text-bg-dark', 'col-2', 'col-xxl-12');
+                div.classList.add('card', 'custom-card', 'text-bg-dark', 'col-12');
 
                 div.innerHTML +=
                     `  
-                <a class="text-decoration-none text-reset" href="../pagGame/infoGame.html?id=${juego['id']}" >
+                <a title="${juego["name"]}" class="text-decoration-none text-reset" href="/pagGame/infoGame.html?id=${juego['id']}" >
                     <img src="${juego["background_image"]}" class="card-img" alt="${juego["name"]}">
                 <div class="card-img-overlay">
                     <h5 class=" bordeNegro card-title">${juego["name"]}</h5>
@@ -142,7 +142,7 @@ function iniciarApp() {
                             <strong>Calificación:</strong> 
                             <span class="badge bg-success">${juego["rating"] * 2}</span>
                         </span>
-                        <span class="bg-dark text-warning fw-bold rounded-3 p-1 d-none d-xxl-inline">
+                        <span class="bg-dark text-warning fw-bold rounded-3 p-1 d-none d-xl-inline">
                             <i class="bi bi-star-fill"></i> ${juego["ratings_count"]} valoraciones
                         </span>
                     </p>
@@ -200,7 +200,7 @@ function iniciarApp() {
                 divCarrusel.id = "carousel" + index;
                 divCarrusel.innerHTML +=
                     `
-                <a href="/pagGame/infoGame.html?id=${juego['id']}" >
+                <a title="${juego["name"]}" href="/pagGame/infoGame.html?id=${juego['id']}" >
                 <div class="carousel-inner">
                 </div>
                     `;
@@ -242,7 +242,7 @@ function iniciarApp() {
                 divTest.innerHTML +=
                     ` 
                     <div class="card-body">
-                        <a class="text-decoration-none text-white link-primary" href="/pagGame/infoGame.html?id=${juego['id']}" >
+                        <a  class="text-decoration-none text-white link-primary" href="/pagGame/infoGame.html?id=${juego['id']}" >
                             <h5 class="card-title fw-bold">${juego["name"]}</h5>   
                         </a>
                         <div id="plataformas"></div> 
