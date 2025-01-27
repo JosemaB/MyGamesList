@@ -268,13 +268,13 @@ body {
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.6), 0 0 30px rgba(255, 255, 255, 0.4);
   /* Efecto de brillo */
 }
-#targetasPrincipales 
 
 /* Carrusel: Limitar tamaño */
 #catalogoPrincipal .carousel-inner,
 #catalogoPrincipal .carousel-inner img,
 #catalogoPrincipal .carousel-inner .carousel-item {
-  height: 100%; /*No me quedaba de otra para poner el carousel al 100% el alto. El carousel es calentarte la cabeza a mas no poder*/
+  height: 100%;
+  /*No me quedaba de otra para poner el carousel al 100% el alto. El carousel es calentarte la cabeza a mas no poder*/
 }
 
 .carousel-item img {
