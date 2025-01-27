@@ -27,7 +27,14 @@
     top: 53px !important;
   }
 }
-
+@media (max-width: 1199px){
+  .dropdown-menu[data-bs-popper] {
+    left: 26%;
+  }
+  #form{
+    margin: auto;
+  }
+}
 /* Media Query para tabletas y móviles grandes (entre 768px y 1024px) */
 @media (max-width: 1023px) and (min-width: 768px) {
   #resultadosForm .card-title {

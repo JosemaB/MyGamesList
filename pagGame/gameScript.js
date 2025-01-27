@@ -474,7 +474,6 @@ async function iniciarInfoGame() {
                         /*Ponemos el titulo antes */
                         divReqMin.appendChild(tituloMinimo);
                         divReqRec.appendChild(tituloRecomended);
-
                         /*Si encontramos /N lo remplazamos con un <br> */
                         if (plataforma['requirements']['minimum']) {/*Lo compruebo si no existe el minimo o recomendado para que no reviente la pagina */
 
