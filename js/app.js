@@ -2,6 +2,7 @@ import { listaJuegosPorFiltro, catalogoPrincipal, cardsMain, listaDeJuegosPorNom
 import { mostrarPlataforma, adjustSelectToSelectedOption, limpiarHTML, quitarContenidoAdulto, generos } from "./funciones.js";
 
 document.addEventListener('DOMContentLoaded', iniciarApp);
+
 function iniciarApp() {
     try {
         //Dejo los query selector aqui para que sean mas intuitivos
@@ -88,9 +89,46 @@ function iniciarApp() {
 
 
         if (catalogoMain && resultado20Games) { /*Compruebo si existen para la pagina principal */
-            mostrarCatalogoPrincipal();
-            mostrarMainCards();
-            mostrarJuegos();
+            /*Para la pantalla de carga es una pijada hacer esto pero tenia ganas de probarlo claremente */
+            window.addEventListener('load', function () {
+                // Crear una promesa que resuelve cuando todas las funciones terminan
+                function cargarContenido() {
+                    return new Promise((resolve, reject) => {
+                        // Ejecutamos las tres funciones y esperamos que todas terminen
+                        let promises = [
+                            mostrarCatalogoPrincipal(),
+                            mostrarMainCards(),
+                            mostrarJuegos()
+                        ];
+
+                        // Esperamos a que todas las promesas se resuelvan
+                        Promise.all(promises)
+                            .then(() => {
+                                // Cuando todas las funciones se hayan completado, resolvemos la promesa
+                                resolve();
+                            })
+                            .catch((error) => {
+                                // Si alguna función falla, rechazamos la promesa
+                                reject(error);
+                            });
+                    });
+                }
+
+                // Llamamos a la función cargarContenido y esperamos que todas las funciones se completen
+                cargarContenido()
+                    .then(function () {
+                        // Cuando se resuelva la promesa, ocultamos el loading y mostramos el contenido
+                        document.getElementById('loading').style.display = 'none';
+                        document.querySelectorAll('.ocultarContenido').forEach(function (element) {
+                            element.style.display = 'block';
+                        });
+                    })
+                    .catch(function (error) {
+                        // Si hubo algún error durante la carga de contenido
+                        console.error('Error al cargar el contenido:', error);
+                    });
+            });
+
         }
 
         async function mostrarCatalogoPrincipal() {

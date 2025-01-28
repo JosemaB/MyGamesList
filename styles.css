@@ -27,14 +27,17 @@
     top: 53px !important;
   }
 }
-@media (max-width: 1199px){
+
+@media (max-width: 1199px) {
   .dropdown-menu[data-bs-popper] {
     left: 26%;
   }
-  #form{
+
+  #form {
     margin: auto;
   }
 }
+
 /* Media Query para tabletas y móviles grandes (entre 768px y 1024px) */
 @media (max-width: 1023px) and (min-width: 768px) {
   #resultadosForm .card-title {
@@ -63,13 +66,49 @@
   }
 }
 
+
+/*Pantalla de carga*/
+
+.load .yoshi {
+  width: auto;
+  border-radius: 50px;
+  height: 250px;
+}
+
+.loading {
+  font-size: 24px; /* Tamaño del texto */
+  font-weight: bold;
+  color: #E3E8FF;
+  animation: blink 2s infinite; /* Duración de 2 segundos, animación infinita */
+}
+
+/* Definición de la animación de parpadeo */
+/* Definición de la animación de parpadeo */
+@keyframes blink {
+  0%, 100% {
+    opacity: 1; /* Totalmente visible al inicio y al final */
+  }
+  50% {
+    opacity: 0; /* Invisible a mitad de la animación */
+  }
+}
+
+.load .titulo {
+  height: 30px;
+  width: auto;
+}
+
+.ocultarContenido {
+  display: none;
+}
+
+
 /* Aplica la fuente Oswald a todo el contenido */
 body {
   font-family: 'Oswald', sans-serif;
   background-color: #121829;
   color: #E3E8FF;
 }
-
 
 
 /*header*/

@@ -174,9 +174,9 @@ async function iniciarInfoGame() {
                 const divDescripcion = document.createElement('div');
                 divDescripcion.id = 'DescripcionJuego';
 
-                const descripcionLimpia = juego['description'].replace(/<br\s*\/?>/gi, ''); // Elimina todos los <br>
+                const descripcionLimpia = juego['description'].replace(/<br\s*\/?>|&lt;br\s*\/?&gt;|&lt;strong&gt;|&lt;\/strong&gt;/gi, ''); // Elimina todos los <br>
                 divDescripcion.innerHTML = descripcionLimpia;
-
+                console.log(descripcionLimpia);
                 const plataformas = mostrarPlataforma(juego);
                 plataformas.classList.add('child', 'fw-bold');
                 plataformas.textContent = 'Plataformas: ';

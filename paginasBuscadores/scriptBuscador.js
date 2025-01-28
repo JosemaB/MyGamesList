@@ -11,8 +11,7 @@ function iniciarBuscador() {
         const urlParams = new URLSearchParams(window.location.search);
         // Accede al valor del parámetro "q"
         const searchValue = urlParams.get("q");
-        console.log(urlParams);
-
+        
         if (searchValue) {
             juegosPorResultado(searchValue);
         }
