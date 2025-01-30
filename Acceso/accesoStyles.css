@@ -60,3 +60,20 @@ body {
 #miFormulario .btn:hover {
     background-color: #121829;
 }
+
+/*Para el login de google*/
+.separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: gray;
+    margin: 10px 0;
+}
+
+.separator::before,
+.separator::after {
+    content: "";
+    flex: 1;
+    border-top: 1px solid gray;
+    margin: 0 10px;
+}

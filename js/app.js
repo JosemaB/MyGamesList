@@ -81,7 +81,18 @@ function iniciarApp() {
                 // Redirige al usuario a la página
                 window.location.href = targetUrl;
             } else {
-                alert("Por favor, ingrese un término de búsqueda.");
+                const alerta = resultadosForm.querySelector('.alert-danger')
+                if(alerta){
+                    alerta.remove();
+                }
+                const divAlert = document.createElement('div');
+                divAlert.classList.add('alert', 'alert-danger');
+                divAlert.role = 'alert';
+                divAlert.style.backgroundColor = 'none';
+                divAlert.style.borderRadius = '0';
+                divAlert.style.margin = '0';
+                divAlert.innerHTML = 'Por favor, ingrese un término de búsqueda.';
+                resultadosForm.appendChild(divAlert);
             }
 
         });
