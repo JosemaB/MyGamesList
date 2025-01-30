@@ -1,4 +1,3 @@
-/* Media Query para pantallas de escritorio (mayores a 1024px) */
 @media (min-width: 992px) {
   #form {
     width: 350px;
@@ -51,7 +50,7 @@
 }
 
 /* Media Query para móviles pequeños (menos de 768px) */
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   .imgForm {
     object-fit: cover;
   }
@@ -60,19 +59,15 @@
     font-size: 15px;
 
   }
-
   .logo {
     width: 60px;
   }
 }
 
-
 /*Pantalla de carga*/
-
 .load .yoshi {
   width: auto;
-  border-radius: 50px;
-  height: 250px;
+  max-height: 250px;
 }
 
 .loading {
@@ -80,6 +75,10 @@
   font-weight: bold;
   color: #E3E8FF;
   animation: blink 2s infinite; /* Duración de 2 segundos, animación infinita */
+}
+.load .titulo {
+  height: auto;
+  width: 70%;
 }
 
 /* Definición de la animación de parpadeo */
@@ -91,11 +90,6 @@
   50% {
     opacity: 0; /* Invisible a mitad de la animación */
   }
-}
-
-.load .titulo {
-  height: 30px;
-  width: auto;
 }
 
 .ocultarContenido {
