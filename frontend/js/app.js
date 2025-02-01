@@ -76,7 +76,7 @@ function iniciarApp() {
 
             if (searchValue) {
                 // Construye la URL con el valor ingresado
-                const targetUrl = `/frontend/paginasBuscadores/resultados.html?q=${encodeURIComponent(searchValue)}`;
+                const targetUrl = `/paginasBuscadores/resultados.html?q=${encodeURIComponent(searchValue)}`;
 
                 // Redirige al usuario a la página
                 window.location.href = targetUrl;
@@ -160,7 +160,7 @@ function iniciarApp() {
                 }
                 divItem.innerHTML +=
                     ` 
-                    <a href="/frontend/pagGame/infoGame.html?id=${juego['id']}" >
+                    <a href="/pagGame/infoGame.html?id=${juego['id']}" >
                         <img src="${juego["background_image"]}?q=50" class="d-block" alt="${juego["name"]}" title="${juego["name"]}">
                     </a>
                     <div class="carousel-caption d-none d-md-block">
@@ -182,7 +182,7 @@ function iniciarApp() {
 
                 div.innerHTML +=
                     `  
-                <a title="${juego["name"]}" class="text-decoration-none text-reset" href="/frontend/pagGame/infoGame.html?id=${juego['id']}" >
+                <a title="${juego["name"]}" class="text-decoration-none text-reset" href="/pagGame/infoGame.html?id=${juego['id']}" >
                     <img src="${juego["background_image"]}" class="card-img" alt="${juego["name"]}">
                 <div class="card-img-overlay">
                     <h5 class=" bordeNegro card-title">${juego["name"]}</h5>
@@ -249,7 +249,7 @@ function iniciarApp() {
                 divCarrusel.id = "carousel" + index;
                 divCarrusel.innerHTML +=
                     `
-                <a title="${juego["name"]}" href="/frontend/pagGame/infoGame.html?id=${juego['id']}" >
+                <a title="${juego["name"]}" href="/pagGame/infoGame.html?id=${juego['id']}" >
                 <div class="carousel-inner">
                 </div>
                     `;
@@ -291,7 +291,7 @@ function iniciarApp() {
                 divTest.innerHTML +=
                     ` 
                     <div class="card-body">
-                        <a  class="text-decoration-none text-white link-primary" href="/frontend/pagGame/infoGame.html?id=${juego['id']}" >
+                        <a  class="text-decoration-none text-white link-primary" href="/pagGame/infoGame.html?id=${juego['id']}" >
                             <h5 class="card-title fw-bold">${juego["name"]}</h5>   
                         </a>
                         <div id="plataformas"></div> 
@@ -344,7 +344,7 @@ function iniciarApp() {
                 juegosFiltrados.slice(0, 5).forEach(juego => {
                     // Crear el enlace <a>
                     const aElement = document.createElement('a');
-                    aElement.href = `/frontend/pagGame/infoGame.html?id=${juego['id']}`; // URL de destino
+                    aElement.href = `/pagGame/infoGame.html?id=${juego['id']}`; // URL de destino
                     aElement.classList.add('text-decoration-none', 'text-dark'); // Clases CSS
 
                     // Crear el contenedor de la tarjeta <div class="card">

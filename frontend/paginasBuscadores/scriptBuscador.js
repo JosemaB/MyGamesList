@@ -41,7 +41,7 @@ async function juegosPorResultado(searchValue) {
                 divCarrusel.id = "carousel" + index;
                 divCarrusel.innerHTML +=
                     `
-                    <a href="/frontend/pagGame/infoGame.html?id=${juego['id']}" >
+                    <a href="/pagGame/infoGame.html?id=${juego['id']}" >
                     <div class="carousel-inner">
                     </div>
                         `;
@@ -83,7 +83,7 @@ async function juegosPorResultado(searchValue) {
                 divTest.innerHTML +=
                     ` 
                         <div class="card-body">
-                            <a class="text-decoration-none text-white link-primary" href="/frontend/pagGame/infoGame.html?id=${juego['id']}" >
+                            <a class="text-decoration-none text-white link-primary" href="/pagGame/infoGame.html?id=${juego['id']}" >
                                 <h5 class="card-title fw-bold">${juego["name"]}</h5>   
                             </a>
                             <div id="plataformas"></div> 

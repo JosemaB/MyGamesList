@@ -1,11 +1,11 @@
 @media (min-width: 771px) {
     body {
-        background-image: url('/frontend/img/acceso/registerFondo.jpg');
+        background-image: url('/img/acceso/registerFondo.jpg');
     }
 }
 @media (max-width: 771px) {
     body {
-        background-image: url('/frontend/img/acceso/registerMovil.png');
+        background-image: url('/img/acceso/registerMovil.png');
     }
 }
 

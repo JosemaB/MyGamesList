@@ -11,12 +11,12 @@ async function buscadorNintendo() {
         if (page) {
             await juegosPorCatalogo(1, resultadoJuegos, page);
             if (!document.querySelector('#resultadoJuegos #sinResultado')) {
-                mostrarPaginador('/frontend/paginasBuscadores/pc/pc.html', resultadoJuegos, 250, parseInt(page));
+                mostrarPaginador('/paginasBuscadores/pc/pc.html', resultadoJuegos, 250, parseInt(page));
             }
 
         } else {
             await juegosPorCatalogo(1, resultadoJuegos);
-            mostrarPaginador('/frontend/paginasBuscadores/pc/pc.html', resultadoJuegos, 250);
+            mostrarPaginador('/paginasBuscadores/pc/pc.html', resultadoJuegos, 250);
 
         }
     } catch (error) {

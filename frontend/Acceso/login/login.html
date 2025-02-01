@@ -12,11 +12,11 @@
     <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script>
 
     <!--Login google-->
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <meta name="google-signin-client_id" content="150210589892-f21l9gp217rvh7ubi1k2svkgjqdmf0uq.apps.googleusercontent.com">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
 
     <!--Mis archivos-->
-    <link href="/frontend/Acceso/accesoStyles.css" rel="stylesheet">
+    <link href="/Acceso/accesoStyles.css" rel="stylesheet">
     <link href="../../styles.css" rel="stylesheet">
     <link href="loginEstilos.css" rel="stylesheet">
 
@@ -29,9 +29,9 @@
     <header>
         <nav class="contentNav navbar bg-transparent">
             <div class="container-fluid justify-content-between">
-                <a href="/frontend/index.html"
+                <a href="/index.html"
                     class="d-flex align-items-center mb-2 mb-0 link-body-emphasis text-decoration-none">
-                    <img class="logo" src="/frontend/img/logo.png" alt="LOGO">
+                    <img class="logo" src="/img/logo.png" alt="LOGO">
                 </a>
                 <button id="btnClose" type="button" class="btn-close me-3 btn-close-white" aria-label="Close"></button>
             </div>
@@ -47,12 +47,13 @@
                             <form id="miFormulario">
                                 <div class="mb-3">
                                     <label for="email" class="fw-bold form-label">Correo electrónico</label>
-                                    <input placeholder="Ingresa tu correo electrónico" type="email" class="form-control"
-                                        id="email">
+                                    <input placeholder="Ingresa tu correo electrónico" autocomplete="email" type="email"
+                                        class="form-control" id="email">
                                 </div>
                                 <div class="mb-3">
                                     <label for="password" class="fw-bold form-label">Contraseña</label>
-                                    <input placeholder="***********" type="password" class="form-control" id="password">
+                                    <input placeholder="***********" autocomplete="current-password" type="password"
+                                        class="form-control" id="password">
                                 </div>
                                 <div class="mb-3 form-check">
                                     <input type="checkbox" class="fw-bold form-check-input" id="exampleCheck1"
@@ -62,7 +63,40 @@
                                 <button type="submit" name="enviar" class="fw-bold col-12 btn">Iniciar Sesión</button>
                             </form>
                             <div class="separator">o</div>
-                            <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                            <!-- Botón de inicio de sesión -->
+                            <div id="g_id_onload"
+                                data-client_id="963691276350-ef15a1a1lde4c0lhchr6kn3lr005rmm9.apps.googleusercontent.com"
+                                data-callback="handleCredentialResponse" data-auto_prompt="false">
+                            </div>
+                            <div class="g_id_signin" data-type="standard" data-size="large">
+                            </div>
+
+                            <script>
+                                function handleCredentialResponse(googleUser) {
+                                    // console.log("Encoded JWT ID token: " + googleUser.credential);
+                                    const tokens = googleUser.credential.split(".");
+                                    const responsePayload = JSON.parse(atob(tokens[1]));
+                                    console.log("ID: " + responsePayload.sub);
+                                    console.log('Full Name: ' + responsePayload.name);
+                                    console.log('Given Name: ' + responsePayload.given_name);
+                                    console.log('Family Name: ' + responsePayload.family_name);
+                                    console.log("Image URL: " + responsePayload.picture);
+                                    console.log("Email: " + responsePayload.email);
+
+                                    // cache the jwt token into cookie for 1 hour to be reused later
+                                    // Get current time
+                                    var now = new Date();
+
+                                    // Set expiration time to 1 hour from now
+                                    var expirationTime = new Date(now.getTime() + 1 * 3600 * 1000); // 1 hour = 3600 seconds * 1000 milliseconds
+
+                                    // Construct the cookie string
+                                    var cookieString = "user_jwt=" + encodeURIComponent(tokens[1]) + "; expires=" + expirationTime.toUTCString() + "; path=/";
+
+                                    // Set the cookie
+                                    document.cookie = cookieString;
+                                }
+                            </script>
                         </div>
                     </div>
                     <div id="resultado">

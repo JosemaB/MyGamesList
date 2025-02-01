@@ -11,12 +11,12 @@ async function buscadorNintendo() {
         if (page) {
             await juegosPorCatalogo(3, resultadoJuegos, page);
             if (!document.querySelector('#resultadoJuegos #sinResultado')) {
-                mostrarPaginador('/frontend/paginasBuscadores/xbox/xbox.html', resultadoJuegos, 224, parseInt(page));
+                mostrarPaginador('/paginasBuscadores/xbox/xbox.html', resultadoJuegos, 224, parseInt(page));
             }
 
         } else {
             await juegosPorCatalogo(3, resultadoJuegos);
-            mostrarPaginador('/frontend/paginasBuscadores/xbox/xbox.html', resultadoJuegos, 224);
+            mostrarPaginador('/paginasBuscadores/xbox/xbox.html', resultadoJuegos, 224);
 
         }
     } catch (error) {

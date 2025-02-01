@@ -11,11 +11,11 @@ async function buscadorNintendo() {
         if (page) {
             await juegosPorCatalogo(7, resultadoJuegos, page);
             if (!document.querySelector('#resultadoJuegos #sinResultado')) {
-                mostrarPaginador('/frontend/paginasBuscadores/nintendo/nintendo.html', resultadoJuegos, 250, parseInt(page));
+                mostrarPaginador('/paginasBuscadores/nintendo/nintendo.html', resultadoJuegos, 250, parseInt(page));
             }
         } else {
             await juegosPorCatalogo(7, resultadoJuegos);
-            mostrarPaginador('/frontend/paginasBuscadores/nintendo/nintendo.html', resultadoJuegos, 250);
+            mostrarPaginador('/paginasBuscadores/nintendo/nintendo.html', resultadoJuegos, 250);
 
         }
     } catch (error) {
