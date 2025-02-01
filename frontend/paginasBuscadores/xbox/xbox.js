@@ -9,13 +9,14 @@ async function buscadorNintendo() {
         const urlParams = new URLSearchParams(window.location.search);
         const page = urlParams.get('page'); // Page
         if (page) {
-            await juegosPorCatalogo(7, resultadoJuegos, page);
+            await juegosPorCatalogo(3, resultadoJuegos, page);
             if (!document.querySelector('#resultadoJuegos #sinResultado')) {
-                mostrarPaginador('/paginasBuscadores/nintendo/nintendo.html', resultadoJuegos, 250, parseInt(page));
+                mostrarPaginador('/frontend/paginasBuscadores/xbox/xbox.html', resultadoJuegos, 224, parseInt(page));
             }
+
         } else {
-            await juegosPorCatalogo(7, resultadoJuegos);
-            mostrarPaginador('/paginasBuscadores/nintendo/nintendo.html', resultadoJuegos, 250);
+            await juegosPorCatalogo(3, resultadoJuegos);
+            mostrarPaginador('/frontend/paginasBuscadores/xbox/xbox.html', resultadoJuegos, 224);
 
         }
     } catch (error) {

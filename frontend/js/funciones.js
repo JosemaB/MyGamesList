@@ -10,32 +10,32 @@ export function mostrarPlataforma(game) {
 
             switch (plataforma["platform"]["slug"].toLowerCase()) {
                 case "pc":
-                    img.src = '/img/Plataformas/windows.png';
+                    img.src = '/frontend/img/Plataformas/windows.png';
                     img.alt = 'Windows';
                     img.title = 'Windows';
                     break;
                 case "playstation":
-                    img.src = '/img/Plataformas/sony.png';
+                    img.src = '/frontend/img/Plataformas/sony.png';
                     img.alt = 'Playstation';
                     img.title = 'Playstation';
                     break;
                 case "xbox":
-                    img.src = '/img/Plataformas/xbox.png';
+                    img.src = '/frontend/img/Plataformas/xbox.png';
                     img.alt = 'Xbox';
                     img.title = 'Xbox';
                     break;
                 case "nintendo":
-                    img.src = '/img/Plataformas/nintendo.png';
+                    img.src = '/frontend/img/Plataformas/nintendo.png';
                     img.alt = 'Nintendo';
                     img.title = 'Nintendo';
                     break;
                 case "android":
-                    img.src = '/img/Plataformas/android.png';
+                    img.src = '/frontend/img/Plataformas/android.png';
                     img.alt = 'Android';
                     img.title = 'Android';
                     break;
                 case "ios":
-                    img.src = '/img/Plataformas/ios.png';
+                    img.src = '/frontend/img/Plataformas/ios.png';
                     img.alt = 'IOS';
                     img.title = 'IOS';
                     break;
@@ -208,22 +208,22 @@ export function fotoUsuario(id) {
         let fotoUsuario = "";
         switch (id) {
             case 5:
-                fotoUsuario = "/img/usuarios/TonyElMolon.png";
+                fotoUsuario = "/frontend/img/usuarios/TonyElMolon.png";
                 break;
             case 4:
-                fotoUsuario = "/img/usuarios/Josemab26.jpg";
+                fotoUsuario = "/frontend/img/usuarios/Josemab26.jpg";
                 break;
 
             case 3:
-                fotoUsuario = "/img/usuarios/Narita.jfif";
+                fotoUsuario = "/frontend/img/usuarios/Narita.jfif";
                 break;
 
             case 1:
-                fotoUsuario = "/img/usuarios/Chispy2.png";
+                fotoUsuario = "/frontend/img/usuarios/Chispy2.png";
                 break;
 
             default:
-                fotoUsuario = "/img/usuarios/UsuarioDesconocido.png";
+                fotoUsuario = "/frontend/img/usuarios/UsuarioDesconocido.png";
                 break;
 
         }
@@ -454,7 +454,7 @@ export async function juegosPorCatalogo(plataforma, divPrincipal, page = 1) {
                 divCarrusel.id = "carousel" + index;
                 divCarrusel.innerHTML +=
                     `
-                    <a title="${juego["name"]}" href="../../pagGame/infoGame.html?id=${juego['id']}" >
+                    <a title="${juego["name"]}" href="/frontend/pagGame/infoGame.html?id=${juego['id']}" >
                     <div class="carousel-inner">
                     </div>
                         `;
@@ -496,7 +496,7 @@ export async function juegosPorCatalogo(plataforma, divPrincipal, page = 1) {
                 divTest.innerHTML +=
                     ` 
                         <div class="card-body">
-                            <a  class="text-decoration-none text-white link-primary" href="../../pagGame/infoGame.html?id=${juego['id']}" >
+                            <a  class="text-decoration-none text-white link-primary" href="/frontend/pagGame/infoGame.html?id=${juego['id']}" >
                                 <h5 class="card-title fw-bold">${juego["name"]}</h5>   
                             </a>
                             <div id="plataformas"></div> 

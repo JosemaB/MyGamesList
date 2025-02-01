@@ -14,19 +14,19 @@
     <!--Mis archivos-->
     <link href="/Acceso/accesoStyles.css" rel="stylesheet">
     <link href="../../styles.css" rel="stylesheet">
-    <link href="loginEstilos.css" rel="stylesheet">
+    <link href="registerEstilos.css" rel="stylesheet">
 
 
-    <script src="login.js" defer></script>
-    <title>Login</title>
+    <script src="register.js" defer></script>
+    <title>Register</title>
 </head>
 
 <body>
     <header>
         <nav class="contentNav navbar bg-transparent">
             <div class="container-fluid justify-content-between">
-                <a href="/" class="d-flex align-items-center mb-2 mb-0 link-body-emphasis text-decoration-none">
-                    <img class="logo" src="/img/logo.png" alt="LOGO">
+                <a href="/frontend/index.html" class="d-flex align-items-center mb-2 mb-0 link-body-emphasis text-decoration-none">
+                    <img class="logo" src="/frontend/img/logo.png" alt="LOGO">
                 </a>
                 <button id="btnClose" type="button" class="btn-close me-3 btn-close-white" aria-label="Close"></button>
             </div>
@@ -42,10 +42,18 @@
                             <form id="miFormulario">
                                 <div class="mb-3">
                                     <label for="email" class="fw-bold form-label">Correo electrónico</label>
-                                    <input placeholder="Ingresa tu correo electrónico" type="email" class="form-control" id="email">
+                                    <input placeholder="correo@ejemplo.com" type="email" class="form-control" id="email">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="usuario" class="fw-bold form-label">Usuario</label>
+                                    <input placeholder="usuario123" type="usuario" class="form-control" id="usuario">
                                 </div>
                                 <div class="mb-3">
                                     <label for="password" class="fw-bold form-label">Contraseña</label>
+                                    <input placeholder="***********" type="password" class="form-control" id="password">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="password" class="fw-bold form-label">Confirmar contraseña</label>
                                     <input placeholder="***********" type="password" class="form-control" id="password">
                                 </div>
                                 <div class="mb-3 form-check">
@@ -53,9 +61,8 @@
                                         onclick="mostrarPassword()">
                                     <label class="form-check-label" for="exampleCheck1">Mostrar contraseña</label>
                                 </div>
-                                <button type="submit" name="enviar" class="fw-bold col-12 btn">Iniciar Sesión</button>
+                                <button type="submit" name="enviar" class="fw-bold col-12 btn">Crear Cuenta</button>
                             </form>
-                            <div class="separator">o</div>
                         </div>
                     </div>
                     <div id="resultado">

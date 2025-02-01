@@ -4,28 +4,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explora el catalogo de Xbox</title>
 
     <!-- Importar CSS desde node_modules -->
-    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="../estilosBuscadores.css">
 
-    <link rel="stylesheet" href="../styles.css">
-    <link rel="stylesheet" href="./stylesInfoGames.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
     <!-- Importar JS desde node_modules -->
-    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script>
-    <script type="module" src="./gameScript.js"></script>
-    <script type="module" src="../js/app.js"></script>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script>
 
-    <title>Game Info</title>
+    <!-- Declarar app.js como un módulo -->
+    <script type="module" src="../../js/app.js"></script>
+    <script type="module" src="./xbox.js"></script>
 </head>
 
 <body>
     <header class="sticky-top mb-3">
         <nav class="contentNav navbar navbar-expand-xl">
             <div class="container-fluid ">
-                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
-                    <img class="logo" src="/img/logo.png" alt="LOGO">
+                <a href="/frontend/index.html" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
+                    <img class="logo" src="/frontend/img/logo.png" alt="LOGO">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
                     data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
@@ -35,13 +37,14 @@
                     aria-labelledby="offcanvasNavbarLabel">
                     <div class="offcanvas-header">
                         <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+                            aria-label="Close"></button>
                     </div>
                     <div class="offcanvas-body">
                         <div class="nav-item dropdown d-block d-xl-none mx-auto text-center">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">
-                                <img src="/img/agregar-usuario.png" alt="mdo" width="45" height="45"
+                                <img src="/frontend/img/agregar-usuario.png" alt="mdo" width="45" height="45"
                                     class="rounded-circle">
                             </a>
                             <ul class="dropdown-menu text-center text-small">
@@ -53,27 +56,28 @@
                             </ul>
                         </div>
                         <ul class="fw-bold nav col-12 col-xl-auto me-xl-auto mb-2 justify-content-center mb-xl-0">
-                            <li><a href="/paginasBuscadores/pc/pc.html"
+                            <li><a href="/frontend/paginasBuscadores/pc/pc.html"
                                     class="nav-link px-2 text-white d-flex align-items-center">
-                                    <img class="icon p-2" src="/img/Plataformas/PC.png" alt="PC">
+                                    <img class="icon p-2" src="/frontend/img/Plataformas/PC.png" alt="PC">
                                     PC
                                 </a>
                             </li>
-                            <li><a href="/paginasBuscadores/sony/sony.html"
+                            <li><a href="/frontend/paginasBuscadores/sony/sony.html"
                                     class="nav-link px-2 text-white d-flex align-items-center">
-                                    <img class="icon p-2" src="/img/Plataformas/sony.png" alt="PC">
+                                    <img class="icon p-2" src="/frontend/img/Plataformas/sony.png" alt="PC">
                                     PlayStation
                                 </a>
                             </li>
-                            <li><a href="/paginasBuscadores/xbox/xbox.html"
+                            <li><a style="background-color: #0e680e;
+                                    border-radius: 50px;" href="/frontend/paginasBuscadores/xbox/xbox.html"
                                     class="nav-link px-2 text-white d-flex align-items-center">
-                                    <img class="icon p-2" src="/img/Plataformas/xbox.png" alt="PC">
+                                    <img class="icon p-2" src="/frontend/img/Plataformas/xbox.png" alt="PC">
                                     Xbox
                                 </a>
                             </li>
-                            <li><a href="/paginasBuscadores/nintendo/nintendo.html"
+                            <li><a href="/frontend/paginasBuscadores/nintendo/nintendo.html"
                                     class="nav-link px-2 text-white d-flex align-items-center">
-                                    <img class="icon p-2" src="/img/Plataformas/nintendo.png" alt="PC">
+                                    <img class="icon p-2" src="/frontend/img/Plataformas/nintendo.png" alt="PC">
                                     Nintendo
                                 </a>
                             </li>
@@ -94,7 +98,7 @@
                         <div class="nav-item dropdown d-none d-xl-block">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">
-                                <img src="/img/agregar-usuario.png" alt="mdo" width="45" height="45"
+                                <img src="/frontend/img/agregar-usuario.png" alt="mdo" width="45" height="45"
                                     class="rounded-circle">
                             </a>
                             <ul class="dropdown-menu text-small text-end">
@@ -111,81 +115,18 @@
         </nav>
     </header>
     <main>
-        <div class="mainContent">
-            <div class="container">
+        <div class="container">
+            <div id="containerCard" class="container">
+                <div class="row justify-content-center  align-items-start" id="resultadoJuegos">
 
-                <div class="row" id="visuales">
-
-                </div>
-
-                <div class="row mt-5">
-                    <!-- Navegación de pestañas -->
-                    <ul class="nav" id="myTab" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="info-tab" data-bs-toggle="tab" data-bs-target="#info"
-                                type="button" role="tab" aria-controls="info" aria-selected="true">DESCRIPCIÓN</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="screenshots-tab" data-bs-toggle="tab"
-                                data-bs-target="#screenshots" type="button" role="tab" aria-controls="screenshots"
-                                aria-selected="false">CAPTURAS DE PANTALLA</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews"
-                                type="button" role="tab" aria-controls="reviews" aria-selected="false">RESEÑAS</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="required-tab" data-bs-toggle="tab" data-bs-target="#required"
-                                type="button" role="tab" aria-controls="required"
-                                aria-selected="false">REQUISITOS</button>
-                        </li>
-                    </ul>
-
-                    <!-- Contenido de las pestañas -->
-                    <!-- Contenido de las pestañas dentro de myTabContent -->
-                    <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id="info" role="tabpanel" aria-labelledby="info-tab">
-
-                        </div>
-                        <div class="tab-pane fade d-flex justify-content-center" id="screenshots" role="tabpanel"
-                            aria-labelledby="screenshots-tab">
-
-                        </div>
-                        <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
-
-                        </div>
-                        <div class="tab-pane fade" id="required" role="tabpanel" aria-labelledby="required-tab">
-
-                        </div>
-                    </div>
                 </div>
             </div>
+
         </div>
     </main>
 
-    <!-- Modal Contenido De Clases-->
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Understood</button>
-                </div>
-            </div>
-        </div>
-    </div>
     <!-- Footer -->
     <footer class="footerPrincipal text-center text-lg-start text-white mt-5">
-       
-       
         <!-- Section: Social media -->
         <section class="foooterSE d-flex justify-content-between p-4">
             <!-- Left -->
@@ -208,14 +149,13 @@
         </section>
         <!-- Section: Social media -->
 
-
         <div class="container text-center text-md-start mt-5">
             <!-- Grid row -->
             <div class="row mt-3 d-flex align-items-start justify-content-between">
                 <!-- Grid column -->
                 <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
                     <!-- Content -->
-                    <h6 class="text-uppercase fw-bold">MyGameList</h6>
+                    <h6 class="text-uppercase fw-bold">MyGamesList</h6>
                     <hr class="tamanoFuente mb-4 mt-0 d-inline-block mx-auto" />
                     <p>
                         <strong>Rating:</strong>
@@ -289,7 +229,6 @@
         </div>
         <!-- Copyright -->
     </footer>
-    <!-- Footer -->
 </body>
 
 </html>

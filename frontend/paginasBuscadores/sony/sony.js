@@ -9,14 +9,14 @@ async function buscadorNintendo() {
         const urlParams = new URLSearchParams(window.location.search);
         const page = urlParams.get('page'); // Page
         if (page) {
-            await juegosPorCatalogo(1, resultadoJuegos, page);
+            await juegosPorCatalogo(2, resultadoJuegos, page);
             if (!document.querySelector('#resultadoJuegos #sinResultado')) {
-                mostrarPaginador('/paginasBuscadores/pc/pc.html', resultadoJuegos, 250, parseInt(page));
+                mostrarPaginador('/frontend/paginasBuscadores/sony/sony.html', resultadoJuegos, 250, parseInt(page));
             }
 
         } else {
-            await juegosPorCatalogo(1, resultadoJuegos);
-            mostrarPaginador('/paginasBuscadores/pc/pc.html', resultadoJuegos, 250);
+            await juegosPorCatalogo(2, resultadoJuegos);
+            mostrarPaginador('/frontend/paginasBuscadores/sony/sony.html', resultadoJuegos, 250);
 
         }
     } catch (error) {

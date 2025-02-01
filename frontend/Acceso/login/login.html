@@ -11,22 +11,27 @@
     <!-- Importar JS desde node_modules -->
     <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script>
 
+    <!--Login google-->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="150210589892-f21l9gp217rvh7ubi1k2svkgjqdmf0uq.apps.googleusercontent.com">
+
     <!--Mis archivos-->
-    <link href="/Acceso/accesoStyles.css" rel="stylesheet">
+    <link href="/frontend/Acceso/accesoStyles.css" rel="stylesheet">
     <link href="../../styles.css" rel="stylesheet">
-    <link href="registerEstilos.css" rel="stylesheet">
+    <link href="loginEstilos.css" rel="stylesheet">
 
 
-    <script src="register.js" defer></script>
-    <title>Register</title>
+    <script src="login.js" defer></script>
+    <title>Login</title>
 </head>
 
 <body>
     <header>
         <nav class="contentNav navbar bg-transparent">
             <div class="container-fluid justify-content-between">
-                <a href="/" class="d-flex align-items-center mb-2 mb-0 link-body-emphasis text-decoration-none">
-                    <img class="logo" src="/img/logo.png" alt="LOGO">
+                <a href="/frontend/index.html"
+                    class="d-flex align-items-center mb-2 mb-0 link-body-emphasis text-decoration-none">
+                    <img class="logo" src="/frontend/img/logo.png" alt="LOGO">
                 </a>
                 <button id="btnClose" type="button" class="btn-close me-3 btn-close-white" aria-label="Close"></button>
             </div>
@@ -42,18 +47,11 @@
                             <form id="miFormulario">
                                 <div class="mb-3">
                                     <label for="email" class="fw-bold form-label">Correo electrónico</label>
-                                    <input placeholder="correo@ejemplo.com" type="email" class="form-control" id="email">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="usuario" class="fw-bold form-label">Usuario</label>
-                                    <input placeholder="usuario123" type="usuario" class="form-control" id="usuario">
+                                    <input placeholder="Ingresa tu correo electrónico" type="email" class="form-control"
+                                        id="email">
                                 </div>
                                 <div class="mb-3">
                                     <label for="password" class="fw-bold form-label">Contraseña</label>
-                                    <input placeholder="***********" type="password" class="form-control" id="password">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="password" class="fw-bold form-label">Confirmar contraseña</label>
                                     <input placeholder="***********" type="password" class="form-control" id="password">
                                 </div>
                                 <div class="mb-3 form-check">
@@ -61,8 +59,10 @@
                                         onclick="mostrarPassword()">
                                     <label class="form-check-label" for="exampleCheck1">Mostrar contraseña</label>
                                 </div>
-                                <button type="submit" name="enviar" class="fw-bold col-12 btn">Crear Cuenta</button>
+                                <button type="submit" name="enviar" class="fw-bold col-12 btn">Iniciar Sesión</button>
                             </form>
+                            <div class="separator">o</div>
+                            <div class="g-signin2" data-onsuccess="onSignIn"></div>
                         </div>
                     </div>
                     <div id="resultado">

@@ -1,0 +1,10 @@
+@media (min-width: 771px) {
+    body {
+        background-image: url('/frontend/img/acceso/fondoLogin.webp');
+    }
+}
+@media (max-width: 771px) {
+    body {
+        background-image: url('/frontend/img/acceso/loginMovil.jpg');
+    }
+}
