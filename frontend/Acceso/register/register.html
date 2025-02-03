@@ -16,7 +16,6 @@
     <link href="../../styles.css" rel="stylesheet">
     <link href="registerEstilos.css" rel="stylesheet">
 
-
     <script src="register.js" defer></script>
     <title>Register</title>
 </head>
@@ -25,7 +24,8 @@
     <header>
         <nav class="contentNav navbar bg-transparent">
             <div class="container-fluid justify-content-between">
-                <a href="/index.html" class="d-flex align-items-center mb-2 mb-0 link-body-emphasis text-decoration-none">
+                <a href="/index.html"
+                    class="d-flex align-items-center mb-2 mb-0 link-body-emphasis text-decoration-none">
                     <img class="logo" src="/img/logo.png" alt="LOGO">
                 </a>
                 <button id="btnClose" type="button" class="btn-close me-3 btn-close-white" aria-label="Close"></button>
@@ -42,7 +42,8 @@
                             <form id="miFormulario">
                                 <div class="mb-3">
                                     <label for="email" class="fw-bold form-label">Correo electrónico</label>
-                                    <input placeholder="correo@ejemplo.com" type="email" class="form-control" id="email">
+                                    <input placeholder="correo@ejemplo.com" autocomplete="email" type="email" class="form-control"
+                                        id="email">
                                 </div>
                                 <div class="mb-3">
                                     <label for="usuario" class="fw-bold form-label">Usuario</label>
@@ -50,11 +51,11 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="password" class="fw-bold form-label">Contraseña</label>
-                                    <input placeholder="***********" type="password" class="form-control" id="password">
+                                    <input placeholder="***********" autocomplete="current-password" type="password" class="form-control" id="password">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="password" class="fw-bold form-label">Confirmar contraseña</label>
-                                    <input placeholder="***********" type="password" class="form-control" id="password">
+                                    <label for="confirmPassword" class="fw-bold form-label">Confirmar contraseña</label>
+                                    <input placeholder="***********" autocomplete="current-password" type="password" class="form-control" id="confirmPassword">
                                 </div>
                                 <div class="mb-3 form-check">
                                     <input type="checkbox" class="fw-bold form-check-input" id="exampleCheck1"
@@ -62,7 +63,14 @@
                                     <label class="form-check-label" for="exampleCheck1">Mostrar contraseña</label>
                                 </div>
                                 <button type="submit" name="enviar" class="fw-bold col-12 btn">Crear Cuenta</button>
+                                <div class="col-12 m-0 mt-2 p-0 text-center" id="errores"></div>
                             </form>
+                            <div class="separator">o</div>
+                            <div class="text-center">
+                                <p class="m-0 fw-bold">¿Ya tienes cuenta en MyGamesList?</p>
+                                <a class="fw-bold text-decoration-none" href="../login/login.html"
+                                    title="Crear cuenta ">Iniciar sesión</a>
+                            </div>
                         </div>
                     </div>
                     <div id="resultado">

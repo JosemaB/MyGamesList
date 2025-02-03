@@ -3,8 +3,17 @@
         background-image: url('/img/acceso/fondoLogin.webp');
     }
 }
+
 @media (max-width: 771px) {
     body {
         background-image: url('/img/acceso/loginMovil.jpg');
     }
+}
+
+a {
+    color: #5a75f1;
+}
+
+a:hover {
+    color: #4e63c9;
 }

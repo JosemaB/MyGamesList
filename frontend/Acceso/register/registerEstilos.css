@@ -19,3 +19,10 @@
 #miFormulario .btn:hover {
     background-color: hsl(9, 71%, 23%);;
 }
+a {
+    color: #4883a3;
+}
+
+a:hover {
+    color: #376780;
+}

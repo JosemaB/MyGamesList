@@ -77,3 +77,8 @@ body {
     border-top: 1px solid gray;
     margin: 0 10px;
 }
+
+/*Para el focus*/
+input.error {
+    border: 2px solid rgb(139, 33, 33);
+}
