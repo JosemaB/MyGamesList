@@ -40,14 +40,14 @@ function iniciarLogin() {
         e.preventDefault();
 
         // Obtener todos los campos del formulario
-        const campos = [formulario.email, formulario.password];
+        const camposLogin = [formulario.email, formulario.password];
 
         // Limpiar el estilo de error antes de la validación
-        campos.forEach(campo => campo.classList.remove('error'));
+        camposLogin.forEach(campo => campo.classList.remove('error'));
 
         let hayErrores = false; //Para saber si tiene el formulario errores antes de pasarlo al backend
         // Validar si los campos están vacíos y aplicar el estilo de error
-        campos.forEach(campo => {
+        camposLogin.forEach(campo => {
             if (campo.value.trim() === "") {
                 campo.classList.add('error');
                 hayErrores = true;
@@ -71,11 +71,42 @@ function iniciarLogin() {
         if (hayErrores) {
             alerta.innerHTML = "El correo y la contraseña son obligatorios";
             errorDiv.appendChild(alerta);
+        } else {
+            //Ahora pasamos los datos al backend
+            enviarDatos(camposLogin[0].value.trim(), camposLogin[1].value.trim());
         }
 
-        //Submit backend
 
     });
+    async function enviarDatos(email, password) {
+        const datos = {
+            email: email,
+            password: password
+        };
+
+        try {
+            // Enviar datos usando fetch
+            const response = await fetch('http://localhost:3000/backend/controllers/register.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datos) // Enviamos los datos como JSON
+            });
+
+            // Verificamos si la respuesta es correcta
+            if (!response.ok) {
+                throw new Error('Error en la respuesta de PHP');
+            }
+
+            // Convertimos la respuesta en JSON
+            const data = await response.json();
+            console.log('Respuesta de PHP:', data);
+
+        } catch (error) {
+            console.error('Error al enviar datos:', error);
+        }
+    }
 }
 function mostrarPassword() {
     const password = document.querySelector('#password');
