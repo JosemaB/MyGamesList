@@ -40,14 +40,14 @@ function iniciarLogin() {
         e.preventDefault();
 
         // Obtener todos los campos del formulario
-        const campos = [formulario.email, formulario.password, formulario.usuario, formulario.confirmPassword];
+        const camposRegister = [formulario.email, formulario.usuario, formulario.password, formulario.confirmPassword];
 
         // Limpiar el estilo de error antes de la validación
-        campos.forEach(campo => campo.classList.remove('error'));
+        camposRegister.forEach(campo => campo.classList.remove('error'));
 
         let hayErrores = false; //Para saber si tiene el formulario errores antes de pasarlo al backend
         // Validar si los campos están vacíos y aplicar el estilo de error
-        campos.forEach(campo => {
+        camposRegister.forEach(campo => {
             if (campo.value.trim() === "") {
                 campo.classList.add('error');
                 hayErrores = true;
@@ -71,17 +71,52 @@ function iniciarLogin() {
         if (hayErrores) {
             alerta.innerHTML = "Por favor, completa todos los campos";
             errorDiv.appendChild(alerta);
+        }else{
+            //Submit backend
+            enviarDatos(camposRegister[0].value, camposRegister[1].value, camposRegister[2].value, camposRegister[3].value);
         }
-        //Submit backend
 
     });
+    async function enviarDatos(email, usuario, password, confirmPassword) {
+        const datos = {
+            email: email,
+            usuario: usuario,
+            password: password,
+            confirmPassword: confirmPassword
+        };
+        try {
+            // Enviar datos usando fetch
+            const response = await fetch('http://localhost:3000/backend/controllers/register.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datos) // Enviamos los datos como JSON
+            });
 
+            // Verificamos si la respuesta es correcta
+            if (!response.ok) {
+                throw new Error('Error en la respuesta de PHP');
+            }
+            // Convertimos la respuesta en JSON
+            const data = await response.json();
+            console.log('Respuesta de PHP:', data);
+
+        } catch (error) {
+            console.error('Error al enviar datos:', error);
+        }
+    }
 }
 function mostrarPassword() {
     const password = document.querySelector('#password');
+    const confirmPassword = document.querySelector('#confirmPassword');
+
     if (password.type === "password") {
         password.type = 'text';
+        confirmPassword.type = 'text';
+
     } else {
         password.type = 'password';
+        confirmPassword.type = 'password';
     }
 }
