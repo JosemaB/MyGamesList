@@ -433,6 +433,33 @@ function crearEllipsis() {
     return ellipsisItem;
 }
 
+export function alertDanger(textError) {
+    // Crear el div de la alerta
+    const alerta = document.createElement("div");
+
+    // Agregar clases de Bootstrap
+    alerta.classList.add("fw-bold", "alert", "alert-danger");
+    alerta.setAttribute("role", "alert");
+    alerta.style.margin = '0';
+    alerta.innerHTML = textError;
+
+    return alerta;
+}
+export function alertSuccess(textSuccess) {
+    // Crear el div de la alerta
+    const alerta = document.createElement("div");
+
+    // Agregar clases de Bootstrap para éxito
+    alerta.classList.add("fw-bold", "alert", "alert-success");
+    alerta.setAttribute("role", "alert");
+    alerta.style.margin = '0';
+    alerta.innerHTML = textSuccess;
+
+    return alerta;
+}
+
+
+
 export async function juegosPorCatalogo(plataforma, divPrincipal, page = 1) {
     try {
         const juegos = await catalogoPlataformas(page, plataforma);

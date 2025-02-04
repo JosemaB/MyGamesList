@@ -16,7 +16,7 @@
     <link href="../../styles.css" rel="stylesheet">
     <link href="registerEstilos.css" rel="stylesheet">
 
-    <script src="register.js" defer></script>
+    <script type="module" src="register.js"></script>
     <title>Register</title>
 </head>
 
@@ -58,12 +58,11 @@
                                     <input placeholder="***********" autocomplete="current-password" type="password" class="form-control" id="confirmPassword">
                                 </div>
                                 <div class="mb-3 form-check">
-                                    <input type="checkbox" class="fw-bold form-check-input" id="exampleCheck1"
-                                        onclick="mostrarPassword()">
+                                    <input type="checkbox" class="fw-bold form-check-input" id="checkbox">
                                     <label class="form-check-label" for="exampleCheck1">Mostrar contraseña</label>
                                 </div>
-                                <button type="submit" name="enviar" class="fw-bold col-12 btn">Crear Cuenta</button>
-                                <div class="col-12 m-0 mt-2 p-0 text-center" id="errores"></div>
+                                <button id="crearCuentaBtn" type="submit" name="enviar" class="fw-bold col-12 btn">Crear Cuenta</button>
+                                <div class="col-12 m-0 mt-2 p-0 text-center" id="alertas"></div>
                             </form>
                             <div class="separator">o</div>
                             <div class="text-center">

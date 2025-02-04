@@ -1,6 +1,10 @@
+import { alertDanger, alertSuccess } from "../../js/funciones.js";
+
 document.addEventListener('DOMContentLoaded', iniciarLogin);
 
 function iniciarLogin() {
+    document.getElementById('checkbox').addEventListener('click', mostrarPassword);
+
     // Obtener la URL de la página anterior
     let referrer = document.referrer;
 
@@ -35,7 +39,7 @@ function iniciarLogin() {
         window.location.href = redirectUrl; // Redirige a la URL almacenada
     }
 
-    formulario.addEventListener('submit', (e) => {
+    formulario.addEventListener('submit', async (e) => {
         // Evita que el formulario se envíe de manera predeterminada
         e.preventDefault();
 
@@ -54,26 +58,31 @@ function iniciarLogin() {
             }
         });
 
-        const errorDiv = document.getElementById('errores');
-        const existeAlerta = errorDiv.querySelector('.alert-danger');
+        const alertaDiv = document.getElementById('alertas');
+        const existeAlerta = alertaDiv.querySelector('.alert');
         if (existeAlerta) {
             existeAlerta.remove();
         }
-        // Crear el div de la alerta
-        const alerta = document.createElement("div");
-
-        // Agregar clases de Bootstrap
-        alerta.classList.add("alert", "alert-danger");
-        alerta.setAttribute("role", "alert");
-        alerta.style.margin = '0';
 
         // Validar campos vacíos
         if (hayErrores) {
-            alerta.innerHTML = "Por favor, completa todos los campos";
-            errorDiv.appendChild(alerta);
-        }else{
+            alertaDiv.appendChild(alertDanger("Por favor, completa todos los campos"));
+        } else {
             //Submit backend
-            enviarDatos(camposRegister[0].value, camposRegister[1].value, camposRegister[2].value, camposRegister[3].value);
+            const datos = await enviarDatos(camposRegister[0].value, camposRegister[1].value, camposRegister[2].value, camposRegister[3].value);
+
+            if (!datos["success"]) {
+                alertaDiv.appendChild(alertDanger(datos["error"]));
+
+            } else if (datos["success"]) { //Lo compruebo asi sin else por si falla los datos y no hacerlo aunque haya generado error
+                alertaDiv.appendChild(alertSuccess(datos["exito"]));
+                document.getElementById('crearCuentaBtn').style.display = 'none';
+
+                // Redirigir al login después de 4 segundos
+                setTimeout(() => {
+                    window.location.href = "../login/login.html";
+                }, 4000);
+            }
         }
 
     });
@@ -100,23 +109,23 @@ function iniciarLogin() {
             }
             // Convertimos la respuesta en JSON
             const data = await response.json();
-            console.log('Respuesta de PHP:', data);
 
+            return data;
         } catch (error) {
             console.error('Error al enviar datos:', error);
         }
     }
-}
-function mostrarPassword() {
-    const password = document.querySelector('#password');
-    const confirmPassword = document.querySelector('#confirmPassword');
-
-    if (password.type === "password") {
-        password.type = 'text';
-        confirmPassword.type = 'text';
-
-    } else {
-        password.type = 'password';
-        confirmPassword.type = 'password';
+    function mostrarPassword() {
+        const password = document.querySelector('#password');
+        const confirmPassword = document.querySelector('#confirmPassword');
+    
+        if (password.type === "password") {
+            password.type = 'text';
+            confirmPassword.type = 'text';
+    
+        } else {
+            password.type = 'password';
+            confirmPassword.type = 'password';
+        }
     }
 }

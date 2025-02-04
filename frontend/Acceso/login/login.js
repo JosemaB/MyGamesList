@@ -1,6 +1,9 @@
 document.addEventListener('DOMContentLoaded', iniciarLogin);
 
 function iniciarLogin() {
+    //Selectores
+    document.getElementById('checkbox').addEventListener('click', mostrarPassword);
+
     // Obtener la URL de la página anterior
     let referrer = document.referrer;
 
@@ -107,12 +110,40 @@ function iniciarLogin() {
             console.error('Error al enviar datos:', error);
         }
     }
-}
-function mostrarPassword() {
-    const password = document.querySelector('#password');
-    if (password.type === "password") {
-        password.type = 'text';
-    } else {
-        password.type = 'password';
+    function mostrarPassword() {
+        const password = document.querySelector('#password');
+        if (password.type === "password") {
+            password.type = 'text';
+        } else {
+            password.type = 'password';
+        }
     }
 }
+/*
+                            <script>
+                                function handleCredentialResponse(googleUser) {
+                                    // console.log("Encoded JWT ID token: " + googleUser.credential);
+                                    const tokens = googleUser.credential.split(".");
+                                    const responsePayload = JSON.parse(atob(tokens[1]));
+                                    console.log("ID: " + responsePayload.sub);
+                                    console.log('Full Name: ' + responsePayload.name);
+                                    console.log('Given Name: ' + responsePayload.given_name);
+                                    console.log('Family Name: ' + responsePayload.family_name);
+                                    console.log("Image URL: " + responsePayload.picture);
+                                    console.log("Email: " + responsePayload.email);
+
+                                    // cache the jwt token into cookie for 1 hour to be reused later
+                                    // Get current time
+                                    var now = new Date();
+
+                                    // Set expiration time to 1 hour from now
+                                    var expirationTime = new Date(now.getTime() + 1 * 3600 * 1000); // 1 hour = 3600 seconds * 1000 milliseconds
+
+                                    // Construct the cookie string
+                                    var cookieString = "user_jwt=" + encodeURIComponent(tokens[1]) + "; expires=" + expirationTime.toUTCString() + "; path=/";
+
+                                    // Set the cookie
+                                    document.cookie = cookieString;
+                                }
+                            </script> */
+

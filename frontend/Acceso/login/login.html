@@ -18,7 +18,7 @@
     <link href="/Acceso/accesoStyles.css" rel="stylesheet">
     <link href="../../styles.css" rel="stylesheet">
     <link href="loginEstilos.css" rel="stylesheet">
-    <script src="login.js" defer></script>
+    <script type="module" src="login.js"></script>
     <title>Login</title>
 </head>
 
@@ -53,7 +53,7 @@
                                         class="form-control" id="password">
                                 </div>
                                 <div class="mb-3 form-check">
-                                    <input type="checkbox" class="fw-bold form-check-input" onclick="mostrarPassword()">
+                                    <input type="checkbox" class="fw-bold form-check-input" id="checkbox">
                                     <div class="d-flex justify-content-between">
                                         <label class="form-check-label" for="exampleCheck1">Mostrar contraseña</label>
                                         <a class=" text-decoration-none" href="#" title="Crear cuenta">¿Olvidaste tu
@@ -65,13 +65,13 @@
 
                                 <div class="separator">o</div>
                                 <!-- Botón de inicio de sesión -->
-                                <div class="m-auto">
+                                <div class="mb-3 d-flex justify-content-center d-relative">
                                     <div id="g_id_onload"
                                         data-client_id="963691276350-ef15a1a1lde4c0lhchr6kn3lr005rmm9.apps.googleusercontent.com"
                                         data-callback="handleCredentialResponse" data-auto_prompt="false">
                                     </div>
-                                    <div class="d-flex justify-content-center g_id_signin" data-type="standard"
-                                        data-size="large">
+                                    <div class="m3 g_id_signin" data-type="standard"
+                                        data-size="large" data-width="300">
                                     </div>
                                 </div>
 
@@ -81,33 +81,6 @@
                                         title="Crear cuenta">Unirse ahora</a>
                                 </div>
                             </form>
-
-                            <script>
-                                function handleCredentialResponse(googleUser) {
-                                    // console.log("Encoded JWT ID token: " + googleUser.credential);
-                                    const tokens = googleUser.credential.split(".");
-                                    const responsePayload = JSON.parse(atob(tokens[1]));
-                                    console.log("ID: " + responsePayload.sub);
-                                    console.log('Full Name: ' + responsePayload.name);
-                                    console.log('Given Name: ' + responsePayload.given_name);
-                                    console.log('Family Name: ' + responsePayload.family_name);
-                                    console.log("Image URL: " + responsePayload.picture);
-                                    console.log("Email: " + responsePayload.email);
-
-                                    // cache the jwt token into cookie for 1 hour to be reused later
-                                    // Get current time
-                                    var now = new Date();
-
-                                    // Set expiration time to 1 hour from now
-                                    var expirationTime = new Date(now.getTime() + 1 * 3600 * 1000); // 1 hour = 3600 seconds * 1000 milliseconds
-
-                                    // Construct the cookie string
-                                    var cookieString = "user_jwt=" + encodeURIComponent(tokens[1]) + "; expires=" + expirationTime.toUTCString() + "; path=/";
-
-                                    // Set the cookie
-                                    document.cookie = cookieString;
-                                }
-                            </script>
                         </div>
                     </div>
                     <div id="resultado mt-3"></div>

@@ -21,5 +21,5 @@ function validarCorreo($correo)
 function validarContrasena($contrasena)
 {
     $contrasenaSaneada = valdiarConCarateresEspeciales($contrasena);
-    return preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*?]).{6,}$/', $contrasenaSaneada);
+    return preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*?.]).{6,}$/', $contrasenaSaneada);
 }
