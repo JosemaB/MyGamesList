@@ -12,7 +12,7 @@ class ConexionBdd
         $this->conn = new mysqli($this->host, $this->username, $this->password, $this->dbname);
 
         if ($this->conn->connect_error) {
-            die("Error de conexión: " . $this->conn->connect_error);
+            throw new Exception("Error de conexión: " . $this->conn->connect_error);
         }
     }
     // Método estático para obtener la conexión directamente

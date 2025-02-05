@@ -1,19 +1,17 @@
 <?php
 include_once '../config/ConexionBdd.php';  //Para la conexion de la base de datos MyGamesList
 include_once '../config/cors.php';  // Incluye CORS para poder hacer la conexion con mi frontend
-include_once '../validators/userValidator.php';
 include_once '../helpers/funciones.php';
 
-// Obtener los datos enviados en formato JSON
-$datos = json_decode(file_get_contents('php://input'), true);
-if ($datos) {
-    $email = validarCadena($datos['email']);
+try {
+    // Obtener los datos enviados en formato JSON
+    $datos = json_decode(file_get_contents('php://input'), true);
+    if ($datos) {
 
-    //Creamos la conexion ya con los campos validados
-    $baseDeDatos = new ConexionBdd();
-    $conexion = $baseDeDatos->getConnection();
-
-    try {
+        $email = validarCadena($datos['email']);
+        //Creamos la conexion ya con los campos validados
+        $baseDeDatos = new ConexionBdd();
+        $conexion = $baseDeDatos->getConnection();
         //Buscar otro tipos de inriptacion en el siguiente dia
         //Aqui se comprueba si el usuario existe
         $consultaUsuario = $conexion->prepare("select contrasena from usuarios where email = ?");
@@ -25,17 +23,19 @@ if ($datos) {
         if ($usuarioExiste->num_rows !== 0) {
             if (password_verify($datos['password'], $usuarioResultado["contrasena"])) {
                 $exito = "Usuario dentro de la sesion";
+                //Faltaria crear cookeis y agregar sesion
             } else {
                 $error = 'Error. Usuario o Contraseña incorrectos';
             }
             //Para mandar un mensaje mas correcto
         } else {
-            $error = "El usuario que quieres inicar sesion no existe(Crea tu cuenta para poder iniciar sesion)";
+            $error = "El correo electrónico ingresado no está asociado a ninguna cuenta, regístrate para acceder";
         }
-    } catch (Exception $ex) {
-        echo $ex->getMessage();
+        //Cerramos la conexion
+        $baseDeDatos->closeConnection();
     }
-
+} catch (Exception $ex) {
+    $error = $ex->getMessage();
 }
 
 // Si hay error, los devolvemos como JSON y detenemos la ejecución

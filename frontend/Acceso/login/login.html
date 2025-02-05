@@ -56,12 +56,13 @@
                                     <input type="checkbox" class="fw-bold form-check-input" id="checkbox">
                                     <div class="d-flex justify-content-between">
                                         <label class="form-check-label" for="exampleCheck1">Mostrar contraseña</label>
-                                        <a class=" text-decoration-none" href="#" title="Crear cuenta">¿Olvidaste tu
-                                            contraseña?</a>
+                                        <a class=" text-decoration-none" href="#" title="Crear cuenta"
+                                            data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                            ¿Olvidaste tu contraseña?</a>
                                     </div>
                                 </div>
                                 <button type="submit" name="enviar" class="fw-bold col-12 btn">Iniciar Sesión</button>
-                                <div class="col-12 m-0 mt-2 p-0 text-center" id="errores"></div>
+                                <div class="col-12 m-0 mt-2 p-0 text-center" id="alertas"></div>
 
                                 <div class="separator">o</div>
                                 <!-- Botón de inicio de sesión -->
@@ -70,8 +71,7 @@
                                         data-client_id="963691276350-ef15a1a1lde4c0lhchr6kn3lr005rmm9.apps.googleusercontent.com"
                                         data-callback="handleCredentialResponse" data-auto_prompt="false">
                                     </div>
-                                    <div class="m3 g_id_signin" data-type="standard"
-                                        data-size="large" data-width="300">
+                                    <div class="m3 g_id_signin" data-type="standard" data-size="large" data-width="300">
                                     </div>
                                 </div>
 
@@ -84,11 +84,38 @@
                         </div>
                     </div>
                     <div id="resultado mt-3"></div>
+                    <!-- Modal -->
+                    <div class="modal fade d-relative" id="staticBackdrop" data-bs-backdrop="static"
+                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="fw-bold modal-title fs-5 text-center" id="staticBackdropLabel">
+                                        Recuperación
+                                        de Contraseña</h1>
+                                    <button type="button" id="closeBtn" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="formModal">
+                                        <div class="mb-3">
+                                            <label for="email" class="form-label">Correo electrónico</label>
+                                            <input placeholder="Ingresa tu correo electrónico" autocomplete="email"
+                                                type="email" class="form-control" id="emailModal">
+                                        </div>
+                                        <button type="submit" name="enviar" class="fw-bold col-12 btn">Recuperar
+                                            Contraseña</button>
+                                        <div class="col-12 m-0 mt-2 p-0 text-center" id="alertasModal"></div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
             </div>
         </div>
     </main>
-
 </body>
 
 </html>

@@ -1,26 +1,12 @@
-import { alertDanger, alertSuccess } from "../../js/funciones.js";
+import { alertDanger, alertSuccess, urlPaginaAnterior } from "../../js/funciones.js";
 
 document.addEventListener('DOMContentLoaded', iniciarLogin);
 
 function iniciarLogin() {
     document.getElementById('checkbox').addEventListener('click', mostrarPassword);
 
-    // Obtener la URL de la página anterior
-    let referrer = document.referrer;
-
-    // Verificar si la URL anterior pertenece al mismo dominio
-    if (referrer.includes(window.location.hostname)) {
-
-        if (referrer.includes('/Acceso/register/register.html')) {
-            localStorage.setItem('redirectUrl', '../../index.html');
-        } else {
-            // Si es una página interna diferente al login, guardarla para redirección
-            localStorage.setItem('redirectUrl', referrer);
-        }
-    } else {
-        // Si es una página externa, redirigir al inicio
-        localStorage.setItem('redirectUrl', '../../index.html');
-    }
+    //Obtiene la url de la pagina anteriror para cuadno le da a la x volver 
+    urlPaginaAnterior('/Acceso/register/register.html');
 
     /*Selectores*/
     // Obtener el botón del DOM
@@ -50,6 +36,7 @@ function iniciarLogin() {
         camposRegister.forEach(campo => campo.classList.remove('error'));
 
         let hayErrores = false; //Para saber si tiene el formulario errores antes de pasarlo al backend
+
         // Validar si los campos están vacíos y aplicar el estilo de error
         camposRegister.forEach(campo => {
             if (campo.value.trim() === "") {
@@ -59,10 +46,8 @@ function iniciarLogin() {
         });
 
         const alertaDiv = document.getElementById('alertas');
-        const existeAlerta = alertaDiv.querySelector('.alert');
-        if (existeAlerta) {
-            existeAlerta.remove();
-        }
+        //Para que no genere muchas alertas
+        borrarAlerta();
 
         // Validar campos vacíos
         if (hayErrores) {
@@ -72,7 +57,25 @@ function iniciarLogin() {
             const datos = await enviarDatos(camposRegister[0].value, camposRegister[1].value, camposRegister[2].value, camposRegister[3].value);
 
             if (!datos["success"]) {
-                alertaDiv.appendChild(alertDanger(datos["error"]));
+                console.log(datos);
+                if (typeof datos.error === "string") {
+                    // Si error es un string, lo mostramos directamente
+                    alertaDiv.appendChild(alertDanger(datos.error));
+                } else if (typeof datos.error === "object") {
+                    // Si error es un objeto, obtenemos la primera clave y mostramos el mensaje
+                    const key = Object.keys(datos.error)[0]; // "password" o "email"
+
+                    camposRegister.forEach(campo => {
+                        if (campo.id === key) {
+                            campo.classList.add('error'); // Marca el campo con error
+                        }
+                    });
+
+                    // Mostrar el mensaje de error
+                    alertaDiv.appendChild(alertDanger(datos.error[key]));
+                }
+
+
 
             } else if (datos["success"]) { //Lo compruebo asi sin else por si falla los datos y no hacerlo aunque haya generado error
                 alertaDiv.appendChild(alertSuccess(datos["exito"]));
@@ -81,7 +84,7 @@ function iniciarLogin() {
                 // Redirigir al login después de 4 segundos
                 setTimeout(() => {
                     window.location.href = "../login/login.html";
-                }, 4000);
+                }, 3000);
             }
         }
 
@@ -109,6 +112,8 @@ function iniciarLogin() {
             }
             // Convertimos la respuesta en JSON
             const data = await response.json();
+            //para evitar generar muchas alertas
+            borrarAlerta();
 
             return data;
         } catch (error) {
@@ -118,14 +123,22 @@ function iniciarLogin() {
     function mostrarPassword() {
         const password = document.querySelector('#password');
         const confirmPassword = document.querySelector('#confirmPassword');
-    
+
         if (password.type === "password") {
             password.type = 'text';
             confirmPassword.type = 'text';
-    
+
         } else {
             password.type = 'password';
             confirmPassword.type = 'password';
+        }
+    }
+    function borrarAlerta() {
+        //Por si la base de datos esta caida para que no salgan muchas alertas hago esto se que es poner lo mismo pero si no me salta muchisimas
+        const alertaDiv = document.getElementById('alertas');
+        const existeAlerta = alertaDiv.querySelector('.alert');
+        if (existeAlerta) {
+            existeAlerta.remove();
         }
     }
 }

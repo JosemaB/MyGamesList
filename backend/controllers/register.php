@@ -19,11 +19,11 @@ try {
         //Validamos los datos antes de la inserccion en la bdd
         if (!validarCorreo($email)) {
             $error = ["email" => "El correo electrónico no es válido"];
-        }else  if (!validarCadena($usuario)) {
+        } else if (!validarCadena($usuario)) {
             $error = ["usuario" => "El nombre de usuario no es válido"];
-        }else if (!validarContrasena($password)) {
+        } else if (!validarContrasena($password)) {
             $error = ["password" => "La contraseña debe tener al menos 6 caracteres e incluir lo siguiente: una letra mayúscula, una minúscula, un número y un carácter especial (!@#$%^&*?.)"];
-        }else if ($confirmPassword != $password) {
+        } else if ($confirmPassword != $password) {
             $error = ["confirmPassword" => "Las contraseñas no coinciden, por favor verifica y vuelve a intentarlo"];
         }
 
@@ -45,10 +45,10 @@ try {
             $emailResultado = $consultaCorreo->get_result();
 
             if ($emailResultado->num_rows > 0) {
-                $error = ["email" =>"El correo que quieres registrar ya existe"];
+                $error = ["email" => "El correo que quieres registrar ya existe"];
                 $response = $error;
             } else if ($usuarioResultado->num_rows > 0) {
-                $error = ["usuario" =>"El usuario que quieres registrar ya existe"];
+                $error = ["usuario" => "El usuario que quieres registrar ya existe"];
                 $response = $error;
             } else {
                 //Hacemos el insert para registrar al usuario
@@ -65,13 +65,13 @@ try {
         }
     }
 
-    // Si hay error, los devolvemos como JSON y detenemos la ejecución
-    if (isset($error)) {
-        echo json_encode(["success" => false, "error" => $error]);
-    } else if (isset($exito)) {
-        // Si todo está bien, continuamos con el registro
-        echo json_encode(["success" => true, "exito" => $exito]);
-    }
 } catch (Exception $e) {
     $error = $e->getMessage();
+}
+// Si hay error, los devolvemos como JSON y detenemos la ejecución
+if (isset($error)) {
+    echo json_encode(["success" => false, "error" => $error]);
+} else if (isset($exito)) {
+    // Si todo está bien, continuamos con el registro
+    echo json_encode(["success" => true, "exito" => $exito]);
 }

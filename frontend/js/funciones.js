@@ -119,7 +119,6 @@ export function quitarContenidoAdulto(juegos) { /*Cambialo a excluir contenido a
 
             return juegoValido;
         });
-        console.log(juegosFiltrados);
         return juegosFiltrados;
     } catch (error) {
         console.log(error);
@@ -433,6 +432,25 @@ function crearEllipsis() {
     return ellipsisItem;
 }
 
+export function urlPaginaAnterior(linkPaginaActual){
+    // Obtener la URL de la página anterior
+    let referrer = document.referrer;
+
+    // Verificar si la URL anterior pertenece al mismo dominio
+    if (referrer.includes(window.location.hostname)) {
+
+        if (referrer.includes(linkPaginaActual)) {
+            localStorage.setItem('redirectUrl', '../../index.html');
+        } else {
+            // Si es una página interna diferente al login, guardarla para redirección
+            localStorage.setItem('redirectUrl', referrer);
+        }
+    } else {
+        // Si es una página externa, redirigir al inicio
+        localStorage.setItem('redirectUrl', '../../index.html');
+    }
+}
+
 export function alertDanger(textError) {
     // Crear el div de la alerta
     const alerta = document.createElement("div");
@@ -463,7 +481,6 @@ export function alertSuccess(textSuccess) {
 export async function juegosPorCatalogo(plataforma, divPrincipal, page = 1) {
     try {
         const juegos = await catalogoPlataformas(page, plataforma);
-        console.log(juegos);
         if (juegos["detail"] === 'Invalid page.') {
             divPrincipal.appendChild(sinResultado());
         } else {
