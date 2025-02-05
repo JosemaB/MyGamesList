@@ -18,13 +18,13 @@ try {
 
         //Validamos los datos antes de la inserccion en la bdd
         if (!validarCorreo($email)) {
-            $error = "El correo electrónico no es válido";
+            $error = ["email" => "El correo electrónico no es válido"];
         }else  if (!validarCadena($usuario)) {
-            $error = "El nombre de usuario no es válido";
+            $error = ["usuario" => "El nombre de usuario no es válido"];
         }else if (!validarContrasena($password)) {
-            $error = "La contraseña debe tener al menos 6 caracteres e incluir lo siguiente: una letra mayúscula, una minúscula, un número y un carácter especial (!@#$%^&*?.)";
+            $error = ["password" => "La contraseña debe tener al menos 6 caracteres e incluir lo siguiente: una letra mayúscula, una minúscula, un número y un carácter especial (!@#$%^&*?.)"];
         }else if ($confirmPassword != $password) {
-            $error = "Las contraseñas no coinciden, por favor verifica y vuelve a intentarlo";
+            $error = ["confirmPassword" => "Las contraseñas no coinciden, por favor verifica y vuelve a intentarlo"];
         }
 
         if (!isset($error)) { //Seguiriamos si no tuvieramos error
@@ -45,10 +45,10 @@ try {
             $emailResultado = $consultaCorreo->get_result();
 
             if ($emailResultado->num_rows > 0) {
-                $error = "El correo que quieres registrar ya existe";
+                $error = ["email" =>"El correo que quieres registrar ya existe"];
                 $response = $error;
             } else if ($usuarioResultado->num_rows > 0) {
-                $error = "El usuario que quieres registrar ya existe";
+                $error = ["usuario" =>"El usuario que quieres registrar ya existe"];
                 $response = $error;
             } else {
                 //Hacemos el insert para registrar al usuario
