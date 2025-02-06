@@ -1,4 +1,4 @@
-import { alertDanger, alertSuccess, urlPaginaAnterior } from "../../js/funciones.js";
+import { alertDanger, alertSuccess, urlPaginaAnterior, spinner } from "../../js/funciones.js";
 document.addEventListener('DOMContentLoaded', iniciarLogin);
 
 function iniciarLogin() {
@@ -54,18 +54,35 @@ function iniciarLogin() {
         if (hayErrores) {
             alertaDiv.appendChild(alertDanger("El correo y la contraseña son obligatorios"));
         } else {
-            //Ahora pasamos los datos al backend
-            const datos = await enviarDatosForm(camposLogin[0].value.trim(), camposLogin[1].value.trim());
+             // Verificamos si ya existe un spinner en el div
+             var existingSpinner = alertaDiv.querySelector('.spinner'); // Asegúrate de que '.spinner' es un selector único
 
-            if (!datos["success"]) {
-                camposLogin.forEach(campo => {
-                    campo.classList.add('error');
-                });
-                alertaDiv.appendChild(alertDanger(datos["error"]));
-            } else if (datos["success"]) { //Lo compruebo asi sin else por si falla los datos y no hacerlo aunque haya generado error
-                //No meto ningun div de exito aunque lo envie en el backend porque se incia sesion mas rapido en el register lo veo un poco 
-                //mas logico esperar por si quiere hacer otra cosa
-                window.location.href = "/index.html";
+             if (existingSpinner) {
+                 // Si existe, lo eliminamos
+                 alertaDiv.removeChild(existingSpinner);
+             }
+            //Agregamos el spinner para el tiempo de espera
+            const spinnerElement = spinner();
+            spinnerElement.style.marginTop = '20px';
+            spinnerElement.style.marginBottom = '0';
+            alertaDiv.appendChild(spinnerElement);
+            //Ahora pasamos los datos al backend
+            try {
+                const datos = await enviarDatosForm(camposLogin[0].value.trim(), camposLogin[1].value.trim());
+                //El spinnerl o borramos dentro del awwait se que puede ser confuso pero si manda muchas peiticiones le usuario 
+                // con la base de datos caida hay un bug potente de muchos spinner
+                if (!datos["success"]) {
+                    camposLogin.forEach(campo => {
+                        campo.classList.add('error');
+                    });
+                    alertaDiv.appendChild(alertDanger(datos["error"]));
+                } else if (datos["success"]) { //Lo compruebo asi sin else por si falla los datos y no hacerlo aunque haya generado error
+                    //No meto ningun div de exito aunque lo envie en el backend porque se incia sesion mas rapido en el register lo veo un poco 
+                    //mas logico esperar por si quiere hacer otra cosa
+                    window.location.href = "/index.html";
+                }
+            } catch (error) {
+                console.error("Error al enviar los datos:", error);
             }
         }
 
@@ -92,14 +109,27 @@ function iniciarLogin() {
         if (error) {
             alertaDiv.appendChild(alertDanger("Por favor, ingresa tu correo electrónico"));
         } else {
-            //Ahora pasamos los datos al backend   
-            console.log(email.value);
-            const datos = await envidarDatosFormModal(email.value);
-            console.log(datos);
-            if (!datos["success"]) {
-                alertaDiv.appendChild(alertDanger(datos["error"]));
-            } else if (datos["success"]) {
-                alertaDiv.appendChild(alertSuccess(datos["exito"]));
+            // Verificamos si ya existe un spinner en el div
+            var existingSpinner = alertaDiv.querySelector('.spinner'); // Asegúrate de que '.spinner' es un selector único
+
+            if (existingSpinner) {
+                // Si existe, lo eliminamos
+                alertaDiv.removeChild(existingSpinner);
+            }
+            //Spinner
+            const spinnerElement = spinner();
+            spinnerElement.style.marginTop = '30px';
+            spinnerElement.style.marginBottom = '0';
+            alertaDiv.appendChild(spinnerElement);
+            try {
+                const datos = await envidarDatosFormModal(email.value);
+                if (!datos["success"]) {
+                    alertaDiv.appendChild(alertDanger(datos["error"]));
+                } else if (datos["success"]) {
+                    alertaDiv.appendChild(alertSuccess(datos["exito"]));
+                }
+            } catch (error) {
+                console.error("Error al enviar los datos:", error);
             }
         }
 
@@ -136,6 +166,16 @@ function iniciarLogin() {
             // Convertimos la respuesta en JSON
             const data = await response.json();
 
+            const alertaDiv = document.getElementById('alertas');
+
+            // Verificamos si ya existe un spinner en el div
+            var existingSpinner = alertaDiv.querySelector('.spinner'); // Asegúrate de que '.spinner' es un selector único
+
+            if (existingSpinner) {
+                // Si existe, lo eliminamos
+                alertaDiv.removeChild(existingSpinner);
+            }
+
             //Por si la base de datos esta caida para que no salgan muchas alertas hago esto se que es poner lo mismo pero si no me salta muchisimas
             borrarAlertaForm();
             return data;
@@ -156,7 +196,6 @@ function iniciarLogin() {
         const datos = {
             email: email,
         };
-
         try {
             // Enviar datos usando fetch
             const response = await fetch('http://localhost:3000/backend/controllers/recover.php', {
@@ -166,24 +205,32 @@ function iniciarLogin() {
                 },
                 body: JSON.stringify(datos) // Enviamos los datos como JSON
             });
-            
-
 
             // Verificamos si la respuesta es correcta
             if (!response.ok) {
                 throw new Error('Error en la respuesta de PHP');
             }
 
+
+
             // Convertimos la respuesta en JSON
             const data = await response.json();
 
             //Para eliminar las alertas de modal por si await tarda mucho
             const alertaDiv = document.getElementById('alertasModal');
+            // Verificamos si ya existe un spinner en el div
+            var existingSpinner = alertaDiv.querySelector('.spinner'); // Asegúrate de que '.spinner' es un selector único
+
+            if (existingSpinner) {
+                // Si existe, lo eliminamos
+                alertaDiv.removeChild(existingSpinner);
+            }
             const existeAlerta = alertaDiv.querySelector('.alert');
 
             if (existeAlerta) {
                 existeAlerta.remove();
             }
+
             return data;
 
         } catch (error) {

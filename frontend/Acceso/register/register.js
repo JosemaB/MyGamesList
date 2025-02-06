@@ -1,4 +1,4 @@
-import { alertDanger, alertSuccess, urlPaginaAnterior } from "../../js/funciones.js";
+import { alertDanger, alertSuccess, urlPaginaAnterior, spinner } from "../../js/funciones.js";
 
 document.addEventListener('DOMContentLoaded', iniciarLogin);
 
@@ -53,41 +53,60 @@ function iniciarLogin() {
         if (hayErrores) {
             alertaDiv.appendChild(alertDanger("Por favor, completa todos los campos"));
         } else {
-            //Submit backend
-            const datos = await enviarDatos(camposRegister[0].value, camposRegister[1].value, camposRegister[2].value, camposRegister[3].value);
+            // Verificamos si ya existe un spinner en el div
+            var existingSpinner = alertaDiv.querySelector('.spinner'); // Asegúrate de que '.spinner' es un selector único
 
-            if (!datos["success"]) {
-                console.log(datos);
-                if (typeof datos.error === "string") {
-                    // Si error es un string, lo mostramos directamente
-                    alertaDiv.appendChild(alertDanger(datos.error));
-                } else if (typeof datos.error === "object") {
-                    // Si error es un objeto, obtenemos la primera clave y mostramos el mensaje
-                    const key = Object.keys(datos.error)[0]; // "password" o "email"
+            if (existingSpinner) {
+                // Si existe, lo eliminamos
+                alertaDiv.removeChild(existingSpinner);
+            }
 
-                    camposRegister.forEach(campo => {
-                        if (campo.id === key) {
-                            campo.classList.add('error'); // Marca el campo con error
-                        }
-                    });
+            // Crear el spinner
+            const spinnerElement = spinner(); // Asegúrate de que esta función retorne un elemento HTML válido
+            spinnerElement.classList.add('spinner'); // Si no está añadido en la función spinner, añádelo aquí.
+            spinnerElement.style.marginTop = '20px';
+            spinnerElement.style.marginBottom = '0';
 
-                    // Mostrar el mensaje de error
-                    alertaDiv.appendChild(alertDanger(datos.error[key]));
+            // Agregar el spinner al div
+            alertaDiv.appendChild(spinnerElement);
+
+            // Enviar los datos al backend
+            try {
+                const datos = await enviarDatos(camposRegister[0].value, camposRegister[1].value, camposRegister[2].value, camposRegister[3].value);
+
+                if (!datos["success"]) {
+                    console.log(datos);
+                    if (typeof datos.error === "string") {
+                        // Si error es un string, lo mostramos directamente
+                        alertaDiv.appendChild(alertDanger(datos.error));
+                    } else if (typeof datos.error === "object") {
+                        // Si error es un objeto, obtenemos la primera clave y mostramos el mensaje
+                        const key = Object.keys(datos.error)[0]; // "password" o "email"
+
+                        camposRegister.forEach(campo => {
+                            if (campo.id === key) {
+                                campo.classList.add('error'); // Marca el campo con error
+                            }
+                        });
+
+                        // Mostrar el mensaje de error
+                        alertaDiv.appendChild(alertDanger(datos.error[key]));
+                    }
+
+                } else if (datos["success"]) { //Lo compruebo asi sin else por si falla los datos y no hacerlo aunque haya generado error
+                    alertaDiv.appendChild(alertSuccess(datos["exito"]));
+                    document.getElementById('crearCuentaBtn').style.display = 'none';
+
+                    // Redirigir al login después de 4 segundos
+                    setTimeout(() => {
+                        window.location.href = "../login/login.html";
+                    }, 3000);
                 }
 
-
-
-            } else if (datos["success"]) { //Lo compruebo asi sin else por si falla los datos y no hacerlo aunque haya generado error
-                alertaDiv.appendChild(alertSuccess(datos["exito"]));
-                document.getElementById('crearCuentaBtn').style.display = 'none';
-
-                // Redirigir al login después de 4 segundos
-                setTimeout(() => {
-                    window.location.href = "../login/login.html";
-                }, 3000);
+            } catch (error) {
+                console.error("Error al enviar los datos:", error);
             }
         }
-
     });
     async function enviarDatos(email, usuario, password, confirmPassword) {
         const datos = {
@@ -115,6 +134,15 @@ function iniciarLogin() {
             //para evitar generar muchas alertas
             borrarAlerta();
 
+            const alertaDiv = document.getElementById('alertas');
+
+            // Verificamos si ya existe un spinner en el div
+            var existingSpinner = alertaDiv.querySelector('.spinner'); // Asegúrate de que '.spinner' es un selector único
+
+            if (existingSpinner) {
+                // Si existe, lo eliminamos
+                alertaDiv.removeChild(existingSpinner);
+            }
             return data;
         } catch (error) {
             console.error('Error al enviar datos:', error);
