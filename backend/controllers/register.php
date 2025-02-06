@@ -21,6 +21,8 @@ try {
             $error = ["email" => "El correo electrónico no es válido"];
         } else if (!validarCadena($usuario)) {
             $error = ["usuario" => "El nombre de usuario no es válido"];
+        }else if(strlen($usuario) > 15){
+            $error = ["usuario" => "El nombre de usuario no debe tener más de 15 caracteres"];
         } else if (!validarContrasena($password)) {
             $error = ["password" => "La contraseña debe tener al menos 6 caracteres e incluir lo siguiente: una letra mayúscula, una minúscula, un número y un carácter especial (!@#$%^&*?.)"];
         } else if ($confirmPassword != $password) {

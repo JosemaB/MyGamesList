@@ -12,7 +12,7 @@ try {
         //Creamos la conexion ya con los campos validados
         $baseDeDatos = new ConexionBdd();
         $conexion = $baseDeDatos->getConnection();
-        //Buscar otro tipos de inriptacion en el siguiente dia
+
         //Aqui se comprueba si el usuario existe
         $consultaUsuario = $conexion->prepare("select contrasena from usuarios where email = ?");
         $consultaUsuario->bind_param("s", $email);

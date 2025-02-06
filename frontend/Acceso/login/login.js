@@ -93,8 +93,14 @@ function iniciarLogin() {
             alertaDiv.appendChild(alertDanger("Por favor, ingresa tu correo electrónico"));
         } else {
             //Ahora pasamos los datos al backend   
-            const datos = await envidarDatosFormModal(email);
+            console.log(email.value);
+            const datos = await envidarDatosFormModal(email.value);
             console.log(datos);
+            if (!datos["success"]) {
+                alertaDiv.appendChild(alertDanger(datos["error"]));
+            } else if (datos["success"]) {
+                alertaDiv.appendChild(alertSuccess(datos["exito"]));
+            }
         }
 
     });
@@ -132,8 +138,6 @@ function iniciarLogin() {
 
             //Por si la base de datos esta caida para que no salgan muchas alertas hago esto se que es poner lo mismo pero si no me salta muchisimas
             borrarAlertaForm();
-            console.log(data);
-
             return data;
 
         } catch (error) {
@@ -158,10 +162,12 @@ function iniciarLogin() {
             const response = await fetch('http://localhost:3000/backend/controllers/recover.php', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(datos) // Enviamos los datos como JSON
             });
+            
+
 
             // Verificamos si la respuesta es correcta
             if (!response.ok) {
@@ -174,7 +180,7 @@ function iniciarLogin() {
             //Para eliminar las alertas de modal por si await tarda mucho
             const alertaDiv = document.getElementById('alertasModal');
             const existeAlerta = alertaDiv.querySelector('.alert');
-            
+
             if (existeAlerta) {
                 existeAlerta.remove();
             }
