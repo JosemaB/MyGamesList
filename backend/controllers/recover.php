@@ -55,10 +55,28 @@ try {
                 $insertToken->execute();*/
 
                 // Contenido del correo
-                $mail->isHTML(true);
-                $mail->Subject = 'Recuperar cuenta MygamesList';
-                $mail->Body = 'Este es el cuerpo del correo en formato HTML.';
-                $mail->AltBody = 'Este es el cuerpo del correo en texto plano para clientes que no soportan HTML.';
+                $mail->isHTML(true); // Indica que el correo será en formato HTML
+                $mail->Subject = 'Recuperación de la Cuenta - MyGamesList';
+                $mail->CharSet = 'UTF-8';
+                
+                // Cargar el contenido del archivo HTML y agregar el CSS en línea
+                $htmlContent = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/frontend/Acceso/email/email.html');
+
+
+                // Asegúrate de que el archivo HTML ya tenga el CSS incrustado en <style> o el CSS en línea
+                $mail->Body = $htmlContent;
+                
+
+                // Mensaje en texto plano para clientes de correo que no soportan HTML
+                $mail->AltBody = "Recibimos una solicitud para restablecer la contraseña de tu cuenta. 
+                Si no fuiste tú quien realizó esta solicitud, por favor ignora este correo.
+
+                Para restablecer tu contraseña, copia y pega el siguiente enlace en tu navegador:
+
+                https://tu-dominio.com/frontend/recover/recuperarCuenta.html?token=TOKEN_UNICO_AQUI
+
+                Este enlace será válido durante 1 hora.";
+
 
                 // Enviar el correo
                 $mail->send();

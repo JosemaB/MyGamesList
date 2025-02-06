@@ -54,13 +54,13 @@ function iniciarLogin() {
         if (hayErrores) {
             alertaDiv.appendChild(alertDanger("El correo y la contraseña son obligatorios"));
         } else {
-             // Verificamos si ya existe un spinner en el div
-             var existingSpinner = alertaDiv.querySelector('.spinner'); // Asegúrate de que '.spinner' es un selector único
+            // Verificamos si ya existe un spinner en el div
+            var existingSpinner = alertaDiv.querySelector('.spinner'); // Asegúrate de que '.spinner' es un selector único
 
-             if (existingSpinner) {
-                 // Si existe, lo eliminamos
-                 alertaDiv.removeChild(existingSpinner);
-             }
+            if (existingSpinner) {
+                // Si existe, lo eliminamos
+                alertaDiv.removeChild(existingSpinner);
+            }
             //Agregamos el spinner para el tiempo de espera
             const spinnerElement = spinner();
             spinnerElement.style.marginTop = '20px';
@@ -126,6 +126,7 @@ function iniciarLogin() {
                 if (!datos["success"]) {
                     alertaDiv.appendChild(alertDanger(datos["error"]));
                 } else if (datos["success"]) {
+                    document.getElementById("btnRecuperar").style.display = "none";
                     alertaDiv.appendChild(alertSuccess(datos["exito"]));
                 }
             } catch (error) {
@@ -136,6 +137,7 @@ function iniciarLogin() {
     });
     closeBtn.addEventListener('click', (e) => {
         const alertaDiv = document.getElementById('alertasModal');
+        document.getElementById("btnRecuperar").style.display = "block";
         const existeAlerta = alertaDiv.querySelector('.alert');
         if (existeAlerta) {
             formularioModal.emailModal.classList.remove('error');
