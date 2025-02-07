@@ -7,9 +7,9 @@ $datos = json_decode(file_get_contents('php://input'), true);
 
 try {
     if ($datos) {
-        $password = $datos['newPassword'];
-        $confirmPassword = $datos['confirmPassword'];
-        $token = $datos['token'];
+        $password = validarCadena($datos['newPassword']);
+        $confirmPassword = validarCadena($datos['confirmPassword']);
+        $token = validarCadena($datos['token']);
 
         if (!validarContrasena($password)) {
             $error = ["password" => "La contraseña debe tener al menos 6 caracteres e incluir lo siguiente: una letra mayúscula, una minúscula, un número y un carácter especial (!@#$%^&*?.)"];

@@ -2,6 +2,7 @@ import { alertDanger, alertSuccess, urlPaginaAnterior, spinner } from "../../js/
 document.addEventListener('DOMContentLoaded', iniciarLogin);
 
 function iniciarLogin() {
+    initializeGoogleSignIn(); // Inicializa el inicio de sesión de Google
     //Selectores
     document.getElementById('checkbox').addEventListener('click', mostrarPassword);
 
@@ -259,32 +260,41 @@ function iniciarLogin() {
             existeAlerta.remove();
         }
     }
+
+    // Función para inicializar el Google Sign-In
+    function initializeGoogleSignIn() {
+        // Inicializa el botón de Google Sign-In
+        google.accounts.id.initialize({
+            client_id: '963691276350-ef15a1a1lde4c0lhchr6kn3lr005rmm9.apps.googleusercontent.com', // Usa tu client_id de Google
+            callback: handleCredentialResponse // Asigna el callback aquí
+        });
+
+        // Renderiza el botón de Google Sign-In en el HTML
+        google.accounts.id.renderButton(
+            document.querySelector(".g_id_signin"), // Selecciona el contenedor del botón
+            {
+                theme: "dark", // Estilo oscuro
+                size: "large" // Tamaño grande
+            }
+        );
+    }
+
+    // Esta función se ejecutará cuando el usuario se autentique
+    function handleCredentialResponse(googleUser) {
+        //Aqui sera el submit al backend
+        const tokens = googleUser.credential.split(".");
+        const responsePayload = JSON.parse(atob(tokens[1]));
+        console.log("ID: " + responsePayload.sub);
+        console.log('Full Name: ' + responsePayload.name);
+        console.log('Given Name: ' + responsePayload.given_name);
+        console.log('Family Name: ' + responsePayload.family_name);
+        console.log("Image URL: " + responsePayload.picture);
+        console.log("Email: " + responsePayload.email);
+    }
+
 }
-/*
-                            <script>
-                                function handleCredentialResponse(googleUser) {
-                                    // console.log("Encoded JWT ID token: " + googleUser.credential);
-                                    const tokens = googleUser.credential.split(".");
-                                    const responsePayload = JSON.parse(atob(tokens[1]));
-                                    console.log("ID: " + responsePayload.sub);
-                                    console.log('Full Name: ' + responsePayload.name);
-                                    console.log('Given Name: ' + responsePayload.given_name);
-                                    console.log('Family Name: ' + responsePayload.family_name);
-                                    console.log("Image URL: " + responsePayload.picture);
-                                    console.log("Email: " + responsePayload.email);
 
-                                    // cache the jwt token into cookie for 1 hour to be reused later
-                                    // Get current time
-                                    var now = new Date();
 
-                                    // Set expiration time to 1 hour from now
-                                    var expirationTime = new Date(now.getTime() + 1 * 3600 * 1000); // 1 hour = 3600 seconds * 1000 milliseconds
 
-                                    // Construct the cookie string
-                                    var cookieString = "user_jwt=" + encodeURIComponent(tokens[1]) + "; expires=" + expirationTime.toUTCString() + "; path=/";
 
-                                    // Set the cookie
-                                    document.cookie = cookieString;
-                                }
-                            </script> */
 
