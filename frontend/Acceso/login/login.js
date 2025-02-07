@@ -5,7 +5,7 @@ function iniciarLogin() {
     //Selectores
     document.getElementById('checkbox').addEventListener('click', mostrarPassword);
 
-    //Obtiene la url de la pagina anteriror para cuadno le da a la x volver 
+    //Obtiene la url de la pagina anteriror para cuando le da a la x volver 
     urlPaginaAnterior('/Acceso/login/login.html');
 
     /*Selectores*/
@@ -23,7 +23,7 @@ function iniciarLogin() {
     // Función que se ejecuta al hacer clic en el botón
     function redirigirPaginaAnterior() {
         // Recuperar la URL de redirección almacenada
-        let redirectUrl = localStorage.getItem('redirectUrl') || '/inicio';
+        let redirectUrl = localStorage.getItem('redirectUrl') || '../../index.html';
         window.location.href = redirectUrl; // Redirige a la URL almacenada
     }
 
@@ -119,10 +119,14 @@ function iniciarLogin() {
             //Spinner
             const spinnerElement = spinner();
             spinnerElement.style.marginTop = '30px';
-            spinnerElement.style.marginBottom = '0';
+            spinnerElement.style.marginBottom = '10px';
             alertaDiv.appendChild(spinnerElement);
+            document.getElementById("btnRecuperar").style.display = "none";
+
             try {
                 const datos = await envidarDatosFormModal(email.value);
+
+
                 if (!datos["success"]) {
                     alertaDiv.appendChild(alertDanger(datos["error"]));
                 } else if (datos["success"]) {
@@ -138,6 +142,15 @@ function iniciarLogin() {
     closeBtn.addEventListener('click', (e) => {
         const alertaDiv = document.getElementById('alertasModal');
         document.getElementById("btnRecuperar").style.display = "block";
+        document.getElementById("emailModal").value = "";
+
+        // Verificamos si ya existe un spinner en el div
+        var existingSpinner = alertaDiv.querySelector('.spinner'); // Asegúrate de que '.spinner' es un selector único
+
+        if (existingSpinner) {
+            // Si existe, lo eliminamos
+            alertaDiv.removeChild(existingSpinner);
+        }
         const existeAlerta = alertaDiv.querySelector('.alert');
         if (existeAlerta) {
             formularioModal.emailModal.classList.remove('error');
@@ -222,7 +235,7 @@ function iniciarLogin() {
             const alertaDiv = document.getElementById('alertasModal');
             // Verificamos si ya existe un spinner en el div
             var existingSpinner = alertaDiv.querySelector('.spinner'); // Asegúrate de que '.spinner' es un selector único
-
+            document.getElementById("btnRecuperar").style.display = "block";
             if (existingSpinner) {
                 // Si existe, lo eliminamos
                 alertaDiv.removeChild(existingSpinner);

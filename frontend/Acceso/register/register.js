@@ -12,7 +12,6 @@ function iniciarLogin() {
     // Obtener el botón del DOM
     let btnClose = document.getElementById('btnClose');
 
-    // Selecciona el formulario por su ID
     const formulario = document.getElementById('miFormulario');
 
     // Añadir el event listener al botón
@@ -21,7 +20,7 @@ function iniciarLogin() {
     // Función que se ejecuta al hacer clic en el botón
     function redirigirPaginaAnterior() {
         // Recuperar la URL de redirección almacenada
-        let redirectUrl = localStorage.getItem('redirectUrl') || '/inicio';
+        let redirectUrl = localStorage.getItem('redirectUrl') || '../../index.html';
         window.location.href = redirectUrl; // Redirige a la URL almacenada
     }
 

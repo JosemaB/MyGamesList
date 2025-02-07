@@ -13,6 +13,26 @@
             padding: 0;
         }
 
+        a {
+            color: #ffffff;
+            text-decoration: none;
+            /* Quitar el subrayado */
+        }
+
+        .ii a[href] {
+            color: inherit;
+            /* Hereda el color del elemento contenedor */
+            text-decoration: none;
+            /* Elimina el subrayado, si lo deseas */
+        }
+
+        a:hover {
+            color: #ffffff;
+
+            text-decoration: none;
+            /* Mantener sin subrayado en hover */
+        }
+
         .container {
             width: 100%;
             max-width: 600px;
@@ -43,15 +63,10 @@
             background-color: #1d2e59;
         }
 
-        a {
-            color: #007bff;
-            text-decoration: none;
-        }
-
         .button {
             display: inline-block;
             background-color: #1d2e59;
-            color: #ffffff;
+            color: #ffffff !important; /*NO ME QUEDO DE OTRA SINO EL COLOR DE LA LETRA DEL BOTON ES AZUL*/
             padding: 10px 20px;
             text-decoration: none;
             border-radius: 5px;
@@ -95,17 +110,21 @@
 
         <div class="content">
             <!-- Información clave al principio para evitar los tres puntos -->
-            <p><strong>Recibimos una solicitud para restablecer la contraseña de tu cuenta. Si no fuiste tú quien realizó esta solicitud, por favor ignora este correo.</strong></p>
+            <p><strong>Recibimos una solicitud para restablecer la contraseña de tu cuenta. Si no fuiste tú quien
+                    realizó esta solicitud, por favor ignora este correo.</strong></p>
             <p>Si deseas restablecer tu contraseña, haz clic en el siguiente botón:</p>
             <div id="botonEnviar">
-                <a href="http://tudominio.com/recover/recuperarCuenta.html?token=TOKEN_UNICO_AQUI" class="button">Restablecer Contraseña</a>
+                <a href="http://tudominio.com/recover/recuperarCuenta.html?token=TOKEN_UNICO_AQUI"
+                    class="button">Restablecer contraseña</a>
             </div>
 
-            <p>Este enlace será válido durante 1 hora. Si no lo usas dentro de ese tiempo, tendrás que solicitar un nuevo enlace.</p>
+            <p>Este enlace será válido durante 1 hora. Si no lo usas dentro de ese tiempo, tendrás que solicitar un
+                nuevo enlace.</p>
         </div>
 
         <div class="footer">
-            <p>Si no solicitaste este cambio, puedes ignorar este correo. Si tienes algún problema, por favor contacta con nuestro soporte.</p>
+            <p>Si no solicitaste este cambio, puedes ignorar este correo. Si tienes algún problema, por favor contacta
+                con nuestro soporte.</p>
         </div>
     </div>
 
