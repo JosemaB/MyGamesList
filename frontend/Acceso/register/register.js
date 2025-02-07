@@ -74,7 +74,7 @@ function iniciarLogin() {
                 const datos = await enviarDatos(camposRegister[0].value, camposRegister[1].value, camposRegister[2].value, camposRegister[3].value);
 
                 if (!datos["success"]) {
-                    console.log(datos);
+                    
                     if (typeof datos.error === "string") {
                         // Si error es un string, lo mostramos directamente
                         alertaDiv.appendChild(alertDanger(datos.error));
@@ -96,7 +96,7 @@ function iniciarLogin() {
                     alertaDiv.appendChild(alertSuccess(datos["exito"]));
                     document.getElementById('crearCuentaBtn').style.display = 'none';
 
-                    // Redirigir al login después de 4 segundos
+                    // Redirigir al login después de 3 segundos
                     setTimeout(() => {
                         window.location.href = "../login/login.html";
                     }, 3000);

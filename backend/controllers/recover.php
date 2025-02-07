@@ -42,30 +42,30 @@ try {
                 $mail->addAddress($email, $nombreUsuario['nombre_usuario']);  // El correo ingresado en el formulario
 
                 //Generamos un token que sea unico para saber si ese ususario recupero esa contraseña
-                /*// Generar un token único
+                // Generaramos un token único
                 $token = bin2hex(random_bytes(16)); // Esto genera un token de 32 caracteres
 
-                // Establecer la fecha de expiración (1 hora después de la creación)
+                // Establecemos la fecha de expiración (1 hora después de la creación)
                 $expiresAt = date('Y-m-d H:i:s', strtotime('+1 hour')); // Fecha actual + 1 hora
 
-                // Conectar a la base de datos y hacer la inserción
+                // Insertamos el token
                 $query = "INSERT INTO password_resets (email, token) VALUES (?, ?)";
                 $insertToken = $conexion->prepare($query);
                 $insertToken->bind_param("ss", $email, $token);
-                $insertToken->execute();*/
+                $insertToken->execute();
 
                 // Contenido del correo
                 $mail->isHTML(true); // Indica que el correo será en formato HTML
                 $mail->Subject = 'Recuperación de la Cuenta - MyGamesList';
                 $mail->CharSet = 'UTF-8';
-                
+
                 // Cargar el contenido del archivo HTML y agregar el CSS en línea
                 $htmlContent = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/frontend/Acceso/email/email.html');
-
+                // Reemplazar el marcador "TOKEN_UNICO_AQUI" por el token generado
+                $htmlContent = str_replace('TOKEN_UNICO_AQUI', $token, $htmlContent);
 
                 // Asegúrate de que el archivo HTML ya tenga el CSS incrustado en <style> o el CSS en línea
                 $mail->Body = $htmlContent;
-                
 
                 // Mensaje en texto plano para clientes de correo que no soportan HTML
                 $mail->AltBody = "Recibimos una solicitud para restablecer la contraseña de tu cuenta. 
@@ -73,9 +73,7 @@ try {
 
                 Para restablecer tu contraseña, copia y pega el siguiente enlace en tu navegador:
 
-                https://tu-dominio.com/frontend/recover/recuperarCuenta.html?token=TOKEN_UNICO_AQUI
-
-                Este enlace será válido durante 1 hora.";
+                http://localhost:5500/Acceso/recover/recuperarCuenta.html?token=$token Este enlace será válido durante 1 hora.";
 
 
                 // Enviar el correo
@@ -91,6 +89,8 @@ try {
         }
         // Cerramos la conexión
         $baseDeDatos->closeConnection();
+    } else {
+        $error = "Datos no encontrados";
     }
 } catch (Exception $e) {
     $error = $e->getMessage();
@@ -103,4 +103,3 @@ if (isset($error)) {
     // Si todo está bien, devolvemos éxito
     echo json_encode(["success" => true, "exito" => $exito]);
 }
-?>

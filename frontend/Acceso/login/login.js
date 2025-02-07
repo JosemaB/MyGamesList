@@ -126,7 +126,6 @@ function iniciarLogin() {
             try {
                 const datos = await envidarDatosFormModal(email.value);
 
-
                 if (!datos["success"]) {
                     alertaDiv.appendChild(alertDanger(datos["error"]));
                 } else if (datos["success"]) {

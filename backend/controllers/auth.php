@@ -33,6 +33,8 @@ try {
         }
         //Cerramos la conexion
         $baseDeDatos->closeConnection();
+    } else {
+        $error = "Datos no encontrados";
     }
 } catch (Exception $ex) {
     $error = $ex->getMessage();
