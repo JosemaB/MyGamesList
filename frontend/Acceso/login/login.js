@@ -66,6 +66,7 @@ function iniciarLogin() {
             const spinnerElement = spinner();
             spinnerElement.style.marginTop = '20px';
             spinnerElement.style.marginBottom = '0';
+            document.getElementById("btnIniciatSesion").style.display = "none";
             alertaDiv.appendChild(spinnerElement);
             //Ahora pasamos los datos al backend
             try {
@@ -182,7 +183,7 @@ function iniciarLogin() {
             const data = await response.json();
 
             const alertaDiv = document.getElementById('alertas');
-
+            document.getElementById("btnIniciatSesion").style.display = "block";
             // Verificamos si ya existe un spinner en el div
             var existingSpinner = alertaDiv.querySelector('.spinner'); // Asegúrate de que '.spinner' es un selector único
 
@@ -263,33 +264,60 @@ function iniciarLogin() {
 
     // Función para inicializar el Google Sign-In
     function initializeGoogleSignIn() {
-        // Inicializa el botón de Google Sign-In
-        google.accounts.id.initialize({
-            client_id: '963691276350-ef15a1a1lde4c0lhchr6kn3lr005rmm9.apps.googleusercontent.com', // Usa tu client_id de Google
-            callback: handleCredentialResponse // Asigna el callback aquí
-        });
+        try {
+            // Inicializa el botón de Google Sign-In
+            google.accounts.id.initialize({
+                client_id: '963691276350-ef15a1a1lde4c0lhchr6kn3lr005rmm9.apps.googleusercontent.com', // Usa tu client_id de Google
+                callback: handleCredentialResponse // Asigna el callback aquí
+            });
 
-        // Renderiza el botón de Google Sign-In en el HTML
-        google.accounts.id.renderButton(
-            document.querySelector(".g_id_signin"), // Selecciona el contenedor del botón
-            {
-                theme: "dark", // Estilo oscuro
-                size: "large" // Tamaño grande
-            }
-        );
+            // Renderiza el botón de Google Sign-In en el HTML
+            google.accounts.id.renderButton(
+                document.querySelector(".g_id_signin"), // Selecciona el contenedor del botón
+                {
+                    theme: "dark", // Estilo oscuro
+                    size: "large" // Tamaño grande
+                }
+            );
+        } catch (error) {
+            console.error('Error al enviar datos:', error);
+        }
     }
 
     // Esta función se ejecutará cuando el usuario se autentique
-    function handleCredentialResponse(googleUser) {
-        //Aqui sera el submit al backend
-        const tokens = googleUser.credential.split(".");
-        const responsePayload = JSON.parse(atob(tokens[1]));
-        console.log("ID: " + responsePayload.sub);
-        console.log('Full Name: ' + responsePayload.name);
-        console.log('Given Name: ' + responsePayload.given_name);
-        console.log('Family Name: ' + responsePayload.family_name);
-        console.log("Image URL: " + responsePayload.picture);
-        console.log("Email: " + responsePayload.email);
+    async function handleCredentialResponse(googleUser) {
+        try {
+            //Aqui sera el submit al backend
+            const tokens = googleUser.credential.split(".");
+            const responsePayload = JSON.parse(atob(tokens[1]));
+            // Crear un objeto con los datos del usuario
+            const datos = {
+                google_id: responsePayload.sub,
+                full_name: responsePayload.name,
+                given_name: responsePayload.given_name,
+                family_name: responsePayload.family_name,
+                image_url: responsePayload.picture,
+                email: responsePayload.email
+            };
+            // Enviar datos usando fetch
+            const response = await fetch('http://localhost:3000/backend/controllers/auth_google.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(datos) // Enviamos los datos como JSON
+            });
+            // Verificamos si la respuesta es correcta
+            if (!response.ok) {
+                throw new Error('Error en la respuesta de PHP');
+            }
+
+            // Convertimos la respuesta en JSON
+            const data = await response.json();
+            console.log(data);
+        } catch (error) {
+            console.error('Error al enviar datos:', error);
+        }
     }
 
 }

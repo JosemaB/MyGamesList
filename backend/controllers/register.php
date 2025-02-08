@@ -21,8 +21,10 @@ try {
             $error = ["email" => "El correo electrónico no es válido"];
         } else if (!validarCadena($usuario)) {
             $error = ["usuario" => "El nombre de usuario no es válido"];
-        }else if(strlen($usuario) > 15){
+        } else if (strlen($usuario) > 15) {
             $error = ["usuario" => "El nombre de usuario no debe tener más de 15 caracteres"];
+        } else if (strlen($password) > 255) {
+            $error = "La contraseña no puede tener más de 255 caracteres.";
         } else if (!validarContrasena($password)) {
             $error = ["password" => "La contraseña debe tener al menos 6 caracteres e incluir lo siguiente: una letra mayúscula, una minúscula, un número y un carácter especial (!@#$%^&*?.)"];
         } else if ($confirmPassword != $password) {
@@ -62,8 +64,8 @@ try {
             }
             //Cerramos la conexion
             $baseDeDatos->closeConnection();
-        } 
-    }else{
+        }
+    } else {
         $error = "Datos no encontrados";
     }
 
@@ -77,3 +79,4 @@ if (isset($error)) {
     // Si todo está bien, continuamos con el registro
     echo json_encode(["success" => true, "exito" => $exito]);
 }
+exit();

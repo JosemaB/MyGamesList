@@ -71,6 +71,7 @@ function iniciarLogin() {
 
             // Enviar los datos al backend
             try {
+                document.getElementById('crearCuentaBtn').style.display = 'none';
                 const datos = await enviarDatos(camposRegister[0].value, camposRegister[1].value, camposRegister[2].value, camposRegister[3].value);
 
                 if (!datos["success"]) {
@@ -134,6 +135,7 @@ function iniciarLogin() {
             borrarAlerta();
 
             const alertaDiv = document.getElementById('alertas');
+            document.getElementById('crearCuentaBtn').style.display = 'block';
 
             // Verificamos si ya existe un spinner en el div
             var existingSpinner = alertaDiv.querySelector('.spinner'); // Asegúrate de que '.spinner' es un selector único

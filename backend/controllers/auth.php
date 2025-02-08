@@ -47,3 +47,4 @@ if (isset($error)) {
     // Si todo está bien, continuamos con el registro
     echo json_encode(["success" => true, "exito" => $exito]);
 }
+exit();

@@ -15,6 +15,8 @@ try {
             $error = ["password" => "La contraseña debe tener al menos 6 caracteres e incluir lo siguiente: una letra mayúscula, una minúscula, un número y un carácter especial (!@#$%^&*?.)"];
         } else if ($confirmPassword != $password) {
             $error = ["confirmPassword" => "Las contraseñas no coinciden, por favor verifica y vuelve a intentarlo"];
+        } else if (strlen($password) > 255) {
+            $error = "La contraseña no puede tener más de 255 caracteres.";
         }
 
         if (!isset($error)) {
