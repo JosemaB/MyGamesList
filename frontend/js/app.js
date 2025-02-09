@@ -82,16 +82,17 @@ function iniciarApp() {
                 window.location.href = targetUrl;
             } else {
                 const alerta = resultadosForm.querySelector('.alert-danger')
-                if(alerta){
+                if (alerta) {
                     alerta.remove();
                 }
                 const divAlert = document.createElement('div');
-                divAlert.classList.add('alert', 'alert-danger');
+                divAlert.classList.add('alert', 'alert-danger', 'fw-bold');
                 divAlert.role = 'alert';
                 divAlert.style.backgroundColor = 'none';
                 divAlert.style.borderRadius = '0';
                 divAlert.style.margin = '0';
-                divAlert.innerHTML = 'Por favor, ingrese un término de búsqueda.';
+                divAlert.style.fontSize = '15px';
+                divAlert.innerHTML = 'Por favor, ingrese un término de búsqueda';
                 resultadosForm.appendChild(divAlert);
             }
 

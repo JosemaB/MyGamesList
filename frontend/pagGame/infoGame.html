@@ -24,7 +24,8 @@
     <header class="sticky-top mb-3">
         <nav class="contentNav navbar navbar-expand-xl">
             <div class="container-fluid ">
-                <a href="/index.html" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
+                <a href="/index.html"
+                    class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
                     <img class="logo" src="/img/logo.png" alt="LOGO">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
@@ -35,7 +36,8 @@
                     aria-labelledby="offcanvasNavbarLabel">
                     <div class="offcanvas-header">
                         <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+                            aria-label="Close"></button>
                     </div>
                     <div class="offcanvas-body">
                         <div class="nav-item dropdown d-block d-xl-none mx-auto text-center">
@@ -120,7 +122,7 @@
 
                 <div class="row mt-5">
                     <!-- Navegación de pestañas -->
-                    <ul class="nav" id="myTab" role="tablist">
+                    <ul class="nav d-none d-md-flex" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="info-tab" data-bs-toggle="tab" data-bs-target="#info"
                                 type="button" role="tab" aria-controls="info" aria-selected="true">DESCRIPCIÓN</button>
@@ -140,7 +142,13 @@
                                 aria-selected="false">REQUISITOS</button>
                         </li>
                     </ul>
-
+                    <!-- Menú desplegable para pantallas pequeñas -->
+                    <select class="form-select d-md-none fw-bold text-center" id="tabDropdown">
+                        <option value="info" selected>DESCRIPCIÓN</option>
+                        <option value="screenshots">CAPTURAS DE PANTALLA</option>
+                        <option value="reviews">RESEÑAS</option>
+                        <option value="required">REQUISITOS</option>
+                    </select>
                     <!-- Contenido de las pestañas -->
                     <!-- Contenido de las pestañas dentro de myTabContent -->
                     <div class="tab-content" id="myTabContent">
@@ -184,8 +192,8 @@
     </div>
     <!-- Footer -->
     <footer class="footerPrincipal text-center text-lg-start text-white mt-5">
-       
-       
+
+
         <!-- Section: Social media -->
         <section class="foooterSE d-flex justify-content-between p-4">
             <!-- Left -->

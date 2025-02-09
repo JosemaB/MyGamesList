@@ -42,6 +42,33 @@ async function iniciarInfoGame() {
         // Obtener todos los botones de las pestañas
         const tabs = document.querySelectorAll('#myTab .nav-link');
 
+
+        /*Lista desplegable para pantallas pequeñas */
+        document.getElementById('tabDropdown').addEventListener('change', function () {
+            let tabId = this.value;
+            myTabContent.forEach(divContent => {
+                if (tabId !== divContent.id) {
+                    limpiarHTML(document.querySelector(`#myTabContent #${divContent.id}`));
+                }
+            });
+            let tab = new bootstrap.Tab(document.querySelector(`[data-bs-target="#${tabId}"]`));
+            tab.show();
+            switch (tabId) {
+                case "info":
+                    mostrarDescripcion();
+                    break;
+                case "screenshots":
+                    listaMostrarCapturas();
+                    break;
+                case "reviews":
+                    mostrarResenas();
+                    break;
+                case "required":
+                    mostrarRequisitos();
+                    break;
+            }
+        });
+
         /* Evento de Botones Lista */
         // Escuchar los clics en cada botón
         try {
@@ -324,7 +351,6 @@ async function iniciarInfoGame() {
         function mostrarResenas() {
             try {
                 const juego = obtenerJuego();
-                console.log(juego);
                 const divResenas = document.querySelector('#myTabContent #reviews');
                 const textoExistente = document.querySelector('#reviews #resenas');
                 if (textoExistente) { /*Esto arregla el bug de muchos textos generados*/
@@ -451,7 +477,6 @@ async function iniciarInfoGame() {
                 juego["platforms"].forEach((plataforma => {
 
                     if (plataforma["platform"]['slug'] === 'pc') {
-                        console.log(plataforma['requirements']);
                         /*Creamos el div requisitos minimos*/
                         const divReqMin = document.createElement('div');
                         divReqMin.classList.add('parrafoRequisitos', 'col-lg-6', 'col-12');

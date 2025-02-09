@@ -26,9 +26,9 @@ try {
                 //Faltaria crear cookeis y agregar sesion
             } else {
                 $error = 'Error. Usuario o Contraseña incorrectos';
-            }
-            //Para mandar un mensaje mas correcto
+            }          
         } else {
+            //Para mandar un mensaje mas correcto
             $error = "El correo electrónico ingresado no está asociado a ninguna cuenta, regístrate para acceder";
         }
         //Cerramos la conexion
