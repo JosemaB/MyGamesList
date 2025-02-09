@@ -1,0 +1,65 @@
+.avatar img {
+    border-radius: 100%;
+    max-width: 200px;
+}
+
+/*Configuracion*/
+.cambioImg button {
+    max-width: 100px;
+    padding: 0;
+    border-radius: 50%;
+    /* Redondea el botón */
+    overflow: hidden;
+    /* Asegura que la imagen se recorte correctamente */
+    border: none;
+    /* Elimina cualquier borde por defecto */
+    position: relative;
+    /* Para permitir la creación de un borde alrededor de la imagen */
+}
+
+.cambioImg button img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Cuando el cursor esté encima del botón */
+.cambioImg button:hover {
+    box-shadow: 0 0 0 4px #1d2e59;
+    /* Borde azul alrededor del botón */
+}
+
+/*Boton guardar cambios*/
+#guardarCambios,
+#formEmail button,
+#formNewPassword button,
+#formContacto button {
+    background-color: #1d2e59;
+    color: aliceblue;
+    margin-top: 20px;
+}
+
+#guardarCambios:hover,
+#formEmail button:hover,
+#formNewPassword button:hover,
+#formContacto button:hover  {
+    background-color: #141f3b;
+    color: rgb(165, 182, 196);
+}
+
+#cambioNameUsuario {
+    max-width: 300px;
+}
+
+/*Cambiar email*/
+#formEmail,
+#formNewPassword,
+#formContacto {
+    background-color: #1A233A;
+    border-radius: 20px;
+}
+
+/*Modal*/
+.modal-content{
+background-color: #1A233A;
+}
