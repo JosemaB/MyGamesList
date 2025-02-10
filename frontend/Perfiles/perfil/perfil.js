@@ -54,7 +54,7 @@ function iniciarPerfil() {
 
             avatars.forEach((avatar) => {
                 const button = document.createElement('button');
-                button.classList.add('col-4');
+                button.classList.add('col-4' ,'btnAvatar');
 
                 let avatarImg = document.createElement('img');
                 avatarImg.src = avatar;
@@ -65,11 +65,10 @@ function iniciarPerfil() {
                 let rutaRelativa = avatar;
                 let regex = /^(\.\.\/)+/;
                 let rutaAbsoluta = rutaRelativa.replace(regex, "http://localhost:5500/");
-
                 if (cambiarImg.src === rutaAbsoluta) {
                     button.classList.add('selected');
                 }
-
+                button.style.cursor = "pointer";
                 // Evento para seleccionar el avatar
                 button.addEventListener('click', () => {
                     // Remueve la clase 'selected' de otros botones
@@ -97,7 +96,11 @@ function iniciarPerfil() {
             avatarList.innerHTML = `<p style="color: red;">Error al cargar los avatares.</p>`;
         }
     }
-
+    document.getElementById('btnCloseModal').addEventListener('click', () => {
+        selectedAvatar = null;
+        // Deshabilitar el botón de aceptación después de la selección
+        acceptButton.disabled = true;
+    });
     // Evento para el botón de aceptar
     acceptButton.addEventListener('click', () => {
         if (selectedAvatar) {

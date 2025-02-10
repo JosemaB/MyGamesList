@@ -150,11 +150,51 @@
                     <!-- Contenido de las pestañas -->
                     <div class="tab-content" id="nav-tabContent">
                         <div class="tab-pane fade show active" id="nav-home" role="tabpanel"
-                            aria-labelledby="nav-home-tab" tabindex="0">Contenido de Home</div>
+                            aria-labelledby="nav-home-tab" tabindex="0">
+                            <div class="container">
+                                <div class="row g-0">
+                                    <div class="col-4 card vistaGeneral">
+                                        <div class="card-header text-center">
+                                            <i class="bi bi-speedometer2 fs-1"></i>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div class="d-flex flex-column align-items-center mb-3">
+                                                    <h2 class="fw-bold">0</h2>
+                                                    <p class="fw-bold">Amigos</p>
+                                                </div>
+                                                <div class="d-flex flex-column align-items-center mb-3">
+                                                    <h2 class="fw-bold">0</h2>
+                                                    <p class="fw-bold">Reseña</p>
+                                                </div>
+                                                <div class="d-flex flex-column align-items-center">
+                                                    <h2 class="fw-bold">0</h2>
+                                                    <p class="fw-bold">Lista de Juegos</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col card juegosDestacados">
+                                        <!-- Usamos 'col' en lugar de 'col-8' para ocupar el espacio restante -->
+                                        <div class="card-header fs-1 fw-bold text-center">
+                                            Juegos destacados
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="d-flex flex-column align-items-center">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="tab-pane fade" id="nav-listas" role="tabpanel" aria-labelledby="nav-listas-tab"
                             tabindex="0">Contenido de Mis Listas</div>
+
                         <div class="tab-pane fade" id="amigos" role="tabpanel" aria-labelledby="amigos-tab"
                             tabindex="0">Contenido de Amigos</div>
+
                         <div class="tab-pane fade" id="nav-reviews" role="tabpanel" aria-labelledby="nav-reviews-tab"
                             tabindex="0">Contenido de Reviews</div>
 
@@ -331,8 +371,8 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5 fw-bold text-center" id="staticBackdropLabel">Elige tu avatar</h1>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"
+                        id="btnCloseModal"></button>
                 </div>
                 <div class="modal-body col-12 d-flex justify-content-center align-items-center flex-wrap"
                     id="avatar-list">
