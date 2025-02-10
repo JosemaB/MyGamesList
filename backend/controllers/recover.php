@@ -18,12 +18,16 @@ try {
         $conexion = $baseDeDatos->getConnection();
 
         // Para saber si existe ese email
-        $consultaCorreo = $conexion->prepare("select nombre_usuario from usuarios where email = ?;");
+        $consultaCorreo = $conexion->prepare("select nombre_usuario, metodo_registro from usuarios where email = ?;");
         $consultaCorreo->bind_param("s", $email);
         $consultaCorreo->execute();
         $emailResultado = $consultaCorreo->get_result();
-
-        if ($emailResultado->num_rows > 0) {
+        $metodo = $emailResultado->fetch_assoc();
+        if ($metodo["metodo_registro"] === 'google') {
+            $error = 'No podemos restablecer tu contraseña porque tu cuenta está asociada con Google';
+        } else if ($emailResultado->num_rows > 0) {
+            //Si no tiene errores reiniciamos el puntero
+            $emailResultado->data_seek(0);
             // Enviar el correo usando PHPMailer
             $mail = new PHPMailer(true);
             try {
@@ -68,7 +72,7 @@ try {
                 $mail->Body = $htmlContent;
 
                 // Mensaje en texto plano para clientes de correo que no soportan HTML
-                $mail->AltBody = "Recibimos una solicitud para restablecer la contraseña de tu cuenta. 
+                $mail->AltBody = "Hemos recibido una solicitud para restablecer la contraseña de tu cuenta. 
                 Si no fuiste tú quien realizó esta solicitud, por favor ignora este correo.
 
                 Para restablecer tu contraseña, copia y pega el siguiente enlace en tu navegador:

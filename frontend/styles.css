@@ -59,6 +59,7 @@
     font-size: 15px;
 
   }
+
   .logo {
     width: 60px;
   }
@@ -71,11 +72,14 @@
 }
 
 .loading {
-  font-size: 24px; /* Tamaño del texto */
+  font-size: 24px;
+  /* Tamaño del texto */
   font-weight: bold;
   color: #E3E8FF;
-  animation: blink 2s infinite; /* Duración de 2 segundos, animación infinita */
+  animation: blink 2s infinite;
+  /* Duración de 2 segundos, animación infinita */
 }
+
 .load .titulo {
   height: auto;
   width: 70%;
@@ -84,11 +88,16 @@
 /* Definición de la animación de parpadeo */
 /* Definición de la animación de parpadeo */
 @keyframes blink {
-  0%, 100% {
-    opacity: 1; /* Totalmente visible al inicio y al final */
+
+  0%,
+  100% {
+    opacity: 1;
+    /* Totalmente visible al inicio y al final */
   }
+
   50% {
-    opacity: 0; /* Invisible a mitad de la animación */
+    opacity: 0;
+    /* Invisible a mitad de la animación */
   }
 }
 
@@ -626,6 +635,12 @@ body {
 .spinner .bounce2 {
   -webkit-animation-delay: -0.16s;
   animation-delay: -0.16s;
+}
+
+/*Para el focus*/
+input.error,
+textarea.error {
+  border: 2px solid rgb(139, 33, 33);
 }
 
 @-webkit-keyframes sk-bouncedelay {

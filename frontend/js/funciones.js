@@ -432,7 +432,7 @@ function crearEllipsis() {
     return ellipsisItem;
 }
 
-export function urlPaginaAnterior(linkPaginaActual){
+export function urlPaginaAnterior(linkPaginaActual) {
     // Obtener la URL de la página anterior
     let referrer = document.referrer;
 
@@ -476,8 +476,19 @@ export function alertSuccess(textSuccess) {
     return alerta;
 }
 
-
-
+export function borrarAlerta(divAlerta) {
+    const existeAlerta = divAlerta.querySelector('.alert');
+    if (existeAlerta) {
+        existeAlerta.remove();
+    }
+}
+export function mostrarPassword(divPassword) {
+    if (divPassword.type === "password") {
+        divPassword.type = 'text';
+    } else {
+        divPassword.type = 'password';
+    }
+}
 export async function juegosPorCatalogo(plataforma, divPrincipal, page = 1) {
     try {
         const juegos = await catalogoPlataformas(page, plataforma);

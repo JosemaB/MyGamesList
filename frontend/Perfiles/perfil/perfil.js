@@ -1,11 +1,30 @@
 document.addEventListener('DOMContentLoaded', iniciarPerfil);
-import { limpiarHTML, spinner } from '../../js/funciones.js';
+import { alertDanger, alertSuccess, spinner, borrarAlerta, mostrarPassword } from '../../js/funciones.js';
 
 function iniciarPerfil() {
+
+    /*Configuracion */
+    //Lo hago asi porque es mas intuitivo
+    const formPersonalizarPerfil = document.getElementById('formPersonalizarPerfil');
+    const formEmail = document.getElementById('formEmail');
+    document.getElementById('mostrarPasswordEmail').addEventListener('click', () => {
+        mostrarPassword(document.getElementById('contrasenaEmail'));
+    });
+
+    const formNewPassword = document.getElementById('formNewPassword');
+    document.getElementById('mostrarPasswordNuevaContrasena').addEventListener('click', () => {
+        mostrarPassword(document.getElementById('passwordActual'));
+        mostrarPassword(document.getElementById('newPassword'));
+        mostrarPassword(document.getElementById('confirmNewPassword'));
+
+    });
+
+    const formContacto = document.getElementById('formContacto');
+
     // Llamar a la función para cargar los avatares cuando se abra el modal
     document.getElementById('staticBackdrop').addEventListener('show.bs.modal', loadAvatars);
 
-    /*Variables "globales script" */
+    /*Variables "Locales script" */
     let selectedAvatar = null; //Selecion de avatar
 
     async function loadAvatars() {
@@ -89,4 +108,97 @@ function iniciarPerfil() {
         // Deshabilitar el botón de aceptación después de la selección
         acceptButton.disabled = true;
     });
+
+    formPersonalizarPerfil.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const alerta = document.getElementById('alertaEditarPerfil');
+        const img = formPersonalizarPerfil.cambiarImg.src;
+        const nombre = formPersonalizarPerfil.cambioNameUsuario;
+
+        borrarAlerta(alerta);
+        nombre.classList.remove('error');
+        if (nombre.value.trim() === "") {
+            nombre.classList.add('error');
+            alerta.appendChild(alertDanger("El nombre es obligatorio"));
+        } else {
+            //Backend se enviaria y comprobara sus errores
+        }
+    });
+
+    formEmail.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const alerta = document.getElementById('alertasNuevoEmail');
+
+        // Obtener todos los campos del formulario
+        const campos = [formEmail.email, formEmail.newEmail, formEmail.contrasenaEmail];
+
+        // Limpiar el estilo de error antes de la validación
+        campos.forEach(campo => campo.classList.remove('error'));
+
+        let hayErrores = false; //Para saber si tiene el formulario errores antes de pasarlo al backend
+        // Validar si los campos están vacíos y aplicar el estilo de error
+        campos.forEach(campo => {
+            if (campo.value.trim() === "") {
+                campo.classList.add('error');
+                hayErrores = true;
+            }
+        });
+
+        //Para que no genere muchas alertas
+        borrarAlerta(alerta);
+
+        // Validar campos vacíos
+        if (hayErrores) {
+            alerta.appendChild(alertDanger("Todos los campos son obligatorios"));
+        } else {
+            //Envio backend
+        }
+    });
+
+    formNewPassword.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const alerta = document.getElementById('alertasNuevaContrasena');
+
+        // Obtener todos los campos del formulario
+        const campos = [formNewPassword.passwordActual, formNewPassword.newPassword, formNewPassword.confirmNewPassword];
+
+        // Limpiar el estilo de error antes de la validación
+        campos.forEach(campo => campo.classList.remove('error'));
+
+        let hayErrores = false; //Para saber si tiene el formulario errores antes de pasarlo al backend
+        // Validar si los campos están vacíos y aplicar el estilo de error
+        campos.forEach(campo => {
+            if (campo.value.trim() === "") {
+                campo.classList.add('error');
+                hayErrores = true;
+            }
+        });
+
+        //Para que no genere muchas alertas
+        borrarAlerta(alerta);
+
+        // Validar campos vacíos
+        if (hayErrores) {
+            alerta.appendChild(alertDanger("Todos los campos son obligatorios"));
+        } else {
+            //Envio backend
+        }
+    });
+
+    formContacto.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const alerta = document.getElementById('alertasContacto');
+        const textContacto = formContacto.contacto;
+
+        borrarAlerta(alerta);
+        textContacto.classList.remove('error');
+
+        if (textContacto.value.trim() === "") {
+            textContacto.classList.add('error');
+            alerta.appendChild(alertDanger("Por favor, ingresa un mensaje"));
+        } else {
+            //Backend se enviaria y comprobara sus errores
+        }
+    });
+
 }

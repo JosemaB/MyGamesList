@@ -123,7 +123,7 @@
                 </div>
                 <nav>
                     <nav>
-                        <div class="nav nav-tabs d-flex w-100" id="nav-tab" role="tablist">
+                        <div class="nav nav-tabs d-flex w-100 mb-1" id="nav-tab" role="tablist">
                             <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
                                 aria-selected="true">Home</button>
@@ -159,7 +159,7 @@
                             tabindex="0">Contenido de Reviews</div>
 
                         <!-- Contenido de la pestaña de Configuración -->
-                        <div class="tab-pane fade" id="nav-config" role="tabpanel" aria-labelledby="nav-config-tab"
+                        <div class="tab-pane fade pt-2" id="nav-config" role="tabpanel" aria-labelledby="nav-config-tab"
                             tabindex="0">
 
                             <div class="d-flex flex-column flex-md-row w-100 align-items-md-start">
@@ -167,19 +167,21 @@
                                     role="tablist" aria-orientation="vertical">
                                     <button class="nav-link active col-6 col-md-12" id="v-pills-personalizarPerfil-tab"
                                         data-bs-toggle="pill" data-bs-target="#v-pills-personalizarPerfil" type="button"
-                                        role="tab" aria-controls="v-pills-personalizarPerfil"
-                                        aria-selected="true"><i class="bi bi-person-circle"></i> Personaliza tu perfil</button>
+                                        role="tab" aria-controls="v-pills-personalizarPerfil" aria-selected="true"><i
+                                            class="bi bi-person-circle"></i> Personaliza tu perfil</button>
                                     <button class="nav-link col-6 col-md-12" id="v-pills-email-tab"
                                         data-bs-toggle="pill" data-bs-target="#v-pills-email" type="button" role="tab"
-                                        aria-controls="v-pills-email" aria-selected="false"><i class="bi bi-envelope"></i> Cambiar email</button>
+                                        aria-controls="v-pills-email" aria-selected="false"><i
+                                            class="bi bi-envelope"></i> Cambiar email</button>
                                     <button class="nav-link col-6 col-md-12" id="v-pills-contrasena-tab"
                                         data-bs-toggle="pill" data-bs-target="#v-pills-contrasena" type="button"
-                                        role="tab" aria-controls="v-pills-contrasena" aria-selected="false"> <i class="bi bi-lock"></i> Cambiar
+                                        role="tab" aria-controls="v-pills-contrasena" aria-selected="false"> <i
+                                            class="bi bi-lock"></i> Cambiar
                                         contraseña</button>
                                     <button class="nav-link col-6 col-md-12" id="v-pills-contacto-tab"
                                         data-bs-toggle="pill" data-bs-target="#v-pills-contacto" type="button"
-                                        role="tab" aria-controls="v-pills-contacto"
-                                        aria-selected="false"> <i class="bi bi-person-lines-fill"></i> Contactar</button>
+                                        role="tab" aria-controls="v-pills-contacto" aria-selected="false"> <i
+                                            class="bi bi-person-lines-fill"></i> Contactar</button>
                                 </div>
 
                                 <div class=" col-12 col-md-8 tab-content flex-grow-1" id="v-pills-tabContent">
@@ -206,12 +208,12 @@
                                             </div>
                                             <button id="guardarCambios" type="submit" name="enviar"
                                                 class="fw-bold col-12 btn">Guardar cambios</button>
-                                            <div class="col-12 m-0 mt-2 p-0 text-center" id="alertas"></div>
+                                            <div class="col-12 m-0 mt-2 p-0 text-center" id="alertaEditarPerfil"></div>
                                         </form>
                                     </div>
                                     <div class="tab-pane fade" id="v-pills-email" role="tabpanel"
                                         aria-labelledby="v-pills-email-tab">
-                                        <div class="my-4 mx-4">
+                                        <div class="mb-2 mx-4">
                                             <form class="p-4" id="formEmail">
                                                 <div class="mb-3">
                                                     <label for="email" class="fw-bold form-label">Correo electrónico
@@ -223,7 +225,7 @@
                                                 <div class="mb-3">
                                                     <label for="newEmail" class="fw-bold form-label">Nuevo correo
                                                         electrónico</label>
-                                                    <input placeholder="Ingresa tu correo electrónico"
+                                                    <input placeholder="Ingresa tu nuevo correo electrónico"
                                                         autocomplete="email" type="email" class="form-control"
                                                         id="newEmail">
                                                 </div>
@@ -251,7 +253,7 @@
                                     </div>
                                     <div class="tab-pane fade" id="v-pills-contrasena" role="tabpanel"
                                         aria-labelledby="v-pills-contrasena-tab">
-                                        <div class="my-4 mx-4">
+                                        <div class="mb-2 mx-4">
                                             <form class="p-4" id="formNewPassword">
                                                 <!-- Campo de usuario (necesario para evitar la advertencia de Chrome) -->
                                                 <input type="text" id="fakeUsername" name="fakeUsername"
@@ -282,8 +284,9 @@
                                                 <div class="mb-3 form-check">
                                                     <input type="checkbox" class="form-check-input"
                                                         id="mostrarPasswordNuevaContrasena">
-                                                    <label class="form-check-label" for="mostrarPasswordNuevaContrasena">Mostrar
-                                                        contraseña</label>
+                                                    <label class="form-check-label"
+                                                        for="mostrarPasswordNuevaContrasena">Mostrar
+                                                        contraseñas</label>
                                                 </div>
 
                                                 <button id="btnRestablecerContrasena" type="submit" name="enviar"
@@ -295,12 +298,13 @@
                                     </div>
                                     <div class="tab-pane fade" id="v-pills-contacto" role="tabpanel"
                                         aria-labelledby="v-pills-contacto-tab">
-                                        <div class="my-4 mx-4">
+                                        <div class="mb-2 mx-4">
                                             <form class="p-4" id="formContacto">
                                                 <div>
                                                     <label for="contacto" class="form-label fw-bold">¿En qué podemos
                                                         ayudarte?</label>
-                                                    <textarea placeholder="Escribe tu mensaje aquí" class="form-control" id="contacto" rows="3"></textarea>
+                                                    <textarea placeholder="Escribe tu mensaje aquí" class="form-control"
+                                                        id="contacto" rows="3"></textarea>
                                                 </div>
                                                 <button id="btnEnviarContacto" type="submit" name="enviar"
                                                     class="fw-bold col-12 btn">Enviar</button>
@@ -327,13 +331,16 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5 fw-bold text-center" id="staticBackdropLabel">Elige tu avatar</h1>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
-                <div class="modal-body col-12 d-flex justify-content-center align-items-center flex-wrap" id="avatar-list">
-                    
+                <div class="modal-body col-12 d-flex justify-content-center align-items-center flex-wrap"
+                    id="avatar-list">
+
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="col-12 btn fw-bold" id="acceptButton" data-bs-dismiss="modal" disabled>Aceptar</button>
+                    <button type="button" class="col-12 btn fw-bold" id="acceptButton" data-bs-dismiss="modal"
+                        disabled>Aceptar</button>
                 </div>
             </div>
         </div>

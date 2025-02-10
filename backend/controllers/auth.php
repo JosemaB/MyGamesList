@@ -14,19 +14,21 @@ try {
         $conexion = $baseDeDatos->getConnection();
 
         //Aqui se comprueba si el usuario existe
-        $consultaUsuario = $conexion->prepare("select contrasena from usuarios where email = ?");
+        $consultaUsuario = $conexion->prepare("select contrasena, metodo_registro from usuarios where email = ?");
         $consultaUsuario->bind_param("s", $email);
         $consultaUsuario->execute();
         $usuarioExiste = $consultaUsuario->get_result();
         $usuarioResultado = $usuarioExiste->fetch_assoc();
 
-        if ($usuarioExiste->num_rows !== 0) {
+        if ($usuarioResultado["metodo_registro"] === 'google') {
+            $error = 'El correo que estás ingresando está vinculado con Google. Por favor, inicia sesión con tu cuenta de Google';
+        } else if ($usuarioExiste->num_rows !== 0) {
             if (password_verify($datos['password'], $usuarioResultado["contrasena"])) {
                 $exito = "Usuario dentro de la sesion";
                 //Faltaria crear cookeis y agregar sesion
             } else {
                 $error = 'Error. Usuario o Contraseña incorrectos';
-            }          
+            }
         } else {
             //Para mandar un mensaje mas correcto
             $error = "El correo electrónico ingresado no está asociado a ninguna cuenta, regístrate para acceder";
