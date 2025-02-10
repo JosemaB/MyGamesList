@@ -4,48 +4,63 @@ function iniciarPerfil() {
     // Llamar a la función para cargar los avatares cuando se abra el modal
     document.getElementById('staticBackdrop').addEventListener('show.bs.modal', loadAvatars);
 
-
-
     /*Funciones */
     // Función para cargar los avatares en el modal
     async function loadAvatars() {
-        // Obtén el contenedor del modal donde se mostrarán las imágenes
         const avatarList = document.getElementById('avatar-list');
+        const acceptButton = document.getElementById('acceptButton');
+        let selectedAvatar = null; // Definir la variable globalmente
 
         try {
-            // Hacer la solicitud AJAX con fetch
             const response = await fetch('http://localhost:3000/backend/helpers/getAvatars.php');
-            // Si la respuesta no es ok, lanza un error
+
             if (!response.ok) {
                 throw new Error('Error al cargar las imágenes');
             }
-            // Convertir la respuesta en formato JSON
+
             const avatars = await response.json();
-            console.log(avatars);
+
             // Limpiar el contenido anterior
             avatarList.innerHTML = '';
 
-            // Si hay un error, muestra un mensaje
-            if (avatars.error) {
-                avatarList.innerHTML = `<p>${avatars.error}</p>`;
-                return;
-            }
-            // Verificar si 'avatars' es un array
-            if (Array.isArray(avatars)) {
-                avatars.forEach((avatar) => {
-                    // Tu código para mostrar los avatares
-                    console.log(avatar);  // Para depurar
-                    let avatarImg = document.createElement('img');
-                    avatarImg.src = avatar;
-                    avatarList.appendChild(avatarImg);
+            avatars.forEach((avatar) => {
+                const button = document.createElement('button');
+                button.classList.add('col-4');
+
+                let avatarImg = document.createElement('img');
+                avatarImg.src = avatar;
+                avatarImg.alt = "Avatar"; // Buenas prácticas
+                button.appendChild(avatarImg);
+
+                // Evento para seleccionar el avatar
+                button.addEventListener('click', () => {
+                    // Remueve la clase 'selected' de otros botones
+                    document.querySelectorAll('#avatar-list button').forEach(btn => btn.classList.remove('selected'));
+
+                    // Agrega la clase al botón seleccionado
+                    button.classList.add('selected');
+
+                    // Guarda la URL del avatar seleccionado
+                    selectedAvatar = avatar;
                 });
-            } else {
-                console.error("No se recibió un arreglo de avatares");
-            }
+
+                avatarList.appendChild(button);
+            });
+            // Evento para obtener la URL cuando se acepte el modal
+            acceptButton.addEventListener('click', () => {
+                if (selectedAvatar) {
+                    console.log('Avatar seleccionado:', selectedAvatar);
+                    // Aquí puedes usar la URL como necesites
+                } else {
+                    alert('Por favor, selecciona un avatar.');
+                }
+            });
+
         } catch (error) {
             console.error('Error al cargar los avatares:', error);
-            avatarList.innerHTML = `<p>Error al cargar los avatares.</p>`;
+            avatarList.innerHTML = `<p style="color: red;">Error al cargar los avatares.</p>`;
         }
     }
+
 
 }

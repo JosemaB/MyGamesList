@@ -42,7 +42,7 @@
 #guardarCambios:hover,
 #formEmail button:hover,
 #formNewPassword button:hover,
-#formContacto button:hover  {
+#formContacto button:hover {
     background-color: #141f3b;
     color: rgb(165, 182, 196);
 }
@@ -60,6 +60,29 @@
 }
 
 /*Modal*/
-.modal-content{
-background-color: #1A233A;
+.modal-content {
+    background-color: #1A233A;
+}
+
+#avatar-list button {
+    border-radius: 100%;
+    width: 100px;
+    /* Tamaño fijo para mantener proporción */
+    height: 100px;
+    /* Asegura que el botón sea siempre un círculo */
+    padding: 0;
+    overflow: hidden;
+    margin: 10px;
+    background-color: transparent;
+}
+
+#avatar-list button img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+/*Cuando se seleccioan un boton*/
+.selected {
+    border: 4px solid #0855c7;
 }
