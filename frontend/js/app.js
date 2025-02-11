@@ -1,9 +1,14 @@
 import { listaJuegosPorFiltro, catalogoPrincipal, cardsMain, listaDeJuegosPorNombre } from "./API.js";
 import { mostrarPlataforma, adjustSelectToSelectedOption, limpiarHTML, quitarContenidoAdulto, generos } from "./funciones.js";
+import { validarHeaderMovil, validarHeaderEscritorio } from "./guardian.js";
+
 
 document.addEventListener('DOMContentLoaded', iniciarApp);
 
 function iniciarApp() {
+    //Validamos con el guardian el header
+    validarHeaderMovil();
+    validarHeaderEscritorio();
     try {
         //Dejo los query selector aqui para que sean mas intuitivos
         const resultado20Games = document.querySelector('#resultado20Juegos');

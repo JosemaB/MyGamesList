@@ -2,6 +2,8 @@
 include_once '../config/ConexionBdd.php';  //Para la conexion de la base de datos MyGamesList
 include_once '../config/cors.php';  // Incluye CORS para poder hacer la conexion con mi frontend
 include_once '../helpers/funciones.php';
+include_once './iniciar_sesion.php';
+
 
 try {
     // Obtener los datos enviados en formato JSON
@@ -24,8 +26,11 @@ try {
             $error = 'El correo que estás ingresando está vinculado con Google. Por favor, inicia sesión con tu cuenta de Google';
         } else if ($usuarioExiste->num_rows !== 0) {
             if (password_verify($datos['password'], $usuarioResultado["contrasena"])) {
+
+                //Creamos la sesion y la cookie
+                iniciarSesion($email);
                 $exito = "Usuario dentro de la sesion";
-                //Faltaria crear cookeis y agregar sesion
+
             } else {
                 $error = 'Error. Usuario o Contraseña incorrectos';
             }

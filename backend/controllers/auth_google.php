@@ -1,6 +1,7 @@
 <?php
 include_once '../config/ConexionBdd.php';  //Para la conexion de la base de datos MyGamesList
 include_once '../config/cors.php';  // Incluye CORS para poder hacer la conexion con mi frontend
+include_once './iniciar_sesion.php';
 
 try {
     // Obtener los datos enviados en formato JSON
@@ -62,10 +63,11 @@ try {
             $insertUsuarioNuevo->bind_param("sssss", $username, $email, $metodoRegistro, $avatar, $rol);
             $insertUsuarioNuevo->execute();
             $exito = "¡Registro exitoso!";
-
         } else {
             $exito = "Usuario existe";
         }
+        //Creamos la sesion y la cookie
+        iniciarSesion($email);
     } else {
         $error = "Error al conectar con Google. Datos no válidos";
     }
