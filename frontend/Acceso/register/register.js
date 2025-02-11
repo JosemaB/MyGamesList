@@ -1,5 +1,8 @@
-import { alertDanger, alertSuccess, urlPaginaAnterior, spinner } from "../../js/funciones.js";
-
+import { alertDanger, alertSuccess, urlPaginaAnterior, spinner,getCookie } from "../../js/funciones.js";
+const sesionToken = getCookie('sesion_token');
+if (sesionToken) {
+    window.location.href = "/index.html";
+}
 document.addEventListener('DOMContentLoaded', iniciarLogin);
 
 function iniciarLogin() {
@@ -75,7 +78,7 @@ function iniciarLogin() {
                 const datos = await enviarDatos(camposRegister[0].value, camposRegister[1].value, camposRegister[2].value, camposRegister[3].value);
 
                 if (!datos["success"]) {
-                    
+
                     if (typeof datos.error === "string") {
                         // Si error es un string, lo mostramos directamente
                         alertaDiv.appendChild(alertDanger(datos.error));

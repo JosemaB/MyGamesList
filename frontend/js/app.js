@@ -5,7 +5,9 @@ import { iniciarGuardian } from "./guardian.js";
 document.addEventListener('DOMContentLoaded', iniciarApp);
 
 async function iniciarApp() {
-    if (window.location.pathname !== "/index.html") {
+    // Obtener la ruta de la URL sin importar el dominio ni el puerto
+    const currentPath = window.location.pathname;
+    if ( currentPath !== "/index.html" && currentPath !== "/") {
         document.querySelector('header').style.display = 'none';
         document.querySelector('main').style.display = 'none';
         document.querySelector('footer').style.display = 'none';
@@ -13,7 +15,7 @@ async function iniciarApp() {
         document.querySelector('header').style.display = 'block';
         document.querySelector('main').style.display = 'block';
         document.querySelector('footer').style.display = 'block';
-    } 
+    }
 
 
     try {

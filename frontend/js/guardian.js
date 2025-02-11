@@ -1,4 +1,3 @@
-
 // Variable global para almacenar la sesión
 let sessionData = null;
 
@@ -23,17 +22,22 @@ async function obtenerSesion() {
 // Función para iniciar la aplicación solo cuando la sesión esté lista
 export async function iniciarGuardian() {
     await obtenerSesion(); // Esperamos a que la sesión se obtenga antes de continuar
+
     if (sessionData.error === "Sesion no valida") {
+        windows.location.href = "/Acceso/login/login.html";
 
     } else if (sessionData.error === "No hay sesion activa") {
         usuarioNoConectadoMovil();
         usuarioNoConectadoEscritorio();
     } else if (sessionData.success) {
-        const avatar = sessionData.exito.usuario.avatar;
-        usuarioConectadoMovil(avatar);
-        usuarioConectadoEscritorio(avatar);
+        const { usuario } = sessionData.exito;
+        usuarioConectadoMovil(usuario.avatar);
+        usuarioConectadoEscritorio(usuario.avatar);
+        localStorage.setItem("usuarioData", JSON.stringify(usuario));
     }
 }
+
+/*Header guardian */
 function usuarioNoConectadoMovil() {
     const divHeaderMoviles = document.getElementById('headerMoviles');
     // Crear el contenedor div con clases 'text-center d-block d-xl-none fs-1'
@@ -85,6 +89,7 @@ function usuarioNoConectadoEscritorio() {
 
 }
 function usuarioConectadoMovil(avatar) {
+    avatar = avatar === null ? '/img/avatares/sinAvatar.png' : avatar;
     const divHeaderMoviles = document.getElementById('headerMoviles');
     const navItem = document.createElement('div');
     navItem.classList.add('nav-item', 'dropdown', 'd-block', 'd-xl-none', 'mx-auto', 'text-center');
@@ -110,15 +115,17 @@ function usuarioConectadoMovil(avatar) {
     const dropdownMenu = document.createElement('ul');
     dropdownMenu.classList.add('dropdown-menu', 'text-center', 'text-small');
 
+    if (window.location.pathname !== '/Perfiles/perfil/perfil.html') {
+        // Crear y agregar el tercer item (Perfil)
+        const perfilItem = document.createElement('li');
+        const perfilLink = document.createElement('a');
+        perfilLink.classList.add('dropdown-item', 'text-white', 'fw-bold');
+        perfilLink.setAttribute('href', '/Perfiles/perfil/perfil.html');  // Modificar enlace aquí
+        perfilLink.textContent = 'Perfil';
+        perfilItem.appendChild(perfilLink);
+        dropdownMenu.appendChild(perfilItem);
+    }
 
-    // Crear y agregar el tercer item (Perfil)
-    const perfilItem = document.createElement('li');
-    const perfilLink = document.createElement('a');
-    perfilLink.classList.add('dropdown-item', 'text-white', 'fw-bold');
-    perfilLink.setAttribute('href', '/Perfiles/perfil/perfil.html');  // Modificar enlace aquí
-    perfilLink.textContent = 'Perfil';
-    perfilItem.appendChild(perfilLink);
-    dropdownMenu.appendChild(perfilItem);
 
     // Crear y agregar el quinto item (Cerrar sesión)
     const logoutItem = document.createElement('li');
@@ -143,6 +150,7 @@ function usuarioConectadoMovil(avatar) {
 }
 
 function usuarioConectadoEscritorio(avatar) {
+    avatar = avatar === null ? '/img/avatares/sinAvatar.png' : avatar;
     const divHeaderEscritorio = document.getElementById('headerEscritorio');
 
     const navItem = document.createElement('div');
@@ -171,14 +179,17 @@ function usuarioConectadoEscritorio(avatar) {
     const dropdownMenu = document.createElement('ul');
     dropdownMenu.classList.add('dropdown-menu', 'text-small', 'text-end');
 
-    // Crear y agregar el tercer item (Perfil)
-    const perfilItem = document.createElement('li');
-    const perfilLink = document.createElement('a');
-    perfilLink.classList.add('dropdown-item', 'text-white', 'fw-bold', 'text-center');
-    perfilLink.setAttribute('href', '/Perfiles/perfil/perfil.html');  // Modificar enlace aquí
-    perfilLink.textContent = 'Perfil';
-    perfilItem.appendChild(perfilLink);
-    dropdownMenu.appendChild(perfilItem);
+    if (window.location.pathname !== '/Perfiles/perfil/perfil.html') {
+        // Crear y agregar el tercer item (Perfil)
+        const perfilItem = document.createElement('li');
+        const perfilLink = document.createElement('a');
+        perfilLink.classList.add('dropdown-item', 'text-white', 'fw-bold', 'text-center');
+        perfilLink.setAttribute('href', '/Perfiles/perfil/perfil.html');  // Modificar enlace aquí
+        perfilLink.textContent = 'Perfil';
+        perfilItem.appendChild(perfilLink);
+        dropdownMenu.appendChild(perfilItem);
+
+    }
 
 
     // Crear y agregar el quinto item (Cerrar sesión)
@@ -228,3 +239,5 @@ async function cerrarSesion() {
 
 
 }
+
+

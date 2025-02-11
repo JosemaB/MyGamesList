@@ -1,7 +1,16 @@
+import { alertDanger, alertSuccess, spinner, borrarAlerta, mostrarPassword, getCookie, formatDate } from '../../js/funciones.js';
+const sesionToken = getCookie('sesion_token');
+if (!sesionToken) {
+    window.location.href = "/index.html";
+}
 document.addEventListener('DOMContentLoaded', iniciarPerfil);
-import { alertDanger, alertSuccess, spinner, borrarAlerta, mostrarPassword } from '../../js/funciones.js';
-
 function iniciarPerfil() {
+    /*Los datos del usuario */
+    const usuarioData = JSON.parse(localStorage.getItem("usuarioData"));
+    console.log(usuarioData);
+    /*Configuraciones usuario y sus datos*/
+    perfilInformacion(usuarioData);
+    personalizarPefil(usuarioData);
 
     /*Configuracion */
     //Lo hago asi porque es mas intuitivo
@@ -54,7 +63,7 @@ function iniciarPerfil() {
 
             avatars.forEach((avatar) => {
                 const button = document.createElement('button');
-                button.classList.add('col-4' ,'btnAvatar');
+                button.classList.add('col-4', 'btnAvatar');
 
                 let avatarImg = document.createElement('img');
                 avatarImg.src = avatar;
@@ -203,5 +212,19 @@ function iniciarPerfil() {
             //Backend se enviaria y comprobara sus errores
         }
     });
+    /*Funciones */
+    function perfilInformacion(usuario) {
+        const { nombre, fecha_registro, avatar } = usuario;
+        document.getElementById('nombreUsuario').innerText = nombre;
+        document.getElementById('registro').innerText = `Miembro desde: ${formatDate(fecha_registro)}`;
+        document.getElementById('imgUsuario').src = (avatar === null ? '/img/avatares/sinAvatar.png' : avatar);  //Por si el avatar es null
 
+    }
+
+    function personalizarPefil(usuario) {
+        const { nombre, avatar } = usuario;
+        document.getElementById('cambiarImg').src = (avatar === null ? '/img/avatares/sinAvatar.png' : avatar); //Por si el avatar es null
+        document.getElementById('cambioNameUsuario').value = nombre;
+
+    }
 }

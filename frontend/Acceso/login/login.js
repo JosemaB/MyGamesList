@@ -1,7 +1,13 @@
-import { alertDanger, alertSuccess, urlPaginaAnterior, spinner } from "../../js/funciones.js";
+import { alertDanger, alertSuccess, urlPaginaAnterior, spinner, getCookie } from "../../js/funciones.js";
+
+const sesionToken = getCookie('sesion_token');
+if (sesionToken) {
+    window.location.href = "/index.html";
+}
 document.addEventListener('DOMContentLoaded', iniciarLogin);
 
-function iniciarLogin() {
+async function iniciarLogin() {
+
     initializeGoogleSignIn(); // Inicializa el inicio de sesión de Google
     //Selectores
     document.getElementById('checkbox').addEventListener('click', mostrarPassword);
@@ -329,8 +335,8 @@ function iniciarLogin() {
             console.error('Error al enviar datos:', error);
         }
     }
-
 }
+
 
 
 

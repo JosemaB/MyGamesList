@@ -8,7 +8,7 @@ $directory = '../../frontend/img/avatares/';
 if (is_dir($directory)) {
     // Lee todos los archivos de la carpeta y filtra solo los archivos con extensiones de imagen
     $images = array_filter(scandir($directory), function ($file) use ($directory) {
-        return preg_match('/\.(jpg|jpeg|png|webp|gif)$/i', $file) && strpos($file, 'agregar-usuario') === false;;
+        return preg_match('/\.(jpg|jpeg|png|webp|gif)$/i', $file) && strpos($file, 'sinAvatar') === false;;
     });
 
     // Agrega la ruta relativa de la imagen (sin la parte inicial de la ruta)

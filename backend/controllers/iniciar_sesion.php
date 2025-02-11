@@ -27,8 +27,7 @@ function iniciarSesion($email)
         ];
 
         // Guardar session_id en una cookie para mantener la sesión
-        $session_token = session_id();
-        setcookie("sesion_token", session_id(), time() + (86400 * 30), "/", "localhost", false, true); // no HttpOnly
+        setcookie("sesion_token", session_id(), time() + (86400 * 30), "/", "localhost", false, false); 
 
         $exito = "sesion y cookie generada";
     } catch (Exception $e) {

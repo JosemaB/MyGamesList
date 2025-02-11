@@ -489,6 +489,19 @@ export function mostrarPassword(divPassword) {
         divPassword.type = 'password';
     }
 }
+/*Formateear fecha */
+export function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+}
+
+/*Obtener cookie */
+export function getCookie(name) {
+    return document.cookie.split(';')
+        .map(cookie => cookie.trim())
+        .find(cookie => cookie.startsWith(name + '='))
+        ?.substring(name.length + 1) || null;
+}
 export async function juegosPorCatalogo(plataforma, divPrincipal, page = 1) {
     try {
         const juegos = await catalogoPlataformas(page, plataforma);
