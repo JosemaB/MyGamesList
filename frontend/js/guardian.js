@@ -25,8 +25,9 @@ export async function iniciarGuardian() {
 
     if (sessionData.error === "Sesion no valida") {
         windows.location.href = "/Acceso/login/login.html";
-
+        eliminarDatosStorage();
     } else if (sessionData.error === "No hay sesion activa") {
+        eliminarDatosStorage();
         usuarioNoConectadoMovil();
         usuarioNoConectadoEscritorio();
     } else if (sessionData.success) {
@@ -213,7 +214,9 @@ function usuarioConectadoEscritorio(avatar) {
     divHeaderEscritorio.appendChild(navItem);
 
 }
-
+function eliminarDatosStorage() {
+    localStorage.removeItem("usuarioData"); // Eliminar solo los datos del usuario
+}
 // Función para cerrar sesión
 async function cerrarSesion() {
     try {
@@ -227,6 +230,7 @@ async function cerrarSesion() {
 
         const data = await response.json();
         if (data.success) {
+            eliminarDatosStorage();
             // Recargar la página después de cerrar sesión
             window.location.reload();  // Esto recargará la página
         } else {

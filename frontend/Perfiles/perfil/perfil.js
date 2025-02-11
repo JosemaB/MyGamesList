@@ -1,4 +1,6 @@
 import { alertDanger, alertSuccess, spinner, borrarAlerta, mostrarPassword, getCookie, formatDate } from '../../js/funciones.js';
+import { iniciarGuardian } from "../../js/guardian.js";
+
 const sesionToken = getCookie('sesion_token');
 if (!sesionToken) {
     window.location.href = "/index.html";
@@ -121,7 +123,7 @@ function iniciarPerfil() {
         acceptButton.disabled = true;
     });
 
-    formPersonalizarPerfil.addEventListener('submit', (e) => {
+    formPersonalizarPerfil.addEventListener('submit', async (e) => {
         e.preventDefault();
         const alerta = document.getElementById('alertaEditarPerfil');
         const img = formPersonalizarPerfil.cambiarImg.src;
@@ -133,7 +135,65 @@ function iniciarPerfil() {
             nombre.classList.add('error');
             alerta.appendChild(alertDanger("El nombre es obligatorio"));
         } else {
-            //Backend se enviaria y comprobara sus errores
+
+            try {
+
+                // Verificamos si ya existe un spinner en el div
+                var existingSpinner = alerta.querySelector('.spinner'); // Asegúrate de que '.spinner' es un selector único
+
+                if (existingSpinner) {
+                    // Si existe, lo eliminamos
+                    alerta.removeChild(existingSpinner);
+                }
+                //Spinner
+                const spinnerElement = spinner();
+                spinnerElement.style.marginTop = '30px';
+                spinnerElement.style.marginBottom = '10px';
+                alerta.appendChild(spinnerElement);
+                document.getElementById("guardarCambios").style.display = "none";
+
+                const { id } = usuarioData;
+                const datos = {
+                    id: id,
+                    img: img,
+                    nombre: nombre.value
+                }
+                const response = await fetch('http://localhost:3000/backend/controllers/controllerPerfilConfig/personalizarPerfil.php', {
+                    method: 'POST',
+                    credentials: "include",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(datos) // Enviamos los datos como JSON
+                });
+                // Verificamos si la respuesta es correcta
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta de PHP');
+                }
+
+                // Convertimos la respuesta en JSON
+                const data = await response.json();
+
+                // Verificamos si ya existe un spinner en el div
+                var existingSpinner = alerta.querySelector('.spinner'); // Asegúrate de que '.spinner' es un selector único
+                document.getElementById("guardarCambios").style.display = "block";
+                if (existingSpinner) {
+                    // Si existe, lo eliminamos
+                    alerta.removeChild(existingSpinner);
+                }
+                borrarAlerta(alerta);
+
+                if (!data["success"]) {
+                    alerta.appendChild(alertDanger(data["error"]));
+                } else if (data["success"]) {
+                    document.getElementById("guardarCambios").style.display = "none";
+                    alerta.appendChild(alertSuccess(data["exito"]));
+                    await iniciarGuardian();
+                    window.location.reload(); // Recarga la página después de 1 segundo
+                }
+            } catch (error) {
+                console.error("Error al enviar los datos:", error);
+            }
         }
     });
 

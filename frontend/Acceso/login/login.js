@@ -216,15 +216,16 @@ async function iniciarLogin() {
         }
     }
     async function envidarDatosFormModal(email) {
-        const datos = {
-            email: email,
-        };
         try {
+            const datos = {
+                email: email,
+            };
             // Enviar datos usando fetch
             const response = await fetch('http://localhost:3000/backend/controllers/recover.php', {
                 method: 'POST',
+                credentials: "include",
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(datos) // Enviamos los datos como JSON
             });
@@ -233,8 +234,6 @@ async function iniciarLogin() {
             if (!response.ok) {
                 throw new Error('Error en la respuesta de PHP');
             }
-
-
 
             // Convertimos la respuesta en JSON
             const data = await response.json();
