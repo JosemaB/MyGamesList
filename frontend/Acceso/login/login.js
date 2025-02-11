@@ -168,6 +168,7 @@ function iniciarLogin() {
             // Enviar datos usando fetch
             const response = await fetch('http://localhost:3000/backend/controllers/auth.php', {
                 method: 'POST',
+                credentials: "include",
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -301,6 +302,7 @@ function iniciarLogin() {
             // Enviar datos usando fetch
             const response = await fetch('http://localhost:3000/backend/controllers/auth_google.php', {
                 method: 'POST',
+                credentials: "include",
                 headers: {
                     'Content-Type': 'application/json',
                 },

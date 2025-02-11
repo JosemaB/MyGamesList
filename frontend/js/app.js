@@ -1,14 +1,21 @@
 import { listaJuegosPorFiltro, catalogoPrincipal, cardsMain, listaDeJuegosPorNombre } from "./API.js";
 import { mostrarPlataforma, adjustSelectToSelectedOption, limpiarHTML, quitarContenidoAdulto, generos } from "./funciones.js";
-import { validarHeaderMovil, validarHeaderEscritorio } from "./guardian.js";
-
+import { iniciarGuardian } from "./guardian.js";
 
 document.addEventListener('DOMContentLoaded', iniciarApp);
 
-function iniciarApp() {
-    //Validamos con el guardian el header
-    validarHeaderMovil();
-    validarHeaderEscritorio();
+async function iniciarApp() {
+    if (window.location.pathname !== "/index.html") {
+        document.querySelector('header').style.display = 'none';
+        document.querySelector('main').style.display = 'none';
+        document.querySelector('footer').style.display = 'none';
+        await iniciarGuardian();
+        document.querySelector('header').style.display = 'block';
+        document.querySelector('main').style.display = 'block';
+        document.querySelector('footer').style.display = 'block';
+    } 
+
+
     try {
         //Dejo los query selector aqui para que sean mas intuitivos
         const resultado20Games = document.querySelector('#resultado20Juegos');
@@ -115,7 +122,8 @@ function iniciarApp() {
                         let promises = [
                             mostrarCatalogoPrincipal(),
                             mostrarMainCards(),
-                            mostrarJuegos()
+                            mostrarJuegos(),
+                            iniciarGuardian()
                         ];
 
                         // Esperamos a que todas las promesas se resuelvan
