@@ -103,7 +103,7 @@ function iniciarLogin() {
                     // Redirigir al login después de 3 segundos
                     setTimeout(() => {
                         window.location.href = "../login/login.html";
-                    }, 3000);
+                    }, 2000);
                 }
 
             } catch (error) {

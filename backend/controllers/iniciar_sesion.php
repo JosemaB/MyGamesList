@@ -26,7 +26,7 @@ function iniciarSesion($email)
             'avatar' => $usuarioResultado['avatar']
         ];
 
-        // Guardar session_id en una cookie para mantener la sesión
+        // Guardar session_id en una cookie para mantener la sesión, la cookie dura 30 dias
         setcookie("sesion_token", session_id(), time() + (86400 * 30), "/", "localhost", false, false); 
 
         $exito = "sesion y cookie generada";

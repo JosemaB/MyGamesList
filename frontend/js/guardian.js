@@ -232,7 +232,7 @@ async function cerrarSesion() {
         if (data.success) {
             eliminarDatosStorage();
             // Recargar la página después de cerrar sesión
-            window.location.reload();  // Esto recargará la página
+            window.location.href = "/index.html";  // Esto recargará la página
         } else {
             console.error(data.error);
         }
@@ -244,4 +244,21 @@ async function cerrarSesion() {
 
 }
 
-
+//esto servira para trabajar a "tiempo real" que se guarde la cookie y la tengamos cuadno cargue la pagina
+export async function guardarCambiosStorage() {
+    try {
+        const response = await fetch('http://localhost:3000/backend/controllers/verificar_sesion.php', {
+            method: 'POST',
+            credentials: "include",
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const data = await response.json();
+        sessionData = data; // Guardamos la sesión en la variable global
+        const { usuario } = sessionData.exito;
+        localStorage.setItem("usuarioData", JSON.stringify(usuario));
+    } catch (error) {
+        console.error('Error al obtener la sesión:', error);
+    }
+}

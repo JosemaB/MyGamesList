@@ -9,13 +9,14 @@ try {
     if ($datos) {
         $id = validarCadena($datos['id']);
         $nombre = validarCadena($datos['nombre']);
+        $nombreActual = validarCadena($datos['nombreActual']);
         $avatar = $datos['img'];
 
         if (!$nombre) {
-            $error = "Por favor, ingresa un nombre válido";
+            $error = ["nombre" => "Por favor, ingresa un nombre válido"];
         } else if (strlen($nombre) > 15) {
-            $error = "El nombre de usuario no debe tener más de 15 caracteres";
-        }else {
+            $error = ["nombre" => "El nombre de usuario no debe tener más de 15 caracteres"];
+        } else {
             //Creamos la conexion ya con los campos validados
             $baseDeDatos = new ConexionBdd();
             $conexion = $baseDeDatos->getConnection();
@@ -29,7 +30,7 @@ try {
 
             if ($usuarioCampos["avatar"] === $avatar && $usuarioCampos["nombre_usuario"] === $nombre) {
                 $error = "El nombre o el avatar deben ser diferentes";
-            } else if ($usuarioCampos["avatar"] === $avatar) {
+            } else {
                 //Para saber si existe el usuario
                 //Aqui se comprueba si el usuario existe
                 $consultaUsuarioBdd = $conexion->prepare("select * from usuarios where nombre_usuario = ?");
@@ -37,8 +38,8 @@ try {
                 $consultaUsuarioBdd->execute();
                 $usuarioExiste = $consultaUsuarioBdd->get_result();
                 $usario = $usuarioExiste->fetch_assoc();
-                if ($usuarioExiste->num_rows !== 0) {
-                    $error = "Este nombre de usuario ya está en uso. Prueba con otro";
+                if ($usuarioExiste->num_rows !== 0 && (strtolower($nombre) !== strtolower($nombreActual))) {
+                    $error = ["nombre" => "Este nombre de usuario ya está en uso. Prueba con otro"];
                 }
             }
             if (!isset($error)) {

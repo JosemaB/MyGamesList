@@ -317,10 +317,14 @@ async function iniciarLogin() {
             if (!response.ok) {
                 throw new Error('Error en la respuesta de PHP');
             }
-
+            const alertaDiv = document.getElementById('alertas');
+            const existeAlerta = alertaDiv.querySelector('.alert');
+            if (existeAlerta) {
+                existeAlerta.remove();
+            }
             // Convertimos la respuesta en JSON
             const data = await response.json();
-            const alertaDiv = document.getElementById('alertas');
+
 
             //Mensajes en caso de error que es casi imposible sin tenemos internet bien y todo configurado
             if (!data["success"]) {
@@ -329,7 +333,6 @@ async function iniciarLogin() {
                 //Lo mandariamos a su perfil en caso aqui porque no lo tenemos creado
                 window.location.href = "/index.html";
             }
-            console.log(data);
         } catch (error) {
             console.error('Error al enviar datos:', error);
         }

@@ -1,5 +1,5 @@
 import { alertDanger, alertSuccess, spinner, borrarAlerta, mostrarPassword, getCookie, formatDate } from '../../js/funciones.js';
-import { iniciarGuardian } from "../../js/guardian.js";
+import { guardarCambiosStorage } from "../../js/guardian.js";
 
 const sesionToken = getCookie('sesion_token');
 if (!sesionToken) {
@@ -155,6 +155,7 @@ function iniciarPerfil() {
                 const { id } = usuarioData;
                 const datos = {
                     id: id,
+                    nombreActual: usuarioData.nombre,
                     img: img,
                     nombre: nombre.value
                 }
@@ -184,12 +185,27 @@ function iniciarPerfil() {
                 borrarAlerta(alerta);
 
                 if (!data["success"]) {
-                    alerta.appendChild(alertDanger(data["error"]));
+                    if (typeof data.error === "string") {
+                        // Si error es un string, lo mostramos directamente
+                        alerta.appendChild(alertDanger(data.error));
+                    } else if (typeof data.error === "object") {
+                        // Si error es un objeto, obtenemos la primera clave y mostramos el mensaje
+                        const key = Object.keys(data.error)[0]; // "password" o "email"
+
+                        if ("nombre" === key) {
+                            nombre.classList.add('error'); // Marca el campo con error
+                        }
+                        // Mostrar el mensaje de error
+                        alerta.appendChild(alertDanger(data.error[key]));
+                    }
                 } else if (data["success"]) {
                     document.getElementById("guardarCambios").style.display = "none";
                     alerta.appendChild(alertSuccess(data["exito"]));
-                    await iniciarGuardian();
-                    window.location.reload(); // Recarga la página después de 1 segundo
+                    await guardarCambiosStorage();
+                    setTimeout(() => {
+                        window.location.reload(); // Recarga la página después de 1 segundo
+                    }, 500);
+
                 }
             } catch (error) {
                 console.error("Error al enviar los datos:", error);
@@ -197,7 +213,7 @@ function iniciarPerfil() {
         }
     });
 
-    formEmail.addEventListener('submit', (e) => {
+    formEmail.addEventListener('submit', async (e) => {
         e.preventDefault();
         const alerta = document.getElementById('alertasNuevoEmail');
 
@@ -223,11 +239,85 @@ function iniciarPerfil() {
         if (hayErrores) {
             alerta.appendChild(alertDanger("Todos los campos son obligatorios"));
         } else {
-            //Envio backend
+            try {
+                // Verificamos si ya existe un spinner en el div
+                var existingSpinner = alerta.querySelector('.spinner'); // Asegúrate de que '.spinner' es un selector único
+
+                if (existingSpinner) {
+                    // Si existe, lo eliminamos
+                    alerta.removeChild(existingSpinner);
+                }
+                //Spinner
+                const spinnerElement = spinner();
+                spinnerElement.style.marginTop = '30px';
+                spinnerElement.style.marginBottom = '10px';
+                alerta.appendChild(spinnerElement);
+                document.getElementById("btnRestablecerEmail").style.display = "none";
+
+                //Id del usaurio actual
+                const { id } = usuarioData;
+                const datos = {
+                    id: id,
+                    email: formEmail.email.value,
+                    newEmail: formEmail.newEmail.value,
+                    constrasena: formEmail.contrasenaEmail.value
+                }
+                const response = await fetch('http://localhost:3000/backend/controllers/controllerPerfilConfig/cambiarEmail.php', {
+                    method: 'POST',
+                    credentials: "include",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(datos) // Enviamos los datos como JSON
+                });
+                // Verificamos si la respuesta es correcta
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta de PHP');
+                }
+
+                // Convertimos la respuesta en JSON
+                const data = await response.json();
+
+                // Verificamos si ya existe un spinner en el div
+                var existingSpinner = alerta.querySelector('.spinner'); // Asegúrate de que '.spinner' es un selector único
+                document.getElementById("btnRestablecerEmail").style.display = "block";
+                if (existingSpinner) {
+                    // Si existe, lo eliminamos
+                    alerta.removeChild(existingSpinner);
+                }
+                borrarAlerta(alerta);
+
+                if (!data["success"]) {
+                    if (typeof data.error === "string") {
+                        // Si error es un string, lo mostramos directamente
+                        alerta.appendChild(alertDanger(data.error));
+                    } else if (typeof data.error === "object") {
+                        // Si error es un objeto, obtenemos la primera clave y mostramos el mensaje
+                        const key = Object.keys(data.error)[0];
+                        campos.forEach(campo => {
+                            if (campo.id === key) {
+                                campo.classList.add('error'); // Marca el campo con error
+                            }
+                        });
+                        // Mostrar el mensaje de error
+                        alerta.appendChild(alertDanger(data.error[key]));
+                    }
+                } else if (data["success"]) {
+                    document.getElementById("btnRestablecerEmail").style.display = "none";
+                    alerta.appendChild(alertSuccess(data["exito"]));
+                    await guardarCambiosStorage();
+                    setTimeout(() => {
+                        window.location.reload(); // Recarga la página después de 1 segundo
+                    }, 500);
+
+                }
+            } catch (error) {
+                console.error("Error al enviar los datos:", error);
+            }
         }
     });
 
-    formNewPassword.addEventListener('submit', (e) => {
+    formNewPassword.addEventListener('submit', async (e) => {
         e.preventDefault();
         const alerta = document.getElementById('alertasNuevaContrasena');
 
@@ -253,7 +343,81 @@ function iniciarPerfil() {
         if (hayErrores) {
             alerta.appendChild(alertDanger("Todos los campos son obligatorios"));
         } else {
-            //Envio backend
+            try {
+                // Verificamos si ya existe un spinner en el div
+                var existingSpinner = alerta.querySelector('.spinner'); // Asegúrate de que '.spinner' es un selector único
+
+                if (existingSpinner) {
+                    // Si existe, lo eliminamos
+                    alerta.removeChild(existingSpinner);
+                }
+                //Spinner
+                const spinnerElement = spinner();
+                spinnerElement.style.marginTop = '30px';
+                spinnerElement.style.marginBottom = '10px';
+                alerta.appendChild(spinnerElement);
+                document.getElementById("btnRestablecerContrasena").style.display = "none";
+
+                //Id del usaurio actual
+                const { id } = usuarioData;
+                const datos = {
+                    id: id,
+                    passwordActual: formNewPassword.passwordActual.value,
+                    newPassword: formNewPassword.newPassword.value,
+                    confirmNewPassword: formNewPassword.confirmNewPassword.value
+                }
+                const response = await fetch('http://localhost:3000/backend/controllers/controllerPerfilConfig/cambiarContrasena.php', {
+                    method: 'POST',
+                    credentials: "include",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(datos) // Enviamos los datos como JSON
+                });
+                // Verificamos si la respuesta es correcta
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta de PHP');
+                }
+                
+                // Convertimos la respuesta en JSON
+                const data = await response.json();
+
+                // Verificamos si ya existe un spinner en el div
+                var existingSpinner = alerta.querySelector('.spinner'); // Asegúrate de que '.spinner' es un selector único
+                document.getElementById("btnRestablecerContrasena").style.display = "block";
+                if (existingSpinner) {
+                    // Si existe, lo eliminamos
+                    alerta.removeChild(existingSpinner);
+                }
+                borrarAlerta(alerta);
+
+                if (!data["success"]) {
+                    if (typeof data.error === "string") {
+                        // Si error es un string, lo mostramos directamente
+                        alerta.appendChild(alertDanger(data.error));
+                    } else if (typeof data.error === "object") {
+                        // Si error es un objeto, obtenemos la primera clave y mostramos el mensaje
+                        const key = Object.keys(data.error)[0];
+                        campos.forEach(campo => {
+                            if (campo.id === key) {
+                                campo.classList.add('error'); // Marca el campo con error
+                            }
+                        });
+                        // Mostrar el mensaje de error
+                        alerta.appendChild(alertDanger(data.error[key]));
+                    }
+                } else if (data["success"]) {
+                    document.getElementById("btnRestablecerContrasena").style.display = "none";
+                    alerta.appendChild(alertSuccess(data["exito"]));
+                    await guardarCambiosStorage();
+                    setTimeout(() => {
+                        window.location.reload(); // Recarga la página después de 1 segundo
+                    }, 500);
+
+                }
+            } catch (error) {
+                console.error("Error al enviar los datos:", error);
+            }
         }
     });
 
