@@ -1,7 +1,8 @@
 <?php
 include_once '../config/ConexionBdd.php';  // Para la conexión de la base de datos MyGamesList
 include_once '../config/cors.php';  // Incluye CORS para poder hacer la conexión con mi frontend
-include_once '../validators/userValidator.php';
+include_once '../helpers/funciones.php';
+
 
 $datos = json_decode(file_get_contents('php://input'), true);
 

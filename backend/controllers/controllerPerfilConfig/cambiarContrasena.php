@@ -1,7 +1,6 @@
 <?php
 include_once '../../config/cors.php';
 include_once '../../helpers/funciones.php';
-include_once '../../validators/userValidator.php';
 include_once '../../config/ConexionBdd.php';  //Para la conexion de la base de datos MyGamesList
 try {
     // Obtener los datos enviados en formato JSON

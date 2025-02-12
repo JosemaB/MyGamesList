@@ -1,3 +1,27 @@
+@media (max-width: 769px) {
+
+    /*Botones cofig*/
+    #v-pills-tab .nav-link {
+        border: 2px solid transparent;
+        padding: 10px;
+        display: inline-block;
+        transition: border-radius 0.3s ease, border 0.3s ease, text-shadow 0.3s ease, color 0.3s ease;
+        margin: 0;
+    }
+}
+
+@media (min-width: 770px) {
+
+    /*Botones cofig*/
+    #v-pills-tab .nav-link {
+        border: 2px solid transparent;
+        padding: 10px;
+        display: inline-block;
+        transition: border-radius 0.3s ease, border 0.3s ease, text-shadow 0.3s ease, color 0.3s ease;
+        margin: 1px;
+    }
+}
+
 /*Nav*/
 /*Nav*/
 #nav-tab button {
@@ -17,14 +41,14 @@
     /* Color de fondo del botón activo */
 }
 
-#nav-tab .nav-link,
-#v-pills-tab .nav-link {
+#nav-tab .nav-link {
     border: 2px solid transparent;
     padding: 10px;
     display: inline-block;
     transition: border-radius 0.3s ease, border 0.3s ease, text-shadow 0.3s ease, color 0.3s ease;
     margin-bottom: 1px;
 }
+
 
 #nav-tab .nav-link:hover,
 #v-pills-tab .nav-link:hover {
@@ -160,4 +184,10 @@
     background-color: #131e3b;
     color: white;
     border: 1px solid white;
+}
+
+/*Para que sepan que google no este permidito cambair el email y la contrasena*/
+.card-google-login-message {
+    background-color: #1A233A;
+    border-radius: 20px;
 }
