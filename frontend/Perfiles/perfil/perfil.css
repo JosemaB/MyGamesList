@@ -115,7 +115,8 @@
 #guardarCambios,
 #formEmail button,
 #formNewPassword button,
-#formContacto button {
+#formContacto button,
+.cardCrearLista button {
     background-color: #1d2e59;
     color: aliceblue;
     margin-top: 20px;
@@ -124,7 +125,8 @@
 #guardarCambios:hover,
 #formEmail button:hover,
 #formNewPassword button:hover,
-#formContacto button:hover {
+#formContacto button:hover,
+.cardCrearLista button:hover {
     background-color: #141f3b;
     color: rgb(165, 182, 196);
 }
@@ -141,6 +143,25 @@
     border-radius: 20px;
 }
 
+/*Crear lista de videojuegos*/
+.cardCrearLista,
+.cardSinListaDeJuegos,
+.cardLinkAmigo,
+.cardListaModalJuego {
+    background-color: #1A233A;
+    border-radius: 20px;
+    color: aliceblue;
+}
+.tituloLista:hover{
+    color: #0855c7;
+    cursor: pointer;
+}
+
+
+/*Amigos*/
+.linkAmigo{
+    color: #ff346d;
+}
 /*Modal*/
 .modal-content {
     background-color: #1A233A;

@@ -6,14 +6,199 @@ if (!sesionToken) {
     window.location.href = "/index.html";
 }
 document.addEventListener('DOMContentLoaded', iniciarPerfil);
-function iniciarPerfil() {
+async function iniciarPerfil() {
     /*Los datos del usuario */
     const usuarioData = JSON.parse(localStorage.getItem("usuarioData"));
+    const listasDeJuegos = await obtenerListas();
+
+    console.log(listasDeJuegos);
     console.log(usuarioData);
-    /*Configuraciones usuario y sus datos*/
-    perfilInformacion(usuarioData);
-    personalizarPefil(usuarioData);
+
+    /*Perfil informacion lo que se ve todo el rato*/
+    perfilInformacion();
+
+    /*Mostramos el contenido Main del usuario */
+    mostrarMain();
+
+    /*Mostramos las listas */
+    mostrarListas();
+
+    /*Cargamos la seccion config */
     configPerfil();
+
+
+    /*Contenido Main */
+    function mostrarMain() {
+        const { total_listas } = listasDeJuegos.listas;
+
+        /*Total de listas */
+        document.getElementById('totalListas').innerHTML = total_listas;
+    }
+
+
+    /*Listas de videojeugos */
+    /*Selectores */
+    const formList = document.getElementById('formCrearLista');
+
+    formList?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const nombreLista = formList.nombreList;
+        const alerta = document.getElementById('alertaList');
+
+        borrarAlerta(alerta);
+        nombreLista.classList.remove('error');
+        if (nombreLista.value.trim() === "") {
+            nombreLista.classList.add('error');
+            alerta.appendChild(alertDanger("El nombre de la lista es obligatorio"));
+        } else {
+            //Enviamos al backend
+        }
+    });
+
+    function mostrarListas() {
+        const divListas = document.getElementById('nav-listas');
+        if (listasDeJuegos.success) {
+            const { total_contenido, total_listas } = listasDeJuegos.listas;
+            document.getElementById('numListas').innerHTML = `${total_listas} / 10 listas`;
+            if (total_listas == 0) {
+                // Crear el contenedor principal
+                const cardDiv = document.createElement('div');
+                cardDiv.classList.add('card', 'mt-2', 'cardSinListaDeJuegos');
+
+                // Crear el cuerpo de la tarjeta
+                const cardBodyDiv = document.createElement('div');
+                cardBodyDiv.classList.add('card-body', 'd-flex', 'align-items-center', 'justify-content-between', 'flex-column');
+
+                // Crear el icono
+                const icon = document.createElement('i');
+                icon.classList.add('text-center', 'fs-2', 'bi', 'bi-bookmark-heart-fill');
+
+                // Crear el título
+                const cardTitle = document.createElement('h5');
+                cardTitle.classList.add('card-title', 'fw-bold', 'text-center');
+                cardTitle.textContent = '¡Crea tu primera lista de juegos!';
+
+                // Crear el texto descriptivo
+                const cardText = document.createElement('p');
+                cardText.classList.add('card-text', 'text-center');
+                cardText.textContent = '¡Genial que estés aquí! Organiza tus listas y mantén todo bajo control para acceder rápidamente a tus juegos favoritos';
+
+                // Agregar los elementos al cuerpo de la tarjeta
+                cardBodyDiv.appendChild(icon);
+                cardBodyDiv.appendChild(cardTitle);
+                cardBodyDiv.appendChild(cardText);
+
+                // Agregar el cuerpo de la tarjeta al contenedor principal
+                cardDiv.appendChild(cardBodyDiv);
+
+                // Agregar la tarjeta al cuerpo del documento (o a otro elemento específico)
+                divListas.appendChild(cardDiv);
+                
+            } else {
+
+                total_contenido.forEach(lista => {
+                    card.classList.add("card", "col-6", "my-1", "cardListaModalJuego");
+                    card.id = "cardLista-";
+
+                    // Crear el cuerpo de la tarjeta
+                    let cardBody = document.createElement("div");
+                    cardBody.classList.add("card-body");
+
+                    // Crear la fila para el título y el dropdown
+                    let flexDiv = document.createElement("div");
+                    flexDiv.classList.add("d-flex", "justify-content-between", "align-items-center");
+
+                    // Crear el título de la tarjeta
+                    let title = document.createElement("h5");
+                    title.classList.add("card-title", "tituloLista", "m-0");
+                    title.setAttribute("data-bs-toggle", "modal");
+                    title.setAttribute("data-bs-target", "#listJuegos");
+                    title.textContent = "⭐ Animes Favoritos ⭐";
+
+                    // Crear el dropdown
+                    let dropdownDiv = document.createElement("div");
+                    dropdownDiv.classList.add("dropdown");
+
+                    let button = document.createElement("button");
+                    button.classList.add("text-cente", "btn");
+                    button.setAttribute("type", "button");
+                    button.setAttribute("data-bs-toggle", "dropdown");
+                    button.setAttribute("aria-expanded", "false");
+
+                    let buttonSpan = document.createElement("span");
+                    buttonSpan.classList.add("text-light", "fs-4", "fw-bold");
+                    buttonSpan.textContent = "⋮";
+
+                    // Crear el menú desplegable
+                    let dropdownMenu = document.createElement("ul");
+                    dropdownMenu.classList.add("dropdown-menu", "dropdown-menu-dark");
+
+                    let renameItem = document.createElement("li");
+                    let renameLink = document.createElement("a");
+                    renameLink.classList.add("dropdown-item");
+                    renameLink.setAttribute("href", "#");
+                    renameLink.textContent = "Renombrar Lista";
+                    renameItem.appendChild(renameLink);
+
+                    let deleteItem = document.createElement("li");
+                    let deleteLink = document.createElement("a");
+                    deleteLink.classList.add("dropdown-item");
+                    deleteLink.setAttribute("href", "#");
+                    deleteLink.textContent = "Eliminar Lista";
+                    deleteItem.appendChild(deleteLink);
+
+                    dropdownMenu.appendChild(renameItem);
+                    dropdownMenu.appendChild(deleteItem);
+
+                    dropdownDiv.appendChild(button);
+                    dropdownDiv.appendChild(dropdownMenu);
+
+                    // Agregar el título y el dropdown a la fila
+                    flexDiv.appendChild(title);
+                    flexDiv.appendChild(dropdownDiv);
+
+                    // Crear el párrafo con la fecha de creación
+                    let paragraph = document.createElement("p");
+                    paragraph.classList.add("card-text", "text-light");
+                    paragraph.textContent = "Fecha de creación:";
+
+                    // Agregar los elementos al cuerpo de la tarjeta
+                    cardBody.appendChild(flexDiv);
+                    cardBody.appendChild(paragraph);
+
+                    // Agregar el cuerpo de la tarjeta a la tarjeta
+                    card.appendChild(cardBody);
+
+                    // Agregar la tarjeta al documento, por ejemplo, a un contenedor con el id "container"
+                    divListas.appendChild(card);
+                });
+            }
+        }
+
+    }
+    async function obtenerListas() {
+        const { id } = usuarioData;
+        const datos = {
+            id: id
+        }
+        const response = await fetch('http://localhost:3000/backend/helpers/getListasJuegos.php', {
+            method: 'POST',
+            credentials: "include",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos) // Enviamos los datos como JSON
+        });
+        // Verificamos si la respuesta es correcta
+        if (!response.ok) {
+            throw new Error('Error en la respuesta de PHP');
+        }
+
+        // Convertimos la respuesta en JSON
+        const data = await response.json();
+        return data;
+    }
+
     /*Configuracion */
     //Lo hago asi porque es mas intuitivo
     const formPersonalizarPerfil = document.getElementById('formPersonalizarPerfil');
@@ -505,18 +690,11 @@ function iniciarPerfil() {
         }
     });
     /*Funciones */
-    function perfilInformacion(usuario) {
-        const { nombre, fecha_registro, avatar } = usuario;
+    function perfilInformacion() {
+        const { nombre, fecha_registro, avatar } = usuarioData;
         document.getElementById('nombreUsuario').innerText = nombre;
         document.getElementById('registro').innerText = `Miembro desde: ${formatDate(fecha_registro)}`;
         document.getElementById('imgUsuario').src = (avatar === null ? '/img/avatares/sinAvatar.png' : avatar);  //Por si el avatar es null
-
-    }
-
-    function personalizarPefil(usuario) {
-        const { nombre, avatar } = usuario;
-        document.getElementById('cambiarImg').src = (avatar === null ? '/img/avatares/sinAvatar.png' : avatar); //Por si el avatar es null
-        document.getElementById('cambioNameUsuario').value = nombre;
 
     }
 
@@ -524,8 +702,12 @@ function iniciarPerfil() {
         const divEmail = document.getElementById('v-pills-email');
         const divContrasena = document.getElementById('v-pills-contrasena');
 
-        const { metodo_registro } = usuarioData;
+        /*Personalizar perfil */
+        const { metodo_registro, nombre, avatar } = usuarioData;
+        document.getElementById('cambiarImg').src = (avatar === null ? '/img/avatares/sinAvatar.png' : avatar); //Por si el avatar es null
+        document.getElementById('cambioNameUsuario').value = nombre;
 
+        /*Comprobamos si viene de google */
         if (metodo_registro === "google") {
             //Para la contrasena
             // Crear contenedor principal
@@ -824,4 +1006,5 @@ function iniciarPerfil() {
             divEmail.appendChild(formContainer);
         }
     }
+
 }
