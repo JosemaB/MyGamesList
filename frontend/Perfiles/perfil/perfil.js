@@ -250,12 +250,13 @@ async function iniciarPerfil() {
                     // Asignar los manejadores de clic para el "Renombrar" y "Eliminar"
                     renameLink.addEventListener("click", function (event) {
                         event.preventDefault();  // Evitar la acción predeterminada del enlace
-
+                        document.querySelectorAll("#renameListaModal button").forEach(btn => {
+                            if (!btn.classList.contains("btn-close")) {
+                                btn.style.display = "block";
+                            }
+                        });
                         // Aquí puedes agregar la lógica para renombrar la lista
                         const cardId = card.id; // Obtener el ID de la tarjeta
-                        const listName = lista["nombre_lista"]; // Obtener el nombre de la lista
-
-                        console.log(`Renombrar Lista con ID: ${cardId}, Nombre: ${listName}`);
 
                         // Mostramos el modal de rename lista
                         const renameModal = new bootstrap.Modal(document.getElementById('renameListaModal'));
@@ -263,21 +264,80 @@ async function iniciarPerfil() {
 
                         // Lógica cuando se confirma la eliminación
                         const confirmRenameButton = document.getElementById('confirmRenameButton');
-                        confirmRenameButton.onclick = async function () {
-                            console.log("Hola");
 
-                            // Lógica de renombrar (por ejemplo, mostrar un prompt para ingresar el nuevo nombre)
-                            if (newName) {
-                                // Cambiar el nombre de la lista (por ejemplo, actualizar el DOM)
-                                title.textContent = newName;
-                                lista["nombre_lista"] = newName;  // Actualizar el objeto `lista` si es necesario
-                                console.log("Nuevo nombre de la lista:", newName);
+                        //Reiniciamos el valor
+                        document.getElementById('newListName').value = "";
+                        const alerta = document.getElementById('alertasRenameLista');
+                        borrarAlerta(alerta);
+                        confirmRenameButton.onclick = async function () {
+
+
+                            var existingSpinner = alerta.querySelector('.spinner');
+                            if (existingSpinner) {
+                                // Si existe, lo eliminamos
+                                alerta.removeChild(existingSpinner);
                             }
 
-                            // Cerrar el modal después de la acción
-                            renameModal.hide();
-                        }
+                            const nuevoNombre = document.getElementById('newListName');
 
+                            borrarAlerta(alerta);
+
+                            //Si el nombre esta vacio
+                            nuevoNombre.classList.remove('error');
+                            if (nuevoNombre.value.trim() === "") {
+                                nuevoNombre.classList.add('error');
+                                alerta.appendChild(alertDanger("El nombre de la lista es obligatorio"));
+                            } else {
+                                var existingSpinner = alerta.querySelector('.spinner');
+                                if (existingSpinner) {
+                                    // Si existe, lo eliminamos
+                                    alerta.removeChild(existingSpinner);
+                                }
+
+                                //Spinner
+                                const spinnerElement = spinner();
+                                spinnerElement.style.marginTop = '30px';
+                                spinnerElement.style.marginBottom = '10px';
+                                alerta.appendChild(spinnerElement);
+                                document.querySelectorAll("#renameListaModal button").forEach(btn => {
+                                    if (!btn.classList.contains("btn-close")) {
+                                        btn.style.display = "none";
+                                    }
+                                });
+                                //Trabajamos con el backend
+                                //Llamamos a la funcion de cambiar nombre
+                                const data = await renombrarLista(cardId, nuevoNombre.value)
+
+
+                                var existingSpinner = alerta.querySelector('.spinner');
+                                if (existingSpinner) {
+                                    // Si existe, lo eliminamos
+                                    alerta.removeChild(existingSpinner);
+                                }
+                                borrarAlerta(alerta);
+
+                                if (!data["success"]) {
+                                    document.querySelectorAll("#renameListaModal button").forEach(btn => {
+                                        if (!btn.classList.contains("btn-close")) {
+                                            btn.style.display = "block";
+                                        }
+                                    });
+                                    // Si error es un string, lo mostramos directamente
+                                    alerta.appendChild(alertDanger(data.error));
+                                } else if (data["success"]) {
+                                    document.querySelectorAll("#renameListaModal button").forEach(btn => {
+                                        if (!btn.classList.contains("btn-close")) {
+                                            btn.style.display = "none";
+                                        }
+                                    });
+                                    // Cerrar el modal después de la acción
+                                    renameModal.hide();
+                                }
+                                // Cambiar el nombre de la lista (por ejemplo, actualizar el DOM) "A tiempo real"
+                                title.textContent = nuevoNombre.value;
+                                lista["nombre_lista"] = nuevoNombre.value;  // Actualizar el objeto `lista` si es necesario
+                            }
+                        }
 
                     });
 
@@ -355,13 +415,13 @@ async function iniciarPerfil() {
                                         btn.style.display = "none";
                                     }
                                 });
+                                // Cerrar el modal después de la acción
+                                confirmModal.hide();
+                                //Actualizamos a "tiempo real el total de listas agregadas"
+                                card.remove(); // Eliminar la tarjeta del DOM
                             }
 
-                            //Actualizamos a "tiempo real el total de listas agregadas"
-                            card.remove(); // Eliminar la tarjeta del DOM
 
-                            // Cerrar el modal después de la acción
-                            confirmModal.hide();
                         };
                     });
 
@@ -401,6 +461,31 @@ async function iniciarPerfil() {
         // Usar una expresión regular para extraer el primer número
         const primerNumero = contenido.match(/\d+/);  // \d+ busca uno o más dígitos
         return primerNumero[0];
+    }
+
+    async function renombrarLista(idLista, nuevoNombre) {
+        const { id } = usuarioData;
+        const datos = {
+            idUsuario: id,
+            idLista: idLista,
+            nuevoNombre: nuevoNombre
+        }
+        const response = await fetch('http://localhost:3000/backend/controllers/controllerListas/renameLista.php', {
+            method: 'POST',
+            credentials: "include",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos) // Enviamos los datos como JSON
+        });
+        // Verificamos si la respuesta es correcta
+        if (!response.ok) {
+            throw new Error('Error en la respuesta de PHP');
+        }
+
+        // Convertimos la respuesta en JSON
+        const data = await response.json();
+        return data;
     }
     async function borrarLista(idLista) {
         const { id } = usuarioData;

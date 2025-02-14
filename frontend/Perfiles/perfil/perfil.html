@@ -385,7 +385,8 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="confirmModalLabel">Confirmar acción</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center">
                     ¿Estás seguro de que deseas eliminar esta lista?
@@ -406,18 +407,20 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="renameListaModalLabel">Renombrar lista</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
                 <div class="modal-body fw-bold ">
                     <label for="newListName" class="mb-2">Nuevo nombre de la lista:</label>
                     <input type="text" id="newListName" class="form-control" placeholder="Introduce el nuevo nombre"
                         required>
+                    <div class="col-12 m-0 mt-2 p-0 text-center" id="alertasRenameLista"></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="button" class="btn btn-primary" id="confirmRenameButton">Renombrar</button>
                 </div>
-                <div class="col-12 m-0 mt-2 p-0 text-center" id="alertasRenameLista"></div>
+
             </div>
         </div>
     </div>

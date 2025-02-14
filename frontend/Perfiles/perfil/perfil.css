@@ -201,13 +201,15 @@
     border: 1px solid white;
 }
 
-#crearListaModal .modal-footer button {
+#crearListaModal .modal-footer button,
+#renameListaModal .modal-footer button{
     background-color: #1d2e59;
     color: white;
     border: 1px solid white;
 }
 
-#crearListaModal .modal-footer button:hover {
+#crearListaModal .modal-footer button:hover,
+#renameListaModal .modal-footer button:hover {
     background-color: #131e3b;
     color: white;
     border: 1px solid white;
