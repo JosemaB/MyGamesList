@@ -36,12 +36,13 @@ async function iniciarPerfil() {
     }
 
 
-    /*Listas de videojeugos */
+    /*Listas de videojuegos */
     /*Selectores */
     const formList = document.getElementById('formCrearLista');
 
     formList?.addEventListener('submit', async (e) => {
         e.preventDefault();
+
         const nombreLista = formList.nombreList;
         const alerta = document.getElementById('alertaList');
 
@@ -52,7 +53,90 @@ async function iniciarPerfil() {
             alerta.appendChild(alertDanger("El nombre de la lista es obligatorio"));
         } else {
             //Enviamos al backend
+            try {
+
+                // Verificamos si ya existe un spinner en el div
+                var existingSpinner = alerta.querySelector('.spinner'); // Asegúrate de que '.spinner' es un selector único
+
+                if (existingSpinner) {
+                    // Si existe, lo eliminamos
+                    alerta.removeChild(existingSpinner);
+                }
+                //Spinner
+                const spinnerElement = spinner();
+                spinnerElement.style.marginTop = '30px';
+                spinnerElement.style.marginBottom = '10px';
+                alerta.appendChild(spinnerElement);
+                document.querySelectorAll("#crearListaModal button").forEach(btn => {
+                    btn.style.display = "none";
+                });
+
+                const { id } = usuarioData;
+                const total_listas = obtenerNunListasActuales();
+
+                const datos = {
+                    nombreLista: nombreLista.value,
+                    idUsuario: id,
+                    totalListas: total_listas
+                }
+
+                const response = await fetch('http://localhost:3000/backend/controllers/controllerListas/agregarLista.php', {
+                    method: 'POST',
+                    credentials: "include",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(datos) // Enviamos los datos como JSON
+                });
+                // Verificamos si la respuesta es correcta
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta de PHP');
+                }
+
+                // Convertimos la respuesta en JSON
+                const data = await response.json();
+
+
+                // Verificamos si ya existe un spinner en el div
+                var existingSpinner = alerta.querySelector('.spinner'); // Asegúrate de que '.spinner' es un selector único
+                document.querySelectorAll("#crearListaModal button").forEach(btn => {
+                    btn.style.display = "block";
+                });
+                if (existingSpinner) {
+                    // Si existe, lo eliminamos
+                    alerta.removeChild(existingSpinner);
+                }
+                borrarAlerta(alerta);
+
+                if (!data["success"]) {
+                    if (typeof data.error === "string") {
+                        // Si error es un string, lo mostramos directamente
+                        alerta.appendChild(alertDanger(data.error));
+                    } else if (typeof data.error === "object") {
+                        // Si error es un objeto, obtenemos la primera clave y mostramos el mensaje
+                        const key = Object.keys(data.error)[0]; // "password" o "email"
+
+                        if ("nombreList" === key) {
+                            nombreLista.classList.add('error'); // Marca el campo con error
+                        }
+                        // Mostrar el mensaje de error
+                        alerta.appendChild(alertDanger(data.error[key]));
+                    }
+                } else if (data["success"]) {
+                    document.querySelectorAll("#crearListaModal button").forEach(btn => {
+                        if (!btn.classList.contains("btn-close")) {
+                            btn.style.display = "none";
+                        } else {
+                            btn.style.display = "block";
+                        }
+                    });
+                    alerta.appendChild(alertSuccess(data["exito"]));
+                }
+            } catch (error) {
+                console.error("Error al enviar los datos:", error);
+            }
         }
+
     });
 
     function mostrarListas() {
@@ -93,84 +177,196 @@ async function iniciarPerfil() {
 
                 // Agregar la tarjeta al cuerpo del documento (o a otro elemento específico)
                 divListas.appendChild(cardDiv);
-                
+
             } else {
 
                 total_contenido.forEach(lista => {
-                    card.classList.add("card", "col-6", "my-1", "cardListaModalJuego");
-                    card.id = "cardLista-";
+                    const card = document.createElement("div");
+                    card.className = "card col-12 my-1 cardListaModalJuego";
+                    card.id = `cardLista-${lista["id_lista"]}`;
 
-                    // Crear el cuerpo de la tarjeta
-                    let cardBody = document.createElement("div");
-                    cardBody.classList.add("card-body");
+                    const cardBody = document.createElement("div");
+                    cardBody.className = "card-body";
 
-                    // Crear la fila para el título y el dropdown
-                    let flexDiv = document.createElement("div");
-                    flexDiv.classList.add("d-flex", "justify-content-between", "align-items-center");
+                    const header = document.createElement("div");
+                    header.className = "d-flex justify-content-between align-items-center";
 
-                    // Crear el título de la tarjeta
-                    let title = document.createElement("h5");
-                    title.classList.add("card-title", "tituloLista", "m-0");
+                    const title = document.createElement("h5");
+                    title.className = "card-title tituloLista m-0 fw-bold";
                     title.setAttribute("data-bs-toggle", "modal");
                     title.setAttribute("data-bs-target", "#listJuegos");
-                    title.textContent = "⭐ Animes Favoritos ⭐";
+                    title.textContent = lista["nombre_lista"];
+                    title.title = lista["nombre_lista"];
 
-                    // Crear el dropdown
-                    let dropdownDiv = document.createElement("div");
-                    dropdownDiv.classList.add("dropdown");
+                    const dropdown = document.createElement("div");
+                    dropdown.className = "dropdown";
 
-                    let button = document.createElement("button");
-                    button.classList.add("text-cente", "btn");
+                    const button = document.createElement("button");
+                    button.className = "text-center btn";
                     button.setAttribute("type", "button");
                     button.setAttribute("data-bs-toggle", "dropdown");
                     button.setAttribute("aria-expanded", "false");
 
-                    let buttonSpan = document.createElement("span");
-                    buttonSpan.classList.add("text-light", "fs-4", "fw-bold");
-                    buttonSpan.textContent = "⋮";
+                    const span = document.createElement("span");
+                    span.className = "text-light fs-4 fw-bold";
+                    span.textContent = "⋮";
 
-                    // Crear el menú desplegable
-                    let dropdownMenu = document.createElement("ul");
-                    dropdownMenu.classList.add("dropdown-menu", "dropdown-menu-dark");
+                    button.appendChild(span);
+                    dropdown.appendChild(button);
 
-                    let renameItem = document.createElement("li");
-                    let renameLink = document.createElement("a");
-                    renameLink.classList.add("dropdown-item");
-                    renameLink.setAttribute("href", "#");
+                    const dropdownMenu = document.createElement("ul");
+                    dropdownMenu.className = "dropdown-menu dropdown-menu-dark";
+
+                    const renameItem = document.createElement("li");
+                    const renameLink = document.createElement("a");
+                    renameLink.className = "dropdown-item";
+                    renameLink.href = "#";
                     renameLink.textContent = "Renombrar Lista";
                     renameItem.appendChild(renameLink);
 
-                    let deleteItem = document.createElement("li");
-                    let deleteLink = document.createElement("a");
-                    deleteLink.classList.add("dropdown-item");
-                    deleteLink.setAttribute("href", "#");
+                    const deleteItem = document.createElement("li");
+                    const deleteLink = document.createElement("a");
+                    deleteLink.className = "dropdown-item";
+                    deleteLink.href = "#";
                     deleteLink.textContent = "Eliminar Lista";
                     deleteItem.appendChild(deleteLink);
 
                     dropdownMenu.appendChild(renameItem);
                     dropdownMenu.appendChild(deleteItem);
+                    dropdown.appendChild(dropdownMenu);
 
-                    dropdownDiv.appendChild(button);
-                    dropdownDiv.appendChild(dropdownMenu);
+                    header.appendChild(title);
+                    header.appendChild(dropdown);
 
-                    // Agregar el título y el dropdown a la fila
-                    flexDiv.appendChild(title);
-                    flexDiv.appendChild(dropdownDiv);
-
-                    // Crear el párrafo con la fecha de creación
-                    let paragraph = document.createElement("p");
-                    paragraph.classList.add("card-text", "text-light");
-                    paragraph.textContent = "Fecha de creación:";
-
-                    // Agregar los elementos al cuerpo de la tarjeta
-                    cardBody.appendChild(flexDiv);
+                    const paragraph = document.createElement("p");
+                    paragraph.className = "card-text fechaListaJuego";
+                    paragraph.textContent = `Fecha de creación: ${lista["fecha_creacion"].toLocaleString("es-ES", { dateStyle: "short", timeStyle: "short" })}`;
+                    paragraph.setAttribute("data-bs-toggle", "modal");
+                    paragraph.setAttribute("data-bs-target", "#listJuegos");
+                    cardBody.appendChild(header);
                     cardBody.appendChild(paragraph);
-
-                    // Agregar el cuerpo de la tarjeta a la tarjeta
                     card.appendChild(cardBody);
 
-                    // Agregar la tarjeta al documento, por ejemplo, a un contenedor con el id "container"
-                    divListas.appendChild(card);
+                    // Asignar los manejadores de clic para el "Renombrar" y "Eliminar"
+                    renameLink.addEventListener("click", function (event) {
+                        event.preventDefault();  // Evitar la acción predeterminada del enlace
+
+                        // Aquí puedes agregar la lógica para renombrar la lista
+                        const cardId = card.id; // Obtener el ID de la tarjeta
+                        const listName = lista["nombre_lista"]; // Obtener el nombre de la lista
+
+                        console.log(`Renombrar Lista con ID: ${cardId}, Nombre: ${listName}`);
+
+                        // Mostramos el modal de rename lista
+                        const renameModal = new bootstrap.Modal(document.getElementById('renameListaModal'));
+                        renameModal.show();
+
+                        // Lógica cuando se confirma la eliminación
+                        const confirmRenameButton = document.getElementById('confirmRenameButton');
+                        confirmRenameButton.onclick = async function () {
+                            console.log("Hola");
+
+                            // Lógica de renombrar (por ejemplo, mostrar un prompt para ingresar el nuevo nombre)
+                            if (newName) {
+                                // Cambiar el nombre de la lista (por ejemplo, actualizar el DOM)
+                                title.textContent = newName;
+                                lista["nombre_lista"] = newName;  // Actualizar el objeto `lista` si es necesario
+                                console.log("Nuevo nombre de la lista:", newName);
+                            }
+
+                            // Cerrar el modal después de la acción
+                            renameModal.hide();
+                        }
+
+
+                    });
+
+                    deleteLink.addEventListener("click", function (event) {
+                        event.preventDefault();  // Evitamos la acción predeterminada
+
+                        //Si se reinicia el modal
+                        const alerta = document.getElementById('alertasDeleteLista');
+                        var existingSpinner = alerta.querySelector('.spinner');
+                        if (existingSpinner) {
+                            // Si existe, lo eliminamos
+                            alerta.removeChild(existingSpinner);
+                        }
+                        borrarAlerta(alerta);
+                        document.querySelectorAll("#confirmModal button").forEach(btn => {
+                            if (!btn.classList.contains("btn-close")) {
+                                btn.style.display = "block";
+                            }
+                        });
+
+                        // Mostramos el modal de confirmación
+                        const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
+                        confirmModal.show();
+
+                        // Lógica cuando se confirma la eliminación
+                        const confirmDeleteButton = document.getElementById('confirmDeleteButton');
+                        confirmDeleteButton.onclick = async function () {
+                            // Aquí pones la lógica de eliminar la lista
+                            const cardId = card.id;
+
+                            //Total listas main
+                            let totalListas = Number(document.getElementById('totalListas').textContent);
+                            totalListas -= 1; // Realizar la resta
+                            document.getElementById('totalListas').innerHTML = totalListas; // Actualizar el valor del input
+
+                            //Total listas actual
+                            document.getElementById('numListas').innerHTML = `${totalListas} / 10 listas`; // Actualizar el valor del input
+
+                            var existingSpinner = alerta.querySelector('.spinner');
+                            if (existingSpinner) {
+                                // Si existe, lo eliminamos
+                                alerta.removeChild(existingSpinner);
+                            }
+
+                            //Spinner
+                            const spinnerElement = spinner();
+                            spinnerElement.style.marginTop = '30px';
+                            spinnerElement.style.marginBottom = '10px';
+                            alerta.appendChild(spinnerElement);
+                            document.querySelectorAll("#confirmModal button").forEach(btn => {
+                                if (!btn.classList.contains("btn-close")) {
+                                    btn.style.display = "none";
+                                }
+                            });
+                            const data = await borrarLista(cardId);
+
+                            var existingSpinner = alerta.querySelector('.spinner');
+                            if (existingSpinner) {
+                                // Si existe, lo eliminamos
+                                alerta.removeChild(existingSpinner);
+                            }
+                            borrarAlerta(alerta);
+
+                            if (!data["success"]) {
+                                document.querySelectorAll("#confirmModal button").forEach(btn => {
+                                    if (!btn.classList.contains("btn-close")) {
+                                        btn.style.display = "block";
+                                    }
+                                });
+                                // Si error es un string, lo mostramos directamente
+                                alerta.appendChild(alertDanger(data.error));
+                            } else if (data["success"]) {
+                                document.querySelectorAll("#confirmModal button").forEach(btn => {
+                                    if (!btn.classList.contains("btn-close")) {
+                                        btn.style.display = "none";
+                                    }
+                                });
+                            }
+
+                            //Actualizamos a "tiempo real el total de listas agregadas"
+                            card.remove(); // Eliminar la tarjeta del DOM
+
+                            // Cerrar el modal después de la acción
+                            confirmModal.hide();
+                        };
+                    });
+
+
+                    divListas.appendChild(card); // Lo metemos al contendor principal
                 });
             }
         }
@@ -198,6 +394,60 @@ async function iniciarPerfil() {
         const data = await response.json();
         return data;
     }
+    function obtenerNunListasActuales() {
+        // Obtener el contenido del elemento con el ID 'numListas'
+        const contenido = document.getElementById('numListas').textContent;
+
+        // Usar una expresión regular para extraer el primer número
+        const primerNumero = contenido.match(/\d+/);  // \d+ busca uno o más dígitos
+        return primerNumero[0];
+    }
+    async function borrarLista(idLista) {
+        const { id } = usuarioData;
+        const datos = {
+            idUsuario: id,
+            idLista: idLista
+        }
+        const response = await fetch('http://localhost:3000/backend/controllers/controllerListas/borrarListas.php', {
+            method: 'POST',
+            credentials: "include",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos) // Enviamos los datos como JSON
+        });
+        // Verificamos si la respuesta es correcta
+        if (!response.ok) {
+            throw new Error('Error en la respuesta de PHP');
+        }
+
+        // Convertimos la respuesta en JSON
+        const data = await response.json();
+        return data;
+    }
+    // Agregar evento al modal para obtener el ID de la tarjeta para mostrar sus juegos =)
+    document.querySelector("#listJuegos").addEventListener("show.bs.modal", function (event) {
+        // Obtener el botón o el elemento que abrió el modal
+        const target = event.relatedTarget;
+
+        // Asegurarse de que el target está en una tarjeta .card
+        const tarjeta = target.closest('.card');
+        if (tarjeta) {
+            // Obtener el id de la tarjeta
+            const tarjetaId = tarjeta.id;
+
+            // Obtener el título de la tarjeta
+            const tituloCard = tarjeta.querySelector('.card-title').textContent;
+
+            // Establecer el título del modal
+            const tituloModal = document.querySelector('#tituloListaModal');
+            tituloModal.innerHTML = tituloCard;
+
+            // Mostrar en consola el id de la tarjeta
+            console.log("ID de la tarjeta:", tarjetaId);
+        }
+    });
+
 
     /*Configuracion */
     //Lo hago asi porque es mas intuitivo

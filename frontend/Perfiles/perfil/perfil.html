@@ -169,7 +169,7 @@
                         <div class="tab-pane fade" id="nav-listas" role="tabpanel" aria-labelledby="nav-listas-tab"
                             tabindex="0"> <!-- Button trigger modal -->
                             <!--Crear lista-->
-                            <div class="mt-2 card cardCrearLista">
+                            <div class="mt-2 card mb-1 cardCrearLista">
                                 <div class="card-body d-flex justify-content-between align-items-center">
                                     <!-- Botón -->
                                     <button type="button" class="btn m-0 btn-primary" data-bs-toggle="modal"
@@ -180,8 +180,7 @@
                                     <span class="fw-bold" id="numListas"></span>
                                 </div>
                             </div>
-                            <!-- Mostramos las cards -->   
-                            
+                            <!-- Mostramos las cards -->
                         </div>
 
                         <div class="tab-pane fade" id="amigos" role="tabpanel" aria-labelledby="amigos-tab"
@@ -360,13 +359,13 @@
             </div>
         </div>
     </div>
-    <!--Modal de lista de juegos (Dejo esto listo aunque se hace muy adelante)-->
+    <!--Modal de lista de juegos -->
     <div class="modal fade" id="listJuegos" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        aria-labelledby="tituloListaModal" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5 fw-bold" id="staticBackdropLabel">Modal title</h1>
+                    <h1 class="modal-title fs-5 fw-bold" id="tituloListaModal"></h1>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
@@ -376,6 +375,49 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmación eliminacion lista -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalLabel">Confirmar acción</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    ¿Estás seguro de que deseas eliminar esta lista?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteButton">Eliminar</button>
+                </div>
+                <div class="col-12 m-0 mt-2 p-0 text-center" id="alertasDeleteLista"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para renombrar la lista -->
+    <div class="modal fade" id="renameListaModal" tabindex="-1" aria-labelledby="renameListaModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="renameListaModalLabel">Renombrar lista</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body fw-bold ">
+                    <label for="newListName" class="mb-2">Nuevo nombre de la lista:</label>
+                    <input type="text" id="newListName" class="form-control" placeholder="Introduce el nuevo nombre"
+                        required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="confirmRenameButton">Renombrar</button>
+                </div>
+                <div class="col-12 m-0 mt-2 p-0 text-center" id="alertasRenameLista"></div>
             </div>
         </div>
     </div>

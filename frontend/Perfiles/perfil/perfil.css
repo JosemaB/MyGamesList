@@ -152,16 +152,22 @@
     border-radius: 20px;
     color: aliceblue;
 }
-.tituloLista:hover{
+
+.tituloLista:hover,
+.fechaListaJuego:hover {
     color: #0855c7;
     cursor: pointer;
 }
 
+.fechaListaJuego {
+    color: gray;
+}
 
 /*Amigos*/
-.linkAmigo{
+.linkAmigo {
     color: #ff346d;
 }
+
 /*Modal*/
 .modal-content {
     background-color: #1A233A;
@@ -195,13 +201,13 @@
     border: 1px solid white;
 }
 
-.modal-footer button {
+#crearListaModal .modal-footer button {
     background-color: #1d2e59;
     color: white;
     border: 1px solid white;
 }
 
-.modal-footer button:hover {
+#crearListaModal .modal-footer button:hover {
     background-color: #131e3b;
     color: white;
     border: 1px solid white;

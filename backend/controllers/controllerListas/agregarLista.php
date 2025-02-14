@@ -13,9 +13,11 @@ try {
 
         if (!$nombreLista) {
             $error = ["nombreList" => "El nombre no de la lista no debe estar vacío"];
+        }else if (strlen($nombreLista) > 50) {
+            $error = ["nombreList" => "El nombre no debe tener más de 50 caracteres"];
         } else if (!$idUsuario) {
             $error = ["error al obtener el usuario"];
-        } else if ($numTotalListas > 10) {
+        } else if ($numTotalListas >= 10) {
             $error = ["Has alcanzado el límite de 10 listas. Elimina una para crear una nueva"];
 
         } else {
@@ -27,12 +29,12 @@ try {
             $insertLista = $conexion->prepare("INSERT INTO listas (id_usuario, nombre_lista) VALUES (?, ?)");
 
             // Enlazar parámetros y ejecutar la consulta
-            $insertLista->bind_param("is", $id_usuario, $nombre_lista);
+            $insertLista->bind_param("is", $idUsuario, $nombreLista);
             $insertLista->execute();
 
             // Verificar si la inserción fue exitosa
             if ($insertLista->affected_rows > 0) {
-                $exito = "¡Lista creada con éxito!";
+                $exito = "¡Lista creada con éxito! Recarga la página para verla";
             } else {
                 $error = "Error al crear la lista";
             }

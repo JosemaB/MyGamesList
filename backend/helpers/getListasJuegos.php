@@ -25,7 +25,7 @@ try {
             // Consulta 2: Obtener las listas con sus detalles
             $listasQuery = "SELECT id_lista, nombre_lista, fecha_creacion FROM listas WHERE id_usuario = ?";
             $listasStmt = $conexion->prepare($listasQuery);
-            $listasStmt->bind_param("i", $id_usuario);
+            $listasStmt->bind_param("i", $id);
             $listasStmt->execute();
             $listasResult = $listasStmt->get_result();
 
