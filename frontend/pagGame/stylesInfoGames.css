@@ -275,3 +275,27 @@
     font-size: 15px;
     padding: 25px;
 }
+
+
+/*Modal*/
+.modal-content {
+    background-color: #1A233A;
+}
+
+/*Boton de inciar sesion*/
+.btnIniciarSesion:disabled {
+    background-color: #1A233A;
+    border: 1px solid white;
+}
+
+.btnIniciarSesion {
+    background-color: #1d2e59;
+    color: white;
+    border: 1px solid white;
+}
+
+.btnIniciarSesion:hover {
+    background-color: #131e3b;
+    color: white;
+    border: 1px solid white;
+}

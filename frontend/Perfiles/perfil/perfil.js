@@ -1,4 +1,4 @@
-import { alertDanger, alertSuccess, spinner, borrarAlerta, mostrarPassword, getCookie, formatDate } from '../../js/funciones.js';
+import { alertDanger, alertSuccess, spinner, borrarAlerta, mostrarPassword, getCookie, formatDate, obtenerListas } from '../../js/funciones.js';
 import { guardarCambiosStorage } from "../../js/guardian.js";
 
 const sesionToken = getCookie('sesion_token');
@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', iniciarPerfil);
 async function iniciarPerfil() {
     /*Los datos del usuario */
     const usuarioData = JSON.parse(localStorage.getItem("usuarioData"));
-    const listasDeJuegos = await obtenerListas();
+    const listasDeJuegos = await obtenerListas(usuarioData);
 
     console.log(listasDeJuegos);
     console.log(usuarioData);
@@ -432,28 +432,7 @@ async function iniciarPerfil() {
         }
 
     }
-    async function obtenerListas() {
-        const { id } = usuarioData;
-        const datos = {
-            id: id
-        }
-        const response = await fetch('http://localhost:3000/backend/helpers/getListasJuegos.php', {
-            method: 'POST',
-            credentials: "include",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(datos) // Enviamos los datos como JSON
-        });
-        // Verificamos si la respuesta es correcta
-        if (!response.ok) {
-            throw new Error('Error en la respuesta de PHP');
-        }
-
-        // Convertimos la respuesta en JSON
-        const data = await response.json();
-        return data;
-    }
+    
     function obtenerNunListasActuales() {
         // Obtener el contenido del elemento con el ID 'numListas'
         const contenido = document.getElementById('numListas').textContent;

@@ -1,5 +1,5 @@
 import { detallesDelJuego, mostrarCapturas } from '../js/API.js';
-import { limpiarHTML, obtenerEstrellas, mostrarPlataforma, fotoUsuario, nombreUsuario, sinResultado } from '../js/funciones.js';
+import { limpiarHTML, obtenerEstrellas, mostrarPlataforma, fotoUsuario, nombreUsuario, sinResultado, obtenerListas } from '../js/funciones.js';
 
 
 /*Eventos*/
@@ -23,19 +23,23 @@ async function inicializarJuego(juegoId) {
 }
 
 async function iniciarInfoGame() {
-
     // Obtener el valor del parámetro 'id' desde la URL
     const urlParams = new URLSearchParams(window.location.search);
     await inicializarJuego(urlParams.get('id')); // Esto te dará el ID del juego y la funcion dara las capturas y la informacion 
     if (estado.juego["detail"] === 'Not found.') {
-        const idVisuales = document.querySelector('#visuales');
+        const idVisuales = document.querySelector('#juegoNoEncontrado');
         idVisuales.appendChild(sinResultado());
+        idVisuales.style.marginBottom = "350px";  // Aplica margen de 350px en la parte inferior para el footer
+        document.getElementById('contenidoTotal').style.display = 'none';  // Oculta
     } else {
+        /*Los datos del usuario */
+        const usuarioData = JSON.parse(localStorage.getItem("usuarioData"));
+        console.log(usuarioData);
         /*Iniciamos las fuinciones que se deben iniciar al cargar la pagina web */
         /*mostrarVisuales();*/
         mostrarVisuales();
         mostrarDescripcion();
-
+        await mostrarContenidoModal();
         /* Selectores */
         const myTabContent = document.querySelectorAll('#myTabContent .tab-pane');
 
@@ -170,7 +174,6 @@ async function iniciarInfoGame() {
                     // Agregar evento al enlace
                     enlace.addEventListener('click', (event) => {
                         // Si el clic ocurrió en la imagen, detener el enlace
-                        console.log(event.target.className);
                         if ((event.target.className === "valoracionesMain" || event.target.className === "game-rating") || event.target.className === "btn btn-primary"
                             || event.target.className === "modalMain") {
                             event.preventDefault(); // Evitar la acción del enlace
@@ -546,6 +549,103 @@ async function iniciarInfoGame() {
                 console.log(error);
             }
 
+        }
+
+        /*Mostrar contenido modal */
+        async function mostrarContenidoModal() {
+            const divContenidoModal = document.getElementById('contenidoModal');
+            let total_listas, total_contenido;
+            if (usuarioData) {
+                const listasDeJuegos = await obtenerListas(usuarioData);
+                console.log(listasDeJuegos);
+                ({ total_listas, total_contenido } = listasDeJuegos.listas);
+            }
+            if (!usuarioData) {
+                const div = document.createElement("div");
+                div.className = "mb-3 mt-2 card-body d-flex justify-content-center align-items-center flex-column";
+
+                const icon = document.createElement("i");
+                icon.className = "bi bi-bookmark-heart-fill fs-1";
+
+                const paragraph = document.createElement("p");
+                paragraph.className = "card-text fw-bold fs-5 text-center";
+                paragraph.textContent = "Inicia sesión para agregar este juego a tu lista";
+
+                const link = document.createElement("a");
+                link.className = "btn btnIniciarSesion";
+                link.href = "../Acceso/login/login.html";
+                link.textContent = "Iniciar sesión";
+
+                // Agregar elementos al div principal
+                div.appendChild(icon);
+                div.appendChild(paragraph);
+                div.appendChild(link);
+
+                // Agregar el div al documento (ajusta esto según dónde lo quieras insertar)
+                divContenidoModal.appendChild(div);
+            } else if (total_listas == 0) {
+                const card = document.createElement("div");
+                card.className = "card text-center mb-3 mt-2 text-white";
+
+                const cardBody = document.createElement("div");
+                cardBody.className = "card-body";
+
+                const icon = document.createElement("i");
+                icon.className = "fs-1 bi bi-bookmark-star-fill";
+
+                const message = document.createElement("p");
+                message.className = "card-text fw-bold fs-5 text-center";
+                message.textContent = "¡Aún no tienes listas! Ve a tu perfil y empieza a crear una";
+
+                const link = document.createElement("a");
+                link.className = "btn btnIniciarSesion";
+                link.href = "../Perfiles/perfil/perfil.html";
+                link.textContent = "Ir al perfil";
+
+                // Agregar los elementos al cuerpo de la card
+                cardBody.appendChild(icon);
+                cardBody.appendChild(message);
+                cardBody.appendChild(link);
+
+                // Agregar el card al contenedor o a la página
+                card.appendChild(cardBody);
+                divContenidoModal.appendChild(card);
+
+            } else if (total_contenido) {
+
+            } else {
+                const card = document.createElement("div");
+                card.className = "card text-center text-white bg-danger mb-3 mt-2";
+
+                const cardBody = document.createElement("div");
+                cardBody.className = "card-body";
+
+                const icon = document.createElement("i");
+                icon.className = "bi bi-exclamation-circle fs-1";
+
+                const title = document.createElement("p");
+                title.className = "card-text fw-bold fs-3";
+                title.textContent = "¡Error al cargar el modal!";
+
+                const message = document.createElement("p");
+                message.className = "card-text";
+                message.textContent = "Hubo un problema al intentar cargar el contenido. Por favor, recarga la página e intenta de nuevo.";
+
+                const button = document.createElement("a");
+                button.className = "btn btn-light";
+                button.href = "javascript:location.reload();"; // Recargar la página
+                button.textContent = "Recargar página";
+
+                // Agregar los elementos al card
+                cardBody.appendChild(icon);
+                cardBody.appendChild(title);
+                cardBody.appendChild(message);
+                cardBody.appendChild(button);
+                card.appendChild(cardBody);
+
+                // Insertar el card en el cuerpo del documento
+                divContenidoModal.appendChild(card);
+            }
         }
     }
 }

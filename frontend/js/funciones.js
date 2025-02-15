@@ -51,6 +51,29 @@ export function mostrarPlataforma(game) {
         console.log(error);
     }
 }
+/*Obtener listas del usuario */
+export async function obtenerListas(usuarioData) {
+    const { id } = usuarioData;
+    const datos = {
+        id: id
+    }
+    const response = await fetch('http://localhost:3000/backend/helpers/getListasJuegos.php', {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(datos) // Enviamos los datos como JSON
+    });
+    // Verificamos si la respuesta es correcta
+    if (!response.ok) {
+        throw new Error('Error en la respuesta de PHP');
+    }
+
+    // Convertimos la respuesta en JSON
+    const data = await response.json();
+    return data;
+}
 
 export function sinResultado() {
     // Crear el contenedor principal

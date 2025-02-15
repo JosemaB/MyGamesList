@@ -202,6 +202,7 @@
 }
 
 #crearListaModal .modal-footer button,
+#staticBackdrop .modal-footer button,
 #renameListaModal .modal-footer button{
     background-color: #1d2e59;
     color: white;
@@ -209,6 +210,7 @@
 }
 
 #crearListaModal .modal-footer button:hover,
+#staticBackdrop .modal-footer button:hover,
 #renameListaModal .modal-footer button:hover {
     background-color: #131e3b;
     color: white;
