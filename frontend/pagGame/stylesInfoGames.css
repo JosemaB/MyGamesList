@@ -288,13 +288,15 @@
     border: 1px solid white;
 }
 
-.btnIniciarSesion {
+.btnIniciarSesion,
+.btnAnadir {
     background-color: #1d2e59;
     color: white;
     border: 1px solid white;
 }
 
-.btnIniciarSesion:hover {
+.btnIniciarSesion:hover,
+.btnAnadir:hover {
     background-color: #131e3b;
     color: white;
     border: 1px solid white;

@@ -360,20 +360,20 @@
         </div>
     </div>
     <!--Modal de lista de juegos -->
+    <!--Modal de lista de juegos -->
     <div class="modal fade" id="listJuegos" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="tituloListaModal" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content h-100">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5 fw-bold" id="tituloListaModal"></h1>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <div class="modal-body" style="overflow-y: auto;">
+                    <div class="container">
+                        <div class="row g-1" id="contenidoListaJuego"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -389,7 +389,7 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center">
-                    ¿Estás seguro de que deseas eliminar esta lista?                 
+                    ¿Estás seguro de que deseas eliminar esta lista?
                 </div>
                 <div class="modal-footer">
                     <div class="col-12 m-0 mt-2 p-0 text-center" id="alertasDeleteLista"></div>
@@ -399,7 +399,28 @@
             </div>
         </div>
     </div>
-
+    <!-- Modal de confirmación para eliminar un juego -->
+    <div class="modal fade" id="confirmDeleteGameModal" tabindex="-1" aria-labelledby="confirmDeleteGameModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteGameModalLabel">Confirmar eliminación</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    ¿Estás seguro de que deseas eliminar este juego?
+                </div>
+                <div id="alertaConfirmGameDelete"></div>
+                <div class="modal-footer">
+                    <div class="col-12 m-0 mt-2 p-0 text-center" id="alertasDeleteGame"></div>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteGameButton">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Modal para renombrar la lista -->
     <div class="modal fade" id="renameListaModal" tabindex="-1" aria-labelledby="renameListaModalLabel"
         aria-hidden="true">

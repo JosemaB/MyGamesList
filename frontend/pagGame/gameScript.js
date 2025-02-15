@@ -1,5 +1,5 @@
 import { detallesDelJuego, mostrarCapturas } from '../js/API.js';
-import { limpiarHTML, obtenerEstrellas, mostrarPlataforma, fotoUsuario, nombreUsuario, sinResultado, obtenerListas } from '../js/funciones.js';
+import { limpiarHTML, obtenerEstrellas, mostrarPlataforma, fotoUsuario, nombreUsuario, sinResultado, obtenerListas, alertDanger, borrarAlerta, spinner, alertSuccess } from '../js/funciones.js';
 
 
 /*Eventos*/
@@ -557,7 +557,6 @@ async function iniciarInfoGame() {
             let total_listas, total_contenido;
             if (usuarioData) {
                 const listasDeJuegos = await obtenerListas(usuarioData);
-                console.log(listasDeJuegos);
                 ({ total_listas, total_contenido } = listasDeJuegos.listas);
             }
             if (!usuarioData) {
@@ -612,6 +611,50 @@ async function iniciarInfoGame() {
                 divContenidoModal.appendChild(card);
 
             } else if (total_contenido) {
+                // Crear el contenedor principal
+                let container = document.createElement("div");
+                container.className = "text-white m-3";
+
+                // Crear el select
+                let select = document.createElement("select");
+                select.id = "listas";
+                select.className = "form-select";
+
+                // Opción por defecto
+                let defaultOption = document.createElement("option");
+                defaultOption.value = "";
+                defaultOption.disabled = true;
+                defaultOption.selected = true;
+                defaultOption.textContent = "Selecciona una lista";
+                select.appendChild(defaultOption);
+
+                //agregamos las listas totales
+                total_contenido.forEach(lista => {
+                    let option = document.createElement("option");
+                    option.value = lista["id_lista"];
+                    option.textContent = lista["nombre_lista"];
+                    select.appendChild(option);
+                });
+
+                // Crear el botón
+                let button = document.createElement("button");
+                button.type = "submit";
+                button.className = "col-12 btn btnAnadir mt-3";
+                button.id = "anadirListaBtn";
+                button.textContent = "Añadir";
+
+                // Crear el div para alertas
+                let alertDiv = document.createElement("div");
+                alertDiv.id = "alertasJuegoLista";
+                alertDiv.className = "mt-3 text-center";
+
+                // Agregar elementos al contenedor
+                container.appendChild(select);
+                container.appendChild(button);
+                container.appendChild(alertDiv);
+
+                // Insertar en el modal (por ejemplo, en el div con id "contenidoModal")
+                divContenidoModal.appendChild(container);
 
             } else {
                 const card = document.createElement("div");
@@ -647,5 +690,85 @@ async function iniciarInfoGame() {
                 divContenidoModal.appendChild(card);
             }
         }
+        async function agregarLista(idLista) {
+            const { name, background_image, id } = estado.juego;
+            const linkJuego = `/pagGame/infoGame.html?id=${id}`;
+            const datos = {
+                idLista: idLista,
+                titulo: name,
+                image: background_image,
+                linkJuego: linkJuego
+            };
+            const response = await fetch('http://localhost:3000/backend/controllers/controllerListas/agregarJuegoLista.php', {
+                method: 'POST',
+                credentials: "include",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datos) // Enviamos los datos como JSON
+            });
+            // Verificamos si la respuesta es correcta
+            if (!response.ok) {
+                throw new Error('Error en la respuesta de PHP');
+            }
+
+            // Convertimos la respuesta en JSON
+            const data = await response.json();
+            return data;
+        }
+        //Modal submit
+        document.getElementById("anadirListaBtn")?.addEventListener("click", async function () {
+            const alerta = document.getElementById('alertasJuegoLista');
+            borrarAlerta(alerta);
+
+            // Verificamos si ya existe un spinner en el div
+            var existingSpinner = alerta.querySelector('.spinner'); // Asegúrate de que '.spinner' es un selector único
+
+            if (existingSpinner) {
+                // Si existe, lo eliminamos
+                alerta.removeChild(existingSpinner);
+            }
+
+            let selectElement = document.getElementById("listas"); // Obtener el select
+            let selectedValue = selectElement.value; // Obtener el valor seleccionado
+
+            if (selectedValue) {
+                // Verificamos si ya existe un spinner en el div
+                var existingSpinner = alerta.querySelector('.spinner'); // Asegúrate de que '.spinner' es un selector único
+
+                if (existingSpinner) {
+                    // Si existe, lo eliminamos
+                    alerta.removeChild(existingSpinner);
+                }
+                //Spinner
+                const spinnerElement = spinner();
+                spinnerElement.style.marginTop = '30px';
+                spinnerElement.style.marginBottom = '10px';
+                alerta.appendChild(spinnerElement);
+                document.getElementById("anadirListaBtn").style.display = "none";
+
+                //Trabajamos con el backend
+                const data = await agregarLista(selectedValue);
+
+                // Verificamos si ya existe un spinner en el div
+                var existingSpinner = alerta.querySelector('.spinner'); // Asegúrate de que '.spinner' es un selector único
+                document.getElementById("anadirListaBtn").style.display = "block";
+                if (existingSpinner) {
+                    // Si existe, lo eliminamos
+                    alerta.removeChild(existingSpinner);
+                }
+                borrarAlerta(alerta);
+
+                if (!data["success"]) {
+                    alerta.appendChild(alertDanger(data.error));
+                } else if (data["success"]) {
+                    alerta.appendChild(alertSuccess(data["exito"]));
+                }
+
+            } else {
+                alerta.appendChild(alertDanger("Selecciona una lista para añadir"));
+            }
+
+        });
     }
 }

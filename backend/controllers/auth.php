@@ -32,7 +32,7 @@ try {
                 $exito = "Usuario dentro de la sesion";
 
             } else {
-                $error = 'Error. Usuario o Contraseña incorrectos';
+                $error = 'Usuario o Contraseña incorrectos';
             }
         } else {
             //Para mandar un mensaje mas correcto

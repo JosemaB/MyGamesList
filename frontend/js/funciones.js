@@ -498,7 +498,13 @@ export function alertSuccess(textSuccess) {
 
     return alerta;
 }
-
+export function borrarSpinner(div) {
+    var existingSpinner = div.querySelector('.spinner');
+    if (existingSpinner) {
+        // Si existe, lo eliminamos
+        div.removeChild(existingSpinner);
+    }
+}
 export function borrarAlerta(divAlerta) {
     const existeAlerta = divAlerta.querySelector('.alert');
     if (existeAlerta) {
