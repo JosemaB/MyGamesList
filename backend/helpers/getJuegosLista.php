@@ -37,7 +37,7 @@ try {
             }
             $exito = "Listas guardadas";
         } else {
-            $error = "No se encontraron resultados en esta lista";
+            $exito = 0;
         }
 
         // Cerrar la conexión

@@ -64,13 +64,15 @@
 
 /*Home*/
 .vistaGeneral .card-header,
-.juegosDestacados .card-header {
+.juegosDestacados .card-header,
+.cardListVacia .card-header {
     background-color: #2c376e;
     color: aliceblue;
 }
 
 .vistaGeneral .card-body,
-.juegosDestacados .card-body {
+.juegosDestacados .card-body,
+.cardListVacia .card-body {
     background-color: #1A233A;
     color: aliceblue;
 }
@@ -116,7 +118,8 @@
 #formEmail button,
 #formNewPassword button,
 #formContacto button,
-.cardCrearLista button {
+.cardCrearLista button,
+.cardListVacia a {
     background-color: #1d2e59;
     color: aliceblue;
     margin-top: 20px;
@@ -126,7 +129,8 @@
 #formEmail button:hover,
 #formNewPassword button:hover,
 #formContacto button:hover,
-.cardCrearLista button:hover {
+.cardCrearLista button:hover,
+.cardListVacia a:hover {
     background-color: #141f3b;
     color: rgb(165, 182, 196);
 }

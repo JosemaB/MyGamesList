@@ -527,9 +527,9 @@ async function iniciarPerfil() {
 
         /*Juegos lista */
         async function borrarJuegoLista(idJuego) {
-
+            let id = idJuego.split('-')[1];
             const datos = {
-                idJuego: idJuego
+                idJuego: id
             }
             const response = await fetch('http://localhost:3000/backend/controllers/controllerListas/borrarJuegoLista.php', {
                 method: 'POST',
@@ -574,7 +574,40 @@ async function iniciarPerfil() {
         function mostrarJuegos(datos) {
             const divContenidoLista = document.getElementById('contenidoListaJuego');
 
-            if (datos.success) {
+            if (!datos.success) {
+                // Crear el contenedor principal (card)
+                const card = document.createElement('div');
+                card.classList.add('card', 'text-center');
+
+                // Crear el cuerpo de la card
+                const cardBody = document.createElement('div');
+                cardBody.classList.add('card-body', 'bg-danger');
+
+                // Crear el título de la card
+                const cardTitle = document.createElement('h5');
+                cardTitle.classList.add('card-title');
+                cardTitle.textContent = '¡Ups! Algo salió mal';
+
+                // Crear el texto de la card
+                const cardText = document.createElement('p');
+                cardText.classList.add('card-text');
+                cardText.textContent = 'No pudimos obtener la lista de juegos. Por favor, intenta más tarde.';
+
+                // Crear el ícono de carita triste
+                const sadFace = document.createElement('span');
+                sadFace.classList.add('fs-1', 'text-warning');
+                sadFace.innerHTML = '&#128577;'; // Carita triste en código HTML
+
+                // Añadir los elementos a la estructura
+                cardBody.appendChild(cardTitle);
+                cardBody.appendChild(cardText);
+                cardBody.appendChild(sadFace);
+                card.appendChild(cardBody);
+
+                // Insertar la card en el DOM, por ejemplo, en el cuerpo del documento
+                divContenidoLista.appendChild(card);
+
+            } else if (datos.juegos.length > 0) {
                 datos.juegos.forEach(juego => {
                     const cardContainer = document.createElement('div');
                     cardContainer.className = 'col-12 col-lg-6 card text-bg-dark cardListJuego p-0';
@@ -602,7 +635,15 @@ async function iniciarPerfil() {
                     button.addEventListener('click', function (event) {
                         event.preventDefault(); // Previene el comportamiento predeterminado del botón
                         event.stopPropagation(); // Evita que el evento se propague al enlace
+                        const botones = document.querySelectorAll('#confirmDeleteGameModal button');
 
+                        // Recorre todos los botones
+                        botones.forEach(function (boton) {
+                            // Verifica si el botón no es el de cerrar
+                            if (!boton.classList.contains('btn-close')) {
+                                boton.style.display = 'block';
+                            }
+                        });
                         // Mostrar el modal de confirmación
                         const confirmModal = new bootstrap.Modal(document.getElementById('confirmDeleteGameModal'));
                         confirmModal.show();
@@ -612,21 +653,35 @@ async function iniciarPerfil() {
 
                         // Asignar el evento de confirmación al botón "Eliminar" del modal
                         const confirmDeleteGameButton = document.getElementById('confirmDeleteGameButton');
-                        
+
                         confirmDeleteGameButton.onclick = async function () {
                             //Ocultamos los botones si no me da tiempo
                             const alertaGame = document.getElementById('alertaConfirmGameDelete');
+                            borrarSpinner(alertaGame);
 
-                            console.log(card.id);
+                            const spinnerElement = spinner();
+                            spinnerElement.style.margin = '0 auto';
+                            alertaGame.appendChild(spinnerElement);
+
+                            // Recorre todos los botones
+                            botones.forEach(function (boton) {
+                                // Verifica si el botón no es el de cerrar
+                                if (!boton.classList.contains('btn-close')) {
+                                    boton.style.display = 'none';
+                                }
+                            });
                             //Enviamos al backend 
                             const data = await borrarJuegoLista(card.id);
+                            borrarSpinner(alertaGame);
 
                             if (!data.success) {
-
+                                alertaGame.appendChild(alertDanger("Error al eliminar el juego de la lista"));
                             } else {
+                                card.remove();
                                 //Enviar al modal 
                                 confirmModal.hide(); // Cierra el modal después de eliminar
                             }
+
                         };
                     });
 
@@ -640,7 +695,40 @@ async function iniciarPerfil() {
                     divContenidoLista.appendChild(cardContainer);
                 });
             } else {
+                // Crear el contenedor principal
+                let card = document.createElement('div');
+                card.classList.add('card', 'text-center', 'cardListVacia');
 
+                // Crear el cuerpo de la tarjeta
+                let cardBody = document.createElement('div');
+                cardBody.classList.add('card-body');
+
+                // Crear el título
+                let cardTitle = document.createElement('h5');
+                cardTitle.classList.add('card-title');
+                cardTitle.textContent = '¡Lista de Juegos Vacía!';
+
+                // Crear el texto descriptivo
+                let cardText = document.createElement('p');
+                cardText.classList.add('card-text');
+                cardText.textContent = 'No tienes juegos disponibles en este momento. Por favor, añade algunos para verlos aquí.';
+
+                // Crear el botón
+                let button = document.createElement('a');
+                button.href = '/index.html';
+                button.classList.add('btn', 'm-0');
+                button.textContent = 'Volver al Inicio';
+
+                // Añadir los elementos al cuerpo de la tarjeta
+                cardBody.appendChild(cardTitle);
+                cardBody.appendChild(cardText);
+                cardBody.appendChild(button);
+
+                // Añadir el cuerpo de la tarjeta al contenedor
+                card.appendChild(cardBody);
+
+
+                divContenidoLista.appendChild(card);
             }
 
         }

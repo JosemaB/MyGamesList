@@ -360,7 +360,6 @@
         </div>
     </div>
     <!--Modal de lista de juegos -->
-    <!--Modal de lista de juegos -->
     <div class="modal fade" id="listJuegos" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="tituloListaModal" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-scrollable">
@@ -372,7 +371,9 @@
                 </div>
                 <div class="modal-body" style="overflow-y: auto;">
                     <div class="container">
-                        <div class="row g-1" id="contenidoListaJuego"></div>
+                        <div class="row g-1" id="contenidoListaJuego">
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -412,8 +413,8 @@
                 <div class="modal-body text-center">
                     ¿Estás seguro de que deseas eliminar este juego?
                 </div>
-                <div id="alertaConfirmGameDelete"></div>
                 <div class="modal-footer">
+                    <div class="col-12 m-0 mt-2 p-0 text-center" id="alertaConfirmGameDelete"></div>
                     <div class="col-12 m-0 mt-2 p-0 text-center" id="alertasDeleteGame"></div>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="button" class="btn btn-danger" id="confirmDeleteGameButton">Eliminar</button>
