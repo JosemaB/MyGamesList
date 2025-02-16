@@ -486,6 +486,7 @@ export function alertDanger(textError) {
 
     return alerta;
 }
+
 export function alertSuccess(textSuccess) {
     // Crear el div de la alerta
     const alerta = document.createElement("div");

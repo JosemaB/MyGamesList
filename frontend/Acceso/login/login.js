@@ -7,7 +7,6 @@ if (sesionToken) {
 document.addEventListener('DOMContentLoaded', iniciarLogin);
 
 async function iniciarLogin() {
-
     initializeGoogleSignIn(); // Inicializa el inicio de sesión de Google
     //Selectores
     document.getElementById('checkbox').addEventListener('click', mostrarPassword);

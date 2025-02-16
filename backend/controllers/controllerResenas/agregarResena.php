@@ -43,7 +43,7 @@ try {
                 $stmt_insert->bind_param("issss", $idUsuario, $idVideojuegoApi, $contenido, $imageUsuario, $nombreUsuario);
 
                 if ($stmt_insert->execute()) {
-                    $exito = "Reseña agregada correctamente";
+                    $exito = "¡Reseña añadida! Recarga la página para ver los cambios";
                 } else {
                     $error = $stmt_insert->error;
                 }

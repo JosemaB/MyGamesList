@@ -4,7 +4,7 @@ import { limpiarHTML, obtenerEstrellas, mostrarPlataforma, fotoUsuario, nombreUs
 
 /*Eventos*/
 document.addEventListener('DOMContentLoaded', iniciarInfoGame);
-
+document.getElementById('contenidoNav').display = 'none'; //Para que no se vea al cargar la pagina si se cumple se vera el nav
 // Declaración del objeto global de estado
 const estado = {
     juego: null, // Aquí se guardarán los detalles del juego
@@ -36,11 +36,14 @@ async function iniciarInfoGame() {
         /*Los datos del usuario */
         const usuarioData = JSON.parse(localStorage.getItem("usuarioData"));
         console.log(usuarioData);
-        /*Iniciamos las fuinciones que se deben iniciar al cargar la pagina web */
-        /*mostrarVisuales();*/
-        mostrarVisuales();
-        mostrarDescripcion();
-        await mostrarContenidoModal();
+
+        const [totalResenasJuego] = await Promise.all([
+            obtenerResenasJuego(urlParams.get('id')),
+            mostrarContenidoModal(),
+            mostrarVisuales(),
+            mostrarDescripcion()
+        ]);
+        document.getElementById('contenidoNav').display = 'block';
         /* Selectores */
         const myTabContent = document.querySelectorAll('#myTabContent .tab-pane');
 
@@ -395,7 +398,59 @@ async function iniciarInfoGame() {
                 }
 
             }
-            console.log(reviewText);
+        });
+        //Borrar resena 
+        document.getElementById('confirmDeleteResenaButton').addEventListener('click', async function () {
+            const alerta = document.getElementById('alertaResena');
+            borrarSpinner(alerta);
+            borrarAlerta(alerta);
+            // Obtener el modal y los botones
+            const modalFooterButtons = document.querySelectorAll('#confirmDeleteResenaModal .btn');
+
+            // Mostrar los botones cuando el modal se abra
+            modalFooterButtons.forEach(button => {
+                if (!button.classList.contains("btn-close")) {
+                    button.style.display = 'inline-block';
+                }
+            });
+
+
+            // Obtener el ID de la reseña desde el botón de confirmación
+            const resenaId = this.getAttribute('data-resena-id');
+
+            // Eliminar la tarjeta usando el ID
+            const tarjetaAEliminar = document.getElementById(`Resena-${resenaId}`);
+            if (tarjetaAEliminar) {
+                const datos = {
+                    idUsuario: usuarioData.id,
+                    idResena: resenaId
+                }
+                const spinnerElement = spinner();
+                spinnerElement.style.margin = 'auto';
+                alerta.appendChild(spinnerElement);
+
+                modalFooterButtons.forEach(button => {
+                    button.style.display = 'none';
+                });
+
+                //Enviamos al backend para borrar la reseña
+                const data = await borrarResena(datos);
+                borrarSpinner(alerta);
+
+                if (!data.success) {
+                    alerta.appendChild(alertDanger(data.error));
+                    modalFooterButtons.forEach(button => {
+                        button.style.display = 'inline-block';
+                    });
+                } else {
+                    tarjetaAEliminar.remove(); // Eliminar la tarjeta del DOM
+                }
+            }
+
+            // Cerrar el modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('confirmDeleteResenaModal'));
+            modal.hide();
+
         });
         async function agregarResena(datos) {
             const response = await fetch('http://localhost:3000/backend/controllers/controllerResenas/agregarResena.php', {
@@ -415,6 +470,26 @@ async function iniciarInfoGame() {
             const data = await response.json();
             return data;
         }
+
+        async function borrarResena(datos) {
+            const response = await fetch('http://localhost:3000/backend/controllers/controllerResenas/borrarResena.php', {
+                method: 'POST',
+                credentials: "include",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datos) // Enviamos los datos como JSON
+            });
+            // Verificamos si la respuesta es correcta
+            if (!response.ok) {
+                throw new Error('Error en la respuesta de PHP');
+            }
+
+            // Convertimos la respuesta en JSON
+            const data = await response.json();
+            return data;
+        }
+
         function mostrarResenas() {
             try {
                 const juego = obtenerJuego();
@@ -522,6 +597,111 @@ async function iniciarInfoGame() {
                         resenas.appendChild(mensajePersonalizado);
 
                     });
+                    //Si da true porque no haya fallado con la bdd entoces se mostrara las resenas si tiene este jeugo
+                    if (totalResenasJuego.success) {
+                        //Resenas ahora de nuestros usuarios
+                        totalResenasJuego.resenas.forEach(resena => {
+                            // Crear el elemento principal div
+                            const divCol12 = document.createElement('div');
+                            divCol12.classList.add('col-12', 'mensajePersonalizado', 'm-2', 'p-3', 'card');
+                            divCol12.id = `Resena-${resena["id_resena"]}`;
+                            // Crear el div del card-header
+                            const cardHeader = document.createElement('div');
+                            cardHeader.classList.add('col-12', 'card-header', 'fw-bold');
+
+                            // Crear el div flex container
+                            const flexContainer = document.createElement('div');
+                            flexContainer.classList.add('d-flex', 'align-items-center', 'justify-content-between');
+
+                            // Crear el div para el perfil y nombre de usuario
+                            const profileContainer = document.createElement('div');
+                            profileContainer.classList.add('d-flex', 'align-items-center');
+
+                            // Crear el enlace con la imagen de perfil
+                            const profileLink = document.createElement('a');
+
+                            if (usuarioData && usuarioData.id == resena.id_usuario) {
+                                profileLink.href = `/Perfiles/perfil/perfil.html`;
+                            } else {
+                                profileLink.href = `/Perfiles/usuario/usuario.html?id=${resena["id_usuario"]}`;
+                            }
+
+                            const profileImg = document.createElement('img');
+                            profileImg.classList.add('perfil-img');
+                            profileImg.src = resena["image_usuario"];
+                            profileImg.alt = `Imagen usuario de ${resena["nombre_usuario"]}`;
+
+                            if (usuarioData && usuarioData.id == resena.id_usuario) {
+                                profileImg.title = `Perfil`;
+                            } else {
+                                profileImg.title = `Perfil de ${resena["nombre_usuario"]}`;
+                            }
+
+                            profileLink.appendChild(profileImg);
+
+                            // Crear el span para el nombre del usuario
+                            const userName = document.createElement('span');
+                            userName.classList.add('nombre-usuario', 'ms-2');
+                            userName.textContent = resena["nombre_usuario"];
+
+                            // Añadir la imagen y el nombre al contenedor del perfil
+                            profileContainer.appendChild(profileLink);
+                            profileContainer.appendChild(userName);
+
+                            // Añadir el perfil y el botón al contenedor flex
+
+                            flexContainer.appendChild(profileContainer);
+                            if (usuarioData && usuarioData.id == resena.id_usuario) {
+                                // Crear el botón de eliminar
+                                const deleteButton = document.createElement('button');
+                                deleteButton.classList.add('btn');
+                                deleteButton.title = 'Eliminar mensaje';
+                                deleteButton.setAttribute('data-bs-toggle', 'modal');
+                                deleteButton.setAttribute('data-bs-target', '#confirmDeleteResenaModal');
+                                deleteButton.setAttribute('data-resena-id', resena["id_resena"]); // Pasar el ID de la reseña
+                                const deleteIcon = document.createElement('i');
+                                deleteIcon.classList.add('fs-5', 'text-danger', 'bi', 'bi-x-circle-fill');
+
+                                // Agregar evento al botón "X" para pasar el ID al modal
+                                deleteButton.addEventListener('click', function () {
+                                    const resenaId = this.getAttribute('data-resena-id'); // Obtener el ID de la reseña
+                                    document.getElementById('confirmDeleteResenaButton').setAttribute('data-resena-id', resenaId); // Pasar el ID al botón de confirmación
+                                });
+
+                                deleteButton.appendChild(deleteIcon);
+                                flexContainer.appendChild(deleteButton);
+                            }
+
+                            // Añadir el flex container al card-header
+                            cardHeader.appendChild(flexContainer);
+
+                            // Crear el card-body
+                            const cardBody = document.createElement('div');
+                            cardBody.classList.add('card-body');
+
+                            // Crear el blockquote
+                            const blockquote = document.createElement('blockquote');
+                            blockquote.classList.add('blockquote', 'mb-0');
+
+                            // Crear el párrafo del título de la reseña
+                            const reviewTitle = document.createElement('p');
+                            reviewTitle.textContent = resena["contenido"];
+
+                            // Añadir el párrafo al blockquote
+                            blockquote.appendChild(reviewTitle);
+
+                            // Añadir el blockquote al card-body
+                            cardBody.appendChild(blockquote);
+
+                            // Añadir el card-header y el card-body al div principal
+                            divCol12.appendChild(cardHeader);
+                            divCol12.appendChild(cardBody);
+
+                            // Finalmente, añadir el div principal
+                            resenas.appendChild(divCol12);
+                        });
+                    }
+
                 }
 
                 divResenas.appendChild(resenas);
@@ -614,7 +794,27 @@ async function iniciarInfoGame() {
             }
 
         }
+        async function obtenerResenasJuego(idJuego) {
+            const datos = {
+                idJuego: idJuego
+            }
+            const response = await fetch('http://localhost:3000/backend/helpers/getResenasJuego.php', {
+                method: 'POST',
+                credentials: "include",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datos) // Enviamos los datos como JSON
+            });
+            // Verificamos si la respuesta es correcta
+            if (!response.ok) {
+                throw new Error('Error en la respuesta de PHP');
+            }
 
+            // Convertimos la respuesta en JSON
+            const data = await response.json();
+            return data;
+        }
         /*Mostrar contenido modal */
         async function mostrarContenidoModal() {
             const divContenidoModal = document.getElementById('contenidoModal');
