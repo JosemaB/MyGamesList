@@ -13,8 +13,9 @@ try {
 
         $idUsuario = $datos['idUsuario'];
         $idVideojuegoApi = $datos['idJuego'];
-        $contenido = $datos['contenido'];
+        $contenido = validarCadena($datos['contenido']);
         $imageUsuario = $datos['imageUsuario'];
+        $imageJuego = $datos['imageJuego'];
         $nombreUsuario = $datos['nombreUsuario'];
 
         // Verificar si el usuario existe en la tabla Usuarios
@@ -38,9 +39,9 @@ try {
                 $error = "Ya has escrito una reseña para este juego";
             } else {
                 // Insertar la reseña en la tabla Resenas
-                $sql_insert = "INSERT INTO Resenas (id_usuario, id_videojuego_api, contenido, image_usuario, nombre_usuario) VALUES (?, ?, ?, ?, ?)";
+                $sql_insert = "INSERT INTO Resenas (id_usuario, id_videojuego_api, contenido, image_usuario, nombre_usuario, img_juego) VALUES (?, ?, ?, ?, ?, ?)";
                 $stmt_insert = $conexion->prepare($sql_insert);
-                $stmt_insert->bind_param("issss", $idUsuario, $idVideojuegoApi, $contenido, $imageUsuario, $nombreUsuario);
+                $stmt_insert->bind_param("isssss", $idUsuario, $idVideojuegoApi, $contenido, $imageUsuario, $nombreUsuario, $imageJuego);
 
                 if ($stmt_insert->execute()) {
                     $exito = "¡Reseña añadida! Recarga la página para ver los cambios";

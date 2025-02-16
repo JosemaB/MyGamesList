@@ -30,18 +30,21 @@ async function iniciarInfoGame() {
         idVisuales.appendChild(sinResultado());
         idVisuales.style.marginBottom = "350px";  // Aplica margen de 350px en la parte inferior para el footer
         document.getElementById('contenidoTotal').style.display = 'none';  // Oculta
+        document.querySelector('footer').style.display = 'block';
     } else {
+
         /*Los datos del usuario */
         const usuarioData = JSON.parse(localStorage.getItem("usuarioData"));
         console.log(usuarioData);
-        
+
         const [totalResenasJuego] = await Promise.all([
             obtenerResenasJuego(urlParams.get('id')),
-            mostrarContenidoModal(),
-            mostrarVisuales(),
-            mostrarDescripcion()
+            mostrarContenidoModal()
         ]);
-        document.getElementById('contenidoNav').display = 'block';
+        document.getElementById('contenidoNav').style.display = 'flex';
+        document.querySelector('footer').style.display = 'block';
+        mostrarVisuales();
+        mostrarDescripcion();
         /* Selectores */
         const myTabContent = document.querySelectorAll('#myTabContent .tab-pane');
 
@@ -128,7 +131,7 @@ async function iniciarInfoGame() {
                 const imgPrincipal = document.createElement("div");
                 imgPrincipal.className = "imgPrincipal col-12";
 
-                imgPrincipal.style.setProperty('background-image', `url(${juego["background_image"]})`);
+                imgPrincipal.style.setProperty('background-image', `url(${juego["background_image"]}?q=50)`);
                 // Crear el contenedor de valoraciones
                 const valoracionesMain = document.createElement("div");
                 valoracionesMain.className = "valoracionesMain";
@@ -270,7 +273,7 @@ async function iniciarInfoGame() {
 
                         // Crear la imagen
                         const img = document.createElement('img');
-                        img.src = juego['image'];  // Reemplaza esto con el path adecuado de tus imágenes
+                        img.src = `${juego['image']}?q=50`;  // Reemplaza esto con el path adecuado de tus imágenes
                         img.alt = `Slide ${index + 1}`;
                         img.classList.add('d-block', 'w-100');  // Puedes agregar clases para el estilo de la imagen
 
@@ -300,7 +303,7 @@ async function iniciarInfoGame() {
                         }
                         const img = document.createElement('img');
                         img.classList.add('d-block', 'w-100');
-                        img.src = juego['image'];  // Aquí debes poner la URL de las imágenes
+                        img.src = `${juego['image']}?q=50`;  // Aquí debes poner la URL de las imágenes
                         img.alt = `Slide ${index + 1}`;
                         carouselItem.appendChild(img);
                         carouselInner.appendChild(carouselItem);
@@ -368,7 +371,7 @@ async function iniciarInfoGame() {
                 alerta.appendChild(alertDanger("No puedes dejar la reseña vacía"));
             } else {
                 const idJuego = estado.juego.id;
-
+                const imageJuego = estado.juego.background_image;
                 //enviar al backend la resena
                 const { id, nombre, avatar } = usuarioData;
 
@@ -376,8 +379,9 @@ async function iniciarInfoGame() {
                     nombreUsuario: nombre,
                     idUsuario: id,
                     idJuego: idJuego,
+                    imageJuego: imageJuego,
                     imageUsuario: avatar,
-                    contenido: reviewText
+                    contenido: reviewText,
                 }
                 const spinnerElement = spinner();
                 spinnerElement.style.margin = 'auto';

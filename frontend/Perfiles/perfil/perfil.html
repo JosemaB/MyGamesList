@@ -245,7 +245,8 @@
                                             class="bi bi-person-lines-fill"></i> Contactar</button>
                                 </div>
 
-                                <div class="col-12 col-md-8 mt-3 mt-md-0 tab-content flex-grow-1" id="v-pills-tabContent">
+                                <div class="col-12 col-md-8 mt-3 mt-md-0 tab-content flex-grow-1"
+                                    id="v-pills-tabContent">
                                     <div class="tab-pane fade show active" id="v-pills-personalizarPerfil"
                                         role="tabpanel" aria-labelledby="v-pills-personalizarPerfil-tab">
                                         <form id="formPersonalizarPerfil">
@@ -446,7 +447,66 @@
             </div>
         </div>
     </div>
+    <!-- Modal de confirmación Resena -->
+    <div class="modal fade" id="confirmDeleteResenaModal" tabindex="-1" aria-labelledby="confirmDeleteResenaModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteResenaModalLabel">Confirmar eliminación</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    ¿Estás seguro de que deseas eliminar esta reseña?
+                </div>
+                <div class="modal-footer">
+                    <div class="col-12 m-0 mt-2 p-0 text-center" id="alertaResena"></div>
+                    <div class="col-12 m-0 mt-2 p-0 text-center" id="alertaConfirmResenaDelete"></div>
+                    <div class="col-12 m-0 mt-2 p-0 text-center" id="alertasDeleteResena"></div>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteResenaButton">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 mensajePersonalizado m-2 card" id="Resena-[ID_RESENA]">
+        <div class="row g-0">
+            <!-- Columna de la imagen (a la izquierda) -->
+            <div class="col-md-3">
+                <a href="linkJuego">
+                    <img src="../../img/acceso/fondoLogin.webp" class="img-fluid rounded-start"
+                        alt="Imagen de [NOMBRE_USUARIO]">
+                </a>
+            </div>
+            <!-- Columna del contenido (a la derecha) -->
+            <div class="col-md-9">
+                <div class="card-header fw-bold">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <!-- Nombre del usuario -->
+                        <div class="d-flex align-items-center">
+                            <img src="[IMAGEN_USUARIO]" class="img-fluid rounded-start perfil-img"
+                                alt="Imagen de [NOMBRE_USUARIO]">
+                            <span class="nombre-usuario ms-2">[NOMBRE_USUARIO]</span>
+                        </div>
 
+                        <!-- Botón de eliminar (solo para el propietario) -->
+                        <button class="btn" title="Eliminar mensaje" data-bs-toggle="modal"
+                            data-bs-target="#confirmDeleteResenaModal" data-resena-id="[ID_RESENA]">
+                            <i class="fs-5 text-danger bi bi-x-circle-fill"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Cuerpo de la tarjeta -->
+                <div class="card-body">
+                    <blockquote class="blockquote mb-0">
+                        <p>[CONTENIDO]</p>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Footer -->
     <footer class="footerPrincipal text-center text-lg-start text-white mt-5">
         <!-- Section: Social media -->
