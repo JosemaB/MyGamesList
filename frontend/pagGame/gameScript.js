@@ -1,10 +1,7 @@
 import { detallesDelJuego, mostrarCapturas } from '../js/API.js';
 import { limpiarHTML, obtenerEstrellas, mostrarPlataforma, fotoUsuario, nombreUsuario, sinResultado, obtenerListas, alertDanger, borrarAlerta, spinner, alertSuccess, borrarSpinner } from '../js/funciones.js';
 
-
-/*Eventos*/
 document.addEventListener('DOMContentLoaded', iniciarInfoGame);
-document.getElementById('contenidoNav').display = 'none'; //Para que no se vea al cargar la pagina si se cumple se vera el nav
 // Declaración del objeto global de estado
 const estado = {
     juego: null, // Aquí se guardarán los detalles del juego
@@ -24,6 +21,7 @@ async function inicializarJuego(juegoId) {
 }
 
 async function iniciarInfoGame() {
+    document.getElementById('contenidoNav').display = 'none'; //Para que no se vea al cargar la pagina si se cumple se vera el nav
     // Obtener el valor del parámetro 'id' desde la URL
     const urlParams = new URLSearchParams(window.location.search);
     await inicializarJuego(urlParams.get('id')); // Esto te dará el ID del juego y la funcion dara las capturas y la informacion 
@@ -36,7 +34,7 @@ async function iniciarInfoGame() {
         /*Los datos del usuario */
         const usuarioData = JSON.parse(localStorage.getItem("usuarioData"));
         console.log(usuarioData);
-
+        
         const [totalResenasJuego] = await Promise.all([
             obtenerResenasJuego(urlParams.get('id')),
             mostrarContenidoModal(),

@@ -42,12 +42,28 @@ try {
                     $error = ["nombre" => "Este nombre de usuario ya está en uso. Prueba con otro"];
                 }
             }
+
+
             if (!isset($error)) {
                 //Hacemos el update para actulizar los campos
                 $updateCampos = $conexion->prepare("UPDATE usuarios SET avatar = ?, nombre_usuario = ? where id_usuario = ?");
                 $updateCampos->bind_param("sss", $avatar, $nombre, $id);
                 $updateCampos->execute();
                 $exito = "La imagen/avatar se ha actualizado con éxito";
+
+                // Verificar si el usuario tiene reseñas
+                $consultaReseñas = $conexion->prepare("SELECT COUNT(*) AS total_resenas FROM resenas WHERE id_usuario = ?");
+                $consultaReseñas->bind_param("s", $id);
+                $consultaReseñas->execute();
+                $resultadoReseñas = $consultaReseñas->get_result();
+                $filaReseñas = $resultadoReseñas->fetch_assoc();
+
+                if ($filaReseñas['total_resenas'] > 0) {
+                    // Si no tiene reseñas, procedemos a actualizar el nombre y el avatar
+                    $updateCampos = $conexion->prepare("UPDATE resenas SET image_usuario = ?, nombre_usuario = ? WHERE id_usuario = ?");
+                    $updateCampos->bind_param("sss", $avatar, $nombre, $id);
+                    $updateCampos->execute();
+                }
                 // Actualizar los campos en la session
                 $_SESSION['usuario']['avatar'] = $avatar;
                 $_SESSION['usuario']['nombre'] = $nombre;
