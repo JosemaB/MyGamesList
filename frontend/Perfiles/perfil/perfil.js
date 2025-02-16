@@ -387,8 +387,7 @@ async function iniciarPerfil() {
 
                                 //Spinner
                                 const spinnerElement = spinner();
-                                spinnerElement.style.marginTop = '30px';
-                                spinnerElement.style.marginBottom = '10px';
+                                spinnerElement.style.margin = 'auto';
                                 alerta.appendChild(spinnerElement);
                                 document.querySelectorAll("#confirmModal button").forEach(btn => {
                                     if (!btn.classList.contains("btn-close")) {

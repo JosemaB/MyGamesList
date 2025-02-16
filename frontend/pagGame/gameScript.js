@@ -1,5 +1,5 @@
 import { detallesDelJuego, mostrarCapturas } from '../js/API.js';
-import { limpiarHTML, obtenerEstrellas, mostrarPlataforma, fotoUsuario, nombreUsuario, sinResultado, obtenerListas, alertDanger, borrarAlerta, spinner, alertSuccess } from '../js/funciones.js';
+import { limpiarHTML, obtenerEstrellas, mostrarPlataforma, fotoUsuario, nombreUsuario, sinResultado, obtenerListas, alertDanger, borrarAlerta, spinner, alertSuccess, borrarSpinner } from '../js/funciones.js';
 
 
 /*Eventos*/
@@ -15,6 +15,7 @@ const estado = {
 async function inicializarJuego(juegoId) {
     try {
         estado.juego = await detallesDelJuego(juegoId); // Cargar detalles del juego
+        console.log(estado.juego);
         estado.capturasJuego = await mostrarCapturas(juegoId); // Cargar capturas del juego
     } catch (error) {
         console.error("Error al inicializar el juego:", error);
@@ -350,7 +351,70 @@ async function iniciarInfoGame() {
                 console.log(error);
             }
         }
+        /*Reviews (CRUD)*/
+        document.getElementById('reviewModal')?.addEventListener('show.bs.modal', function (event) {
+            let modalTitle = document.getElementById('reviewModalLabel');
+            const { name } = estado.juego;
+            modalTitle.textContent = name || 'Escribir una Reseña';
+        });
 
+        document.getElementById('submitReview')?.addEventListener('click', async function () {
+            const alerta = document.getElementById('alertaReview');
+            let reviewText = document.getElementById('reviewText').value;
+            borrarAlerta(alerta);
+            borrarSpinner(alerta);
+            if (!reviewText) {
+                alerta.appendChild(alertDanger("No puedes dejar la reseña vacía"));
+            } else {
+                const idJuego = estado.juego.id;
+
+                //enviar al backend la resena
+                const { id, nombre, avatar } = usuarioData;
+
+                const datos = {
+                    nombreUsuario: nombre,
+                    idUsuario: id,
+                    idJuego: idJuego,
+                    imageUsuario: avatar,
+                    contenido: reviewText
+                }
+                const spinnerElement = spinner();
+                spinnerElement.style.margin = 'auto';
+                spinnerElement.style.marginTop = '20px';
+                alerta.appendChild(spinnerElement);
+                document.getElementById("submitReview").style.display = "none";
+                const data = await agregarResena(datos);
+                document.getElementById("submitReview").style.display = "block";
+
+                borrarSpinner(alerta);
+
+                if (!data["success"]) {
+                    alerta.appendChild(alertDanger(data.error));
+                } else if (data["success"]) {
+                    alerta.appendChild(alertSuccess(data["exito"]));
+                }
+
+            }
+            console.log(reviewText);
+        });
+        async function agregarResena(datos) {
+            const response = await fetch('http://localhost:3000/backend/controllers/controllerResenas/agregarResena.php', {
+                method: 'POST',
+                credentials: "include",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datos) // Enviamos los datos como JSON
+            });
+            // Verificamos si la respuesta es correcta
+            if (!response.ok) {
+                throw new Error('Error en la respuesta de PHP');
+            }
+
+            // Convertimos la respuesta en JSON
+            const data = await response.json();
+            return data;
+        }
         function mostrarResenas() {
             try {
                 const juego = obtenerJuego();
@@ -391,7 +455,7 @@ async function iniciarInfoGame() {
                 button.type = "button";
                 button.className = "btn";
                 button.setAttribute("data-bs-toggle", "modal");
-                button.setAttribute("data-bs-target", "#staticBackdrop");
+                button.setAttribute("data-bs-target", "#reviewModal");
                 button.innerHTML = "¡Valora este juego! <i class=\"bi bi-pencil-square ms-2\" aria-hidden=\"true\"></i>";
                 cardContent.appendChild(button);
 

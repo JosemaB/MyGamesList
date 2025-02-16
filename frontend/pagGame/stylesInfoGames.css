@@ -289,14 +289,16 @@
 }
 
 .btnIniciarSesion,
-.btnAnadir {
+.btnAnadir,
+#submitReview {
     background-color: #1d2e59;
     color: white;
     border: 1px solid white;
 }
 
 .btnIniciarSesion:hover,
-.btnAnadir:hover {
+.btnAnadir:hover,
+#submitReview:hover {
     background-color: #131e3b;
     color: white;
     border: 1px solid white;
