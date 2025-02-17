@@ -34,6 +34,9 @@ async function iniciarPerfil() {
 
 
         /*Contenido Main */
+        //Obtenemos el formulario
+        const formularioSobreMi = document.getElementById('formSobreMi');
+
         function mostrarMain() {
             const { total_listas } = listasDeJuegos.listas;
             /*Total de listas */
@@ -67,7 +70,85 @@ async function iniciarPerfil() {
 
             // Convertimos la respuesta en JSON
             const data = await response.json();
+            return data;
         }
+        async function guardarRedesYSobremi(datos) {
+            const response = await fetch('http://localhost:3000/backend/controllers/controllerPerfilMain/agregarContenidoUsuario.php', {
+                method: 'POST',
+                credentials: "include",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datos) // Enviamos los datos como JSON
+            });
+            // Verificamos si la respuesta es correcta
+            if (!response.ok) {
+                throw new Error('Error en la respuesta de PHP');
+            }
+
+            // Convertimos la respuesta en JSON
+            const data = await response.json();
+            return data;
+        }
+
+        formularioSobreMi.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const alerta = document.getElementById('sobreMiAlerta');
+
+            // Obtener todos los campos del formulario
+            const campos = [formularioSobreMi.sobreMi, formularioSobreMi.steamLink, formularioSobreMi.youtubeLink, formularioSobreMi.discordTag];
+
+            let todosVacios = true; //Inicializamos como true que por defecto los campos estan vacios
+
+            // Validar si los campos están vacíos y aplicar el estilo de error
+            campos.forEach(campo => {
+                if (campo.value.trim() !== "") {
+                    todosVacios = false; // Si al menos un campo no está vacío, cambia la bandera
+                }
+            });
+
+            //Para que no genere muchas alertas
+            borrarAlerta(alerta);
+
+            if (todosVacios) {
+                alerta.appendChild(alertDanger("Por favor, completa al menos uno de los campos"));
+
+            } else {
+                //Enviamos al backend datos 
+                const datos = {
+                    idUsuario: usuarioData.id,
+                    sobreMi: formularioSobreMi.sobreMi.value,
+                    steam: formularioSobreMi.steamLink.value,
+                    youtube: formularioSobreMi.youtubeLink.value,
+                    discord: formularioSobreMi.discordTag.value
+                }
+                document.getElementById("btnActualizarPerfilRS").style.display = "none";
+                alerta.appendChild(spinner());
+                const data = await guardarRedesYSobremi(datos);
+                borrarSpinner(alerta);
+
+                if (!data["success"]) {
+                    if (typeof data.error === "string") {
+                        // Si error es un string, lo mostramos directamente
+                        alerta.appendChild(alertDanger(data.error));
+                    } else if (typeof data.error === "object") {
+                        // Si error es un objeto, obtenemos la primera clave y mostramos el mensaje
+                        const key = Object.keys(data.error)[0];
+                        campos.forEach(campo => {
+                            if (campo.id === key) {
+                                campo.classList.add('error'); // Marca el campo con error
+                            }
+                        });
+                        // Mostrar el mensaje de error
+                        alerta.appendChild(alertDanger(data.error[key]));
+                    }
+                } else if (data["success"]) {
+                    alerta.appendChild(alertSuccess(data["exito"]));
+                }
+                document.getElementById("btnActualizarPerfilRS").style.display = "block";
+            }
+        });
+
         /*Listas */
         /*Selectores */
         const formList = document.getElementById('formCrearLista');

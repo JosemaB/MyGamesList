@@ -10,42 +10,66 @@ try {
         //Creamos la conexion ya con los campos validados
         $baseDeDatos = new ConexionBdd();
         $conexion = $baseDeDatos->getConnection();
-        
+
         //Validar los campos steam ...
-        
-        $idUsuario = $datos['idUsuario'];
-        $sobremi = $datos['sobremi'];
+
+        $idUsuario = validarCadena($datos['idUsuario']);
+        $sobremi = validarCadena($datos['sobreMi']);
         $steam = $datos['steam'];
-        $youtobe = $datos['youtobe'];
+        $youtube = $datos['youtube'];
         $discord = $datos['discord'];
 
-        // Verificar si el usuario existe
-        $sql_check_list = "SELECT * FROM usuarios WHERE id_usuario = ?";
-        $stmt = $conexion->prepare($sql_check_list);
-        $stmt->bind_param("i", $idUsuario);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        $datos = [ // Crear un array con los valores enviados
+            "sobremi" => $sobremi,
+            "steam" => $steam,
+            "youtube" => $youtube,
+            "discord" => $discord
+        ];
 
-        if ($result->num_rows === 0) {
-            $error = "El usuario no existe";
+        // Validaciones
+        if ($steam && !validarSteam($steam)) {
+            $error = ["steamLink" => "El enlace de Steam no es válido"];
+
+        } else if ($youtube && !validarYouTube($youtube)) {
+            $error = ["youtubeLink" => "El enlace de YouTube no es válido"];
+
+        } else if ($discord && !validarDiscord($discord)) {
+            $error = ["discordTag" => "El tag de Discord no es válido"];
+
         } else {
+            // Verificar si el usuario existe
+            $sql_check_list = "SELECT sobremi, steam, youtube, discord FROM usuarios WHERE id_usuario = ?";
+            $stmt = $conexion->prepare($sql_check_list);
+            $stmt->bind_param("i", $idUsuario);
+            $stmt->execute();
+            $result = $stmt->get_result()->fetch_assoc();
 
-            // Consulta SQL para actualizar los campos
-            $sql = "UPDATE usuarios SET sobremi = ?, steam = ?, youtobe = ?, discord = ? WHERE id_usuario = ?";
-            $stmt = $conexion->prepare($sql);
-            $stmt->bind_param("ssssi", $sobremi, $steam, $youtobe, $discord, $id_usuario);
+            if ($result) { // Verifica que la consulta haya devuelto datos
 
-            // Ejecutar la consulta
-            if ($stmt->execute()) {
-                $exito = "Los datos se han actualizado correctamente.";
+                if (array_diff_assoc($datos, $result) === []) {
+                    $error = "No se detectaron cambios. Modifica algún campo";
+
+                } else {
+                    //El usuario ya tiene sus datos si quiere enviar nuevos tiene que enviar todos los campos(sus datos completo sino se borran los anteriores)
+                    
+                    // Consulta SQL para actualizar los campos
+                    $sql = "UPDATE usuarios SET sobremi = ?, steam = ?, youtube = ?, discord = ? WHERE id_usuario = ?";
+                    $stmt = $conexion->prepare($sql);
+                    $stmt->bind_param("ssssi", $sobremi, $steam, $youtube, $discord, $idUsuario);
+
+                    // Ejecutar la consulta
+                    if ($stmt->execute()) {
+                        $exito = "Los datos se han actualizado correctamente";
+                    } else {
+                        $error = "Error al actualizar los datos: " . $stmt->error;
+                    }
+                    // Cerrar conexión
+                    $stmt->close();
+                }
             } else {
-                $error = "Error al actualizar los datos: " . $stmt->error;
+                $error = "El usuario no existe";
             }
-            // Cerrar conexión
-            $stmt->close();
-
         }
-
         $conexion->close();
     } else {
         $error = "Datos no encontrados";

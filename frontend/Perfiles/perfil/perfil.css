@@ -90,6 +90,7 @@
     background-color: #121829;
     caret-color: white;
     border-color: #7e7ea3;
+    color: white;
 }
 
 #formSobreMi textarea::placeholder,

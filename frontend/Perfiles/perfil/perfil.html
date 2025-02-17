@@ -171,8 +171,7 @@
                                         </div>
                                         <div class="card-body">
 
-                                            <form id="formSobreMi"
-                                                onsubmit="event.preventDefault(); actualizarTarjeta();">
+                                            <form id="formSobreMi">
                                                 <div class="row d-flex justify-content-between">
                                                     <div class="col-md-6">
                                                         <div class="col-12">
@@ -195,17 +194,19 @@
                                                             <label for="youtubeLink"
                                                                 class="form-label fw-bold">YouTube:</label>
                                                             <input type="url" class="form-control" id="youtubeLink"
-                                                                placeholder="https://www.youtube.com/tucanal">
+                                                                placeholder="https://www.youtube.com/@tucanal">
                                                         </div>
                                                         <div class="col-12 mt-2">
                                                             <label for="discordLink"
                                                                 class="form-label fw-bold">Discord:</label>
-                                                            <input type="url" class="form-control" id="discordLink"
-                                                                placeholder="https://discord.gg/tuinvitación">
+                                                            <input type="text" class="form-control" id="discordTag"
+                                                                placeholder="NombreDeUsuario#1234">
                                                         </div>
                                                     </div>
-                                                    <button type="submit" class="mt-5 col-12 btn ">Actualizar
+                                                    <button type="submit" class="mt-5 col-12 btn" id="btnActualizarPerfilRS">Actualizar
                                                         perfil</button>
+                                                    <div class="col-12 m-0 mt-2 p-0 text-center" id="sobreMiAlerta">
+                                                    </div>
                                                 </div>
                                             </form>
                                         </div>
