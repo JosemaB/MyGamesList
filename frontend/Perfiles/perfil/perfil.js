@@ -1,4 +1,4 @@
-import { alertDanger, alertSuccess, spinner, borrarAlerta, mostrarPassword, getCookie, formatDate, obtenerListas, limpiarHTML, borrarSpinner } from '../../js/funciones.js';
+import { borrarResena, alertDanger, alertSuccess, spinner, borrarAlerta, mostrarPassword, getCookie, formatDate, obtenerListas, limpiarHTML, borrarSpinner } from '../../js/funciones.js';
 import { guardarCambiosStorage } from "../../js/guardian.js";
 
 const sesionToken = getCookie('sesion_token');
@@ -9,11 +9,11 @@ document.addEventListener('DOMContentLoaded', iniciarPerfil);
 async function iniciarPerfil() {
     try {
 
-
         /*Los datos del usuario */
         const usuarioData = JSON.parse(localStorage.getItem("usuarioData"));
         const listasDeJuegos = await obtenerListas(usuarioData);
-
+        const obtenerListResenas = await obtenerResenasUsuario(usuarioData.id);
+        console.log(obtenerListResenas);
         console.log(listasDeJuegos);
         console.log(usuarioData);
 
@@ -26,6 +26,9 @@ async function iniciarPerfil() {
         /*Mostramos las listas */
         mostrarListas();
 
+        /*Mostramos las reseñas del usuario */
+        mostrarResenasUsuario()
+
         /*Cargamos la seccion config */
         configPerfil();
 
@@ -33,9 +36,9 @@ async function iniciarPerfil() {
         /*Contenido Main */
         function mostrarMain() {
             const { total_listas } = listasDeJuegos.listas;
-
             /*Total de listas */
             document.getElementById('totalListas').innerHTML = total_listas;
+            document.getElementById('totalResenas').innerHTML = obtenerListResenas.resenas?.length || 0;
         }
 
 
@@ -142,6 +145,7 @@ async function iniciarPerfil() {
 
         });
 
+        /*Listas */
         function mostrarListas() {
             const divListas = document.getElementById('nav-listas');
             if (listasDeJuegos.success) {
@@ -182,7 +186,7 @@ async function iniciarPerfil() {
                     divListas.appendChild(cardDiv);
 
                 } else {
-
+                    const fragment = document.createDocumentFragment(); // Crear el fragmento
                     total_contenido.forEach(lista => {
                         const card = document.createElement("div");
                         card.className = "card col-12 my-1 cardListaModalJuego";
@@ -426,8 +430,9 @@ async function iniciarPerfil() {
 
                             };
                         });
-                        divListas.appendChild(card); // Lo metemos al contendor principal
+                        fragment.appendChild(card); // Lo metemos al contendor principal
                     });
+                    divListas.appendChild(fragment);
                 }
             }
 
@@ -522,7 +527,6 @@ async function iniciarPerfil() {
                 mostrarJuegos(data);
             }
         });
-
 
         /*Juegos lista */
         async function borrarJuegoLista(idJuego) {
@@ -731,6 +735,265 @@ async function iniciarPerfil() {
             }
 
         }
+
+        /*Reseñas*/
+        async function obtenerResenasUsuario(idUsuario) {
+            const datos = {
+                idUsuario: idUsuario
+            }
+            const response = await fetch('http://localhost:3000/backend/helpers/getResenasUsuario.php', {
+                method: 'POST',
+                credentials: "include",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datos) // Enviamos los datos como JSON
+            });
+            // Verificamos si la respuesta es correcta
+            if (!response.ok) {
+                throw new Error('Error en la respuesta de PHP');
+            }
+
+            // Convertimos la respuesta en JSON
+            const data = await response.json();
+            return data;
+        }
+
+        function mostrarResenasUsuario() {
+            const divReviews = document.getElementById('nav-reviews');
+            console.log(obtenerListResenas);
+            if (obtenerListResenas.success) {
+                if (obtenerListResenas.resenas.length > 0) {
+                    const fragment = document.createDocumentFragment();
+                    obtenerListResenas.resenas.forEach(resena => {
+                        // Crear el elemento principal
+                        const resenaDiv = document.createElement('div');
+                        resenaDiv.className = 'mb-2 col-12 mensajePersonalizado card';
+                        resenaDiv.id = `Resena-${resena["id_resena"]}`;
+
+                        // Crear la fila
+                        const rowDiv = document.createElement('div');
+                        rowDiv.className = 'row g-0';
+
+                        // Columna de la imagen (izquierda)
+                        const imgColDiv = document.createElement('div');
+                        imgColDiv.className = 'col-md-3';
+
+                        const imgLink = document.createElement('a');
+                        imgLink.href = `/pagGame/infoGame.html?id=${resena["id_videojuego_api"]}`;
+                        imgLink.title = `/pagGame/infoGame.html?id=${resena["id_videojuego_api"]}`;
+
+                        const img = document.createElement('img');
+                        img.src = resena["img_juego"];
+                        img.className = 'imgJuegoResena img-fluid rounded-start';
+                        img.alt = `Game`;
+
+                        imgLink.appendChild(img);
+                        imgColDiv.appendChild(imgLink);
+
+                        // Columna del contenido (derecha)
+                        const contentColDiv = document.createElement('div');
+                        contentColDiv.className = 'col-md-9';
+
+                        // Card header
+                        const cardHeaderDiv = document.createElement('div');
+                        cardHeaderDiv.className = 'card-header fw-bold';
+
+                        const headerFlexDiv = document.createElement('div');
+                        headerFlexDiv.className = 'd-flex align-items-center justify-content-between';
+
+                        // Nombre del usuario
+                        const userDiv = document.createElement('div');
+                        userDiv.className = 'd-flex align-items-center';
+
+                        const userImg = document.createElement('img');
+                        userImg.src = resena["image_usuario"];
+                        userImg.className = 'img-fluid rounded-start perfil-img';
+                        userImg.alt = `Imagen de ${resena["nombre_usuario"]}`;
+
+                        const userNameSpan = document.createElement('span');
+                        userNameSpan.className = 'nombre-usuario ms-2';
+                        userNameSpan.textContent = resena["nombre_usuario"];
+
+                        userDiv.appendChild(userImg);
+                        userDiv.appendChild(userNameSpan);
+
+                        // Botón de eliminar
+                        const deleteButton = document.createElement('button');
+                        deleteButton.className = 'btn';
+                        deleteButton.title = 'Eliminar mensaje';
+                        deleteButton.setAttribute('data-bs-toggle', 'modal');
+                        deleteButton.setAttribute('data-bs-target', '#confirmDeleteResenaModal');
+                        deleteButton.setAttribute('data-resena-id', resena["id_resena"]);
+
+                        const deleteIcon = document.createElement('i');
+                        deleteIcon.className = 'fs-5 text-danger bi bi-x-circle-fill';
+
+                        deleteButton.appendChild(deleteIcon);
+
+                        // Agregar evento al botón "X" para pasar el ID al modal
+                        divReviews.addEventListener('click', function (event) {
+                            // Obtener el modal y los botones
+                            const modalFooterButtons = document.querySelectorAll('#confirmDeleteResenaModal .btn');
+
+                            // Mostrar los botones cuando el modal se abra
+                            modalFooterButtons.forEach(button => {
+                                button.style.display = 'inline-block';
+                            });
+
+                            if (event.target.closest('.btn[data-resena-id]')) {
+                                const deleteButton = event.target.closest('.btn[data-resena-id]');
+                                const resenaId = deleteButton.getAttribute('data-resena-id');
+                                document.getElementById('confirmDeleteResenaButton').setAttribute('data-resena-id', resenaId);
+                            }
+                        });
+
+                        headerFlexDiv.appendChild(userDiv);
+                        headerFlexDiv.appendChild(deleteButton);
+                        cardHeaderDiv.appendChild(headerFlexDiv);
+
+                        // Card body
+                        const cardBodyDiv = document.createElement('div');
+                        cardBodyDiv.className = 'card-body';
+
+                        const blockquote = document.createElement('blockquote');
+                        blockquote.className = 'blockquote mb-0';
+
+                        const contentParagraph = document.createElement('p');
+                        contentParagraph.textContent = resena["contenido"];
+
+                        blockquote.appendChild(contentParagraph);
+                        cardBodyDiv.appendChild(blockquote);
+
+                        // Añadir todo al contenido de la columna derecha
+                        contentColDiv.appendChild(cardHeaderDiv);
+                        contentColDiv.appendChild(cardBodyDiv);
+
+                        // Añadir las columnas a la fila
+                        rowDiv.appendChild(imgColDiv);
+                        rowDiv.appendChild(contentColDiv);
+
+                        // Añadir la fila al elemento principal
+                        resenaDiv.appendChild(rowDiv);
+
+                        //Asi no se vuelve mas lento el codigo
+                        fragment.appendChild(resenaDiv);
+                    });
+                    divReviews.appendChild(fragment);
+                } else {
+                    // Crear el elemento div con la clase "card cardLinkAmigo mt-3"
+                    const cardDiv = document.createElement('div');
+                    cardDiv.className = 'card cardLinkAmigo mt-3';
+
+                    // Crear el elemento div con la clase "card-body text-center"
+                    const cardBodyDiv = document.createElement('div');
+                    cardBodyDiv.className = 'card-body text-center';
+
+                    // Crear el elemento <i> con las clases "fs-2 bi bi-chat-left-heart-fill"
+                    const icon = document.createElement('i');
+                    icon.className = 'fs-2 bi bi-chat-left-heart-fill';
+
+                    // Crear el elemento <h5> con la clase "card-title fw-bold" y el texto
+                    const title = document.createElement('h5');
+                    title.className = 'card-title fw-bold';
+                    title.textContent = '¿Aún no has dejado una reseña?';
+
+                    // Crear el elemento <p> con la clase "card-text" y el texto
+                    const text = document.createElement('p');
+                    text.className = 'card-text';
+                    text.textContent = 'Comparte tu experiencia con los juegos que has probado. Tu opinión puede ayudar a otros jugadores a elegir sus favoritos.';
+
+                    // Agregar los elementos al cardBodyDiv
+                    cardBodyDiv.appendChild(icon);
+                    cardBodyDiv.appendChild(title);
+                    cardBodyDiv.appendChild(text);
+
+                    // Agregar el cardBodyDiv al cardDiv
+                    cardDiv.appendChild(cardBodyDiv);
+
+                    divReviews.appendChild(cardDiv);
+                }
+
+            } else {
+                // Crear el contenedor principal (card)
+                const card = document.createElement('div');
+                card.classList.add('card', 'text-center');
+
+                // Crear el cuerpo de la card
+                const cardBody = document.createElement('div');
+                cardBody.classList.add('card-body', 'bg-danger');
+
+                // Crear el título de la card
+                const cardTitle = document.createElement('h5');
+                cardTitle.classList.add('card-title');
+                cardTitle.textContent = '¡Ups! Algo salió mal';
+
+                // Crear el texto de la card
+                const cardText = document.createElement('p');
+                cardText.classList.add('card-text');
+                cardText.textContent = 'No pudimos obtener tus reseñas. Por favor, intentalo más tarde.';
+
+                // Crear el ícono de carita triste
+                const sadFace = document.createElement('span');
+                sadFace.classList.add('fs-1', 'text-warning');
+                sadFace.innerHTML = '&#128577;'; // Carita triste en código HTML
+
+                // Añadir los elementos a la estructura
+                cardBody.appendChild(cardTitle);
+                cardBody.appendChild(cardText);
+                cardBody.appendChild(sadFace);
+                card.appendChild(cardBody);
+
+                // Insertar la card en el DOM, por ejemplo, en el cuerpo del documento
+                divReviews.appendChild(card);
+            }
+        }
+        //Borrar resena 
+        document.getElementById('confirmDeleteResenaButton').addEventListener('click', async function () {
+            const alerta = document.getElementById('alertaResena');
+            borrarSpinner(alerta);
+            borrarAlerta(alerta);
+            // Obtener el modal y los botones
+            const modalFooterButtons = document.querySelectorAll('#confirmDeleteResenaModal .btn');
+
+            // Obtener el ID de la reseña desde el botón de confirmación
+            const resenaId = this.getAttribute('data-resena-id');
+
+            // Eliminar la tarjeta usando el ID
+            const tarjetaAEliminar = document.getElementById(`Resena-${resenaId}`);
+            if (tarjetaAEliminar) {
+                const datos = {
+                    idUsuario: usuarioData.id,
+                    idResena: resenaId
+                }
+                const spinnerElement = spinner();
+                spinnerElement.style.margin = 'auto';
+                alerta.appendChild(spinnerElement);
+
+                modalFooterButtons.forEach(button => {
+                    button.style.display = 'none';
+                });
+                //Enviamos al backend para borrar la reseña
+                const data = await borrarResena(datos);
+                borrarSpinner(alerta);
+
+                if (!data.success) {
+                    alerta.appendChild(alertDanger(data.error));
+
+                } else {
+                    let totalResenas = Number(document.getElementById('totalResenas').textContent);
+                    totalResenas -= 1; // Realizar la resta
+                    document.getElementById('totalResenas').innerHTML = totalResenas; // Actualizar el valor del input
+                    tarjetaAEliminar.remove(); // Eliminar la tarjeta del DOM
+                }
+
+            }
+
+            // Cerrar el modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('confirmDeleteResenaModal'));
+            modal.hide();
+        });
+
         /*Configuracion */
         //Lo hago asi porque es mas intuitivo
         const formPersonalizarPerfil = document.getElementById('formPersonalizarPerfil');

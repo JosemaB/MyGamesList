@@ -141,11 +141,11 @@
                                                     <p class="fw-bold">Amigos</p>
                                                 </div>
                                                 <div class="d-flex flex-column align-items-center mb-3">
-                                                    <h2 class="fw-bold">0</h2>
-                                                    <p class="fw-bold">Reseña</p>
+                                                    <h2 class="fw-bold" id="totalResenas">0</h2>
+                                                    <p class="fw-bold">Reseñas</p>
                                                 </div>
                                                 <div class="d-flex flex-column align-items-center">
-                                                    <h2 class="fw-bold" id="totalListas"></h2>
+                                                    <h2 class="fw-bold" id="totalListas">0</h2>
                                                     <p class="fw-bold">Lista de Juegos</p>
                                                 </div>
                                             </div>
@@ -209,15 +209,7 @@
 
                         <div class="tab-pane fade" id="nav-reviews" role="tabpanel" aria-labelledby="nav-reviews-tab"
                             tabindex="0">
-                            <!--Si no tiene amigos-->
-                            <div class="card cardLinkAmigo mt-3">
-                                <div class="card-body text-center">
-                                    <i class="fs-2 bi bi-chat-left-heart-fill"></i>
-                                    <h5 class="card-title fw-bold">¿Aún no has dejado una reseña?</h5>
-                                    <p class="card-text">Comparte tu experiencia con los juegos que has probado. Tu
-                                        opinión puede ayudar a otros jugadores a elegir sus favoritos</p>
-                                </div>
-                            </div>
+
                         </div>
                         <!-- Contenido de la pestaña de Configuración -->
                         <div class="tab-pane fade pt-2" id="nav-config" role="tabpanel" aria-labelledby="nav-config-tab"
@@ -470,43 +462,7 @@
             </div>
         </div>
     </div>
-    <div class="col-12 mensajePersonalizado m-2 card" id="Resena-[ID_RESENA]">
-        <div class="row g-0">
-            <!-- Columna de la imagen (a la izquierda) -->
-            <div class="col-md-3">
-                <a href="linkJuego">
-                    <img src="../../img/acceso/fondoLogin.webp" class="img-fluid rounded-start"
-                        alt="Imagen de [NOMBRE_USUARIO]">
-                </a>
-            </div>
-            <!-- Columna del contenido (a la derecha) -->
-            <div class="col-md-9">
-                <div class="card-header fw-bold">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <!-- Nombre del usuario -->
-                        <div class="d-flex align-items-center">
-                            <img src="[IMAGEN_USUARIO]" class="img-fluid rounded-start perfil-img"
-                                alt="Imagen de [NOMBRE_USUARIO]">
-                            <span class="nombre-usuario ms-2">[NOMBRE_USUARIO]</span>
-                        </div>
 
-                        <!-- Botón de eliminar (solo para el propietario) -->
-                        <button class="btn" title="Eliminar mensaje" data-bs-toggle="modal"
-                            data-bs-target="#confirmDeleteResenaModal" data-resena-id="[ID_RESENA]">
-                            <i class="fs-5 text-danger bi bi-x-circle-fill"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Cuerpo de la tarjeta -->
-                <div class="card-body">
-                    <blockquote class="blockquote mb-0">
-                        <p>[CONTENIDO]</p>
-                    </blockquote>
-                </div>
-            </div>
-        </div>
-    </div>
     <!-- Footer -->
     <footer class="footerPrincipal text-center text-lg-start text-white mt-5">
         <!-- Section: Social media -->

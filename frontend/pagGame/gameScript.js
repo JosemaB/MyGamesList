@@ -1,5 +1,5 @@
 import { detallesDelJuego, mostrarCapturas } from '../js/API.js';
-import { limpiarHTML, obtenerEstrellas, mostrarPlataforma, fotoUsuario, nombreUsuario, sinResultado, obtenerListas, alertDanger, borrarAlerta, spinner, alertSuccess, borrarSpinner } from '../js/funciones.js';
+import { borrarResena, limpiarHTML, obtenerEstrellas, mostrarPlataforma, fotoUsuario, nombreUsuario, sinResultado, obtenerListas, alertDanger, borrarAlerta, spinner, alertSuccess, borrarSpinner } from '../js/funciones.js';
 
 document.addEventListener('DOMContentLoaded', iniciarInfoGame);
 // Declaración del objeto global de estado
@@ -473,24 +473,7 @@ async function iniciarInfoGame() {
             return data;
         }
 
-        async function borrarResena(datos) {
-            const response = await fetch('http://localhost:3000/backend/controllers/controllerResenas/borrarResena.php', {
-                method: 'POST',
-                credentials: "include",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(datos) // Enviamos los datos como JSON
-            });
-            // Verificamos si la respuesta es correcta
-            if (!response.ok) {
-                throw new Error('Error en la respuesta de PHP');
-            }
 
-            // Convertimos la respuesta en JSON
-            const data = await response.json();
-            return data;
-        }
 
         function mostrarResenas() {
             try {
@@ -544,7 +527,9 @@ async function iniciarInfoGame() {
 
 
                 /*Agregamos las reseñas */
-                if (juego["ratings"]) { /*Por si esta vacio para que no de error */
+                if (juego["ratings"]) { /* Por si está vacío para que no dé error */
+                    const fragment = document.createDocumentFragment(); // Crear el fragmento
+
                     juego["ratings"].forEach(resena => {
                         // Crear el contenedor principal
                         const mensajePersonalizado = document.createElement('div');
@@ -596,114 +581,123 @@ async function iniciarInfoGame() {
                         // Añadir el cuerpo de la tarjeta al contenedor principal
                         mensajePersonalizado.appendChild(cardBody);
 
-                        resenas.appendChild(mensajePersonalizado);
-
+                        // Agregar la reseña al fragmento
+                        fragment.appendChild(mensajePersonalizado);
                     });
-                    //Si da true porque no haya fallado con la bdd entoces se mostrara las resenas si tiene este jeugo
-                    if (totalResenasJuego.success) {
-                        //Resenas ahora de nuestros usuarios
-                        totalResenasJuego.resenas.forEach(resena => {
-                            // Crear el elemento principal div
-                            const divCol12 = document.createElement('div');
-                            divCol12.classList.add('col-12', 'mensajePersonalizado', 'm-2', 'p-3', 'card');
-                            divCol12.id = `Resena-${resena["id_resena"]}`;
-                            // Crear el div del card-header
-                            const cardHeader = document.createElement('div');
-                            cardHeader.classList.add('col-12', 'card-header', 'fw-bold');
 
-                            // Crear el div flex container
-                            const flexContainer = document.createElement('div');
-                            flexContainer.classList.add('d-flex', 'align-items-center', 'justify-content-between');
+                    // Agregar todas las reseñas al DOM en una sola operación
+                    resenas.appendChild(fragment);
+                }
+                //Si da true porque no haya fallado con la bdd entoces se mostrara las resenas si tiene este jeugo
+                if (totalResenasJuego.success) {
+                    const fragment = document.createDocumentFragment(); // Crear el fragmento
 
-                            // Crear el div para el perfil y nombre de usuario
-                            const profileContainer = document.createElement('div');
-                            profileContainer.classList.add('d-flex', 'align-items-center');
+                    // Reseñas ahora de nuestros usuarios
+                    totalResenasJuego.resenas.forEach(resena => {
+                        // Crear el elemento principal div
+                        const divCol12 = document.createElement('div');
+                        divCol12.classList.add('col-12', 'mensajePersonalizado', 'm-2', 'p-3', 'card');
+                        divCol12.id = `Resena-${resena["id_resena"]}`;
 
-                            // Crear el enlace con la imagen de perfil
-                            const profileLink = document.createElement('a');
+                        // Crear el div del card-header
+                        const cardHeader = document.createElement('div');
+                        cardHeader.classList.add('col-12', 'card-header', 'fw-bold');
 
-                            if (usuarioData && usuarioData.id == resena.id_usuario) {
-                                profileLink.href = `/Perfiles/perfil/perfil.html`;
-                            } else {
-                                profileLink.href = `/Perfiles/usuario/usuario.html?id=${resena["id_usuario"]}`;
-                            }
+                        // Crear el div flex container
+                        const flexContainer = document.createElement('div');
+                        flexContainer.classList.add('d-flex', 'align-items-center', 'justify-content-between');
 
-                            const profileImg = document.createElement('img');
-                            profileImg.classList.add('perfil-img');
-                            profileImg.src = resena["image_usuario"];
-                            profileImg.alt = `Imagen usuario de ${resena["nombre_usuario"]}`;
+                        // Crear el div para el perfil y nombre de usuario
+                        const profileContainer = document.createElement('div');
+                        profileContainer.classList.add('d-flex', 'align-items-center');
 
-                            if (usuarioData && usuarioData.id == resena.id_usuario) {
-                                profileImg.title = `Perfil`;
-                            } else {
-                                profileImg.title = `Perfil de ${resena["nombre_usuario"]}`;
-                            }
+                        // Crear el enlace con la imagen de perfil
+                        const profileLink = document.createElement('a');
 
-                            profileLink.appendChild(profileImg);
+                        if (usuarioData && usuarioData.id == resena.id_usuario) {
+                            profileLink.href = `/Perfiles/perfil/perfil.html`;
+                        } else {
+                            profileLink.href = `/Perfiles/usuario/usuario.html?id=${resena["id_usuario"]}`;
+                        }
 
-                            // Crear el span para el nombre del usuario
-                            const userName = document.createElement('span');
-                            userName.classList.add('nombre-usuario', 'ms-2');
-                            userName.textContent = resena["nombre_usuario"];
+                        const profileImg = document.createElement('img');
+                        profileImg.classList.add('perfil-img');
+                        profileImg.src = resena["image_usuario"];
+                        profileImg.alt = `Imagen usuario de ${resena["nombre_usuario"]}`;
 
-                            // Añadir la imagen y el nombre al contenedor del perfil
-                            profileContainer.appendChild(profileLink);
-                            profileContainer.appendChild(userName);
+                        if (usuarioData && usuarioData.id == resena.id_usuario) {
+                            profileImg.title = `Perfil`;
+                        } else {
+                            profileImg.title = `Perfil de ${resena["nombre_usuario"]}`;
+                        }
 
-                            // Añadir el perfil y el botón al contenedor flex
+                        profileLink.appendChild(profileImg);
 
-                            flexContainer.appendChild(profileContainer);
-                            if (usuarioData && usuarioData.id == resena.id_usuario) {
-                                // Crear el botón de eliminar
-                                const deleteButton = document.createElement('button');
-                                deleteButton.classList.add('btn');
-                                deleteButton.title = 'Eliminar mensaje';
-                                deleteButton.setAttribute('data-bs-toggle', 'modal');
-                                deleteButton.setAttribute('data-bs-target', '#confirmDeleteResenaModal');
-                                deleteButton.setAttribute('data-resena-id', resena["id_resena"]); // Pasar el ID de la reseña
-                                const deleteIcon = document.createElement('i');
-                                deleteIcon.classList.add('fs-5', 'text-danger', 'bi', 'bi-x-circle-fill');
+                        // Crear el span para el nombre del usuario
+                        const userName = document.createElement('span');
+                        userName.classList.add('nombre-usuario', 'ms-2');
+                        userName.textContent = resena["nombre_usuario"];
 
-                                // Agregar evento al botón "X" para pasar el ID al modal
-                                deleteButton.addEventListener('click', function () {
-                                    const resenaId = this.getAttribute('data-resena-id'); // Obtener el ID de la reseña
-                                    document.getElementById('confirmDeleteResenaButton').setAttribute('data-resena-id', resenaId); // Pasar el ID al botón de confirmación
-                                });
+                        // Añadir la imagen y el nombre al contenedor del perfil
+                        profileContainer.appendChild(profileLink);
+                        profileContainer.appendChild(userName);
 
-                                deleteButton.appendChild(deleteIcon);
-                                flexContainer.appendChild(deleteButton);
-                            }
+                        // Añadir el perfil y el botón al contenedor flex
+                        flexContainer.appendChild(profileContainer);
 
-                            // Añadir el flex container al card-header
-                            cardHeader.appendChild(flexContainer);
+                        if (usuarioData && usuarioData.id == resena.id_usuario) {
+                            // Crear el botón de eliminar
+                            const deleteButton = document.createElement('button');
+                            deleteButton.classList.add('btn');
+                            deleteButton.title = 'Eliminar mensaje';
+                            deleteButton.setAttribute('data-bs-toggle', 'modal');
+                            deleteButton.setAttribute('data-bs-target', '#confirmDeleteResenaModal');
+                            deleteButton.setAttribute('data-resena-id', resena["id_resena"]); // Pasar el ID de la reseña
 
-                            // Crear el card-body
-                            const cardBody = document.createElement('div');
-                            cardBody.classList.add('card-body');
+                            const deleteIcon = document.createElement('i');
+                            deleteIcon.classList.add('fs-5', 'text-danger', 'bi', 'bi-x-circle-fill');
 
-                            // Crear el blockquote
-                            const blockquote = document.createElement('blockquote');
-                            blockquote.classList.add('blockquote', 'mb-0');
+                            // Agregar evento al botón "X" para pasar el ID al modal
+                            deleteButton.addEventListener('click', function () {
+                                const resenaId = this.getAttribute('data-resena-id'); // Obtener el ID de la reseña
+                                document.getElementById('confirmDeleteResenaButton').setAttribute('data-resena-id', resenaId); // Pasar el ID al botón de confirmación
+                            });
 
-                            // Crear el párrafo del título de la reseña
-                            const reviewTitle = document.createElement('p');
-                            reviewTitle.textContent = resena["contenido"];
+                            deleteButton.appendChild(deleteIcon);
+                            flexContainer.appendChild(deleteButton);
+                        }
 
-                            // Añadir el párrafo al blockquote
-                            blockquote.appendChild(reviewTitle);
+                        // Añadir el flex container al card-header
+                        cardHeader.appendChild(flexContainer);
 
-                            // Añadir el blockquote al card-body
-                            cardBody.appendChild(blockquote);
+                        // Crear el card-body
+                        const cardBody = document.createElement('div');
+                        cardBody.classList.add('card-body');
 
-                            // Añadir el card-header y el card-body al div principal
-                            divCol12.appendChild(cardHeader);
-                            divCol12.appendChild(cardBody);
+                        // Crear el blockquote
+                        const blockquote = document.createElement('blockquote');
+                        blockquote.classList.add('blockquote', 'mb-0');
 
-                            // Finalmente, añadir el div principal
-                            resenas.appendChild(divCol12);
-                        });
-                    }
+                        // Crear el párrafo del título de la reseña
+                        const reviewTitle = document.createElement('p');
+                        reviewTitle.textContent = resena["contenido"];
 
+                        // Añadir el párrafo al blockquote
+                        blockquote.appendChild(reviewTitle);
+
+                        // Añadir el blockquote al card-body
+                        cardBody.appendChild(blockquote);
+
+                        // Añadir el card-header y el card-body al div principal
+                        divCol12.appendChild(cardHeader);
+                        divCol12.appendChild(cardBody);
+
+                        // Agregar la reseña al fragmento
+                        fragment.appendChild(divCol12);
+                    });
+
+                    // Agregar todas las reseñas al DOM en una sola operación
+                    resenas.appendChild(fragment);
                 }
 
                 divResenas.appendChild(resenas);

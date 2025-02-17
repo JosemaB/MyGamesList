@@ -111,7 +111,24 @@ export function sinResultado() {
 
     return container;
 }
+export async function borrarResena(datos) {
+    const response = await fetch('http://localhost:3000/backend/controllers/controllerResenas/borrarResena.php', {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(datos) // Enviamos los datos como JSON
+    });
+    // Verificamos si la respuesta es correcta
+    if (!response.ok) {
+        throw new Error('Error en la respuesta de PHP');
+    }
 
+    // Convertimos la respuesta en JSON
+    const data = await response.json();
+    return data;
+}
 export function adjustSelectToSelectedOption(select) {
     // Obtener el texto de la opción seleccionada
     const selectedText = select.options[select.selectedIndex].text;

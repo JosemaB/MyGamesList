@@ -1,3 +1,4 @@
+/*Escritorio*/
 @media (max-width: 769px) {
 
     /*Botones cofig*/
@@ -8,8 +9,15 @@
         transition: border-radius 0.3s ease, border 0.3s ease, text-shadow 0.3s ease, color 0.3s ease;
         margin: 0;
     }
+
+    .imgJuegoResena {
+        object-fit: cover;
+        width: 100%;
+        height: 200px;
+    }
 }
 
+/*Pra moviles*/
 @media (min-width: 770px) {
 
     /*Botones cofig*/
@@ -20,7 +28,14 @@
         transition: border-radius 0.3s ease, border 0.3s ease, text-shadow 0.3s ease, color 0.3s ease;
         margin: 1px;
     }
+
+    .imgJuegoResena {
+        object-fit: cover;
+        width: 300px;
+        height: 200px;
+    }
 }
+
 
 /*Nav*/
 /*Nav*/
@@ -255,10 +270,10 @@
     background-color: #1a2950;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     color: #e6e1e1;
-    width: 1000px;
     text-align: justify;
     border-radius: 20px;
 }
+
 
 .perfil-img {
     width: 35px;
