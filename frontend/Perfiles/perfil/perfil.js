@@ -11,10 +11,10 @@ async function iniciarPerfil() {
 
         /*Los datos del usuario */
         const usuarioData = JSON.parse(localStorage.getItem("usuarioData"));
+        const datosRedesYSobreMi = await obtenerRedesYSobremi(usuarioData.id);
         const listasDeJuegos = await obtenerListas(usuarioData);
         const obtenerListResenas = await obtenerResenasUsuario(usuarioData.id);
-        console.log(obtenerListResenas);
-        console.log(listasDeJuegos);
+        console.log(datosRedesYSobreMi);
         console.log(usuarioData);
 
         /*Perfil informacion lo que se ve todo el rato*/
@@ -39,9 +39,35 @@ async function iniciarPerfil() {
             /*Total de listas */
             document.getElementById('totalListas').innerHTML = total_listas;
             document.getElementById('totalResenas').innerHTML = obtenerListResenas.resenas?.length || 0;
+
+            if (datosRedesYSobreMi) {
+                if (datosRedesYSobreMi.success) {
+
+                }
+            }
+
         }
 
+        async function obtenerRedesYSobremi(idUsuario) {
+            const datos = {
+                idUsuario: idUsuario
+            }
+            const response = await fetch('http://localhost:3000/backend/helpers/getRedesYSobremi.php', {
+                method: 'POST',
+                credentials: "include",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datos) // Enviamos los datos como JSON
+            });
+            // Verificamos si la respuesta es correcta
+            if (!response.ok) {
+                throw new Error('Error en la respuesta de PHP');
+            }
 
+            // Convertimos la respuesta en JSON
+            const data = await response.json();
+        }
         /*Listas */
         /*Selectores */
         const formList = document.getElementById('formCrearLista');
@@ -339,6 +365,7 @@ async function iniciarPerfil() {
                                         });
                                         // Cerrar el modal después de la acción
                                         renameModal.hide();
+                                        mostrarToast('La lista se ha renombrdo correctamente', 'success');
                                     }
                                     // Cambiar el nombre de la lista (por ejemplo, actualizar el DOM) "A tiempo real"
                                     title.textContent = nuevoNombre.value;
@@ -595,7 +622,7 @@ async function iniciarPerfil() {
                 // Crear el texto de la card
                 const cardText = document.createElement('p');
                 cardText.classList.add('card-text');
-                cardText.textContent = 'No pudimos obtener la lista de juegos. Por favor, intenta más tarde.';
+                cardText.textContent = 'No pudimos obtener la lista de juegos. Por favor, intenta más tarde';
 
                 // Crear el ícono de carita triste
                 const sadFace = document.createElement('span');
@@ -715,7 +742,7 @@ async function iniciarPerfil() {
                 // Crear el texto descriptivo
                 let cardText = document.createElement('p');
                 cardText.classList.add('card-text');
-                cardText.textContent = 'No tienes juegos disponibles en este momento. Por favor, añade algunos para verlos aquí.';
+                cardText.textContent = 'No tienes juegos disponibles en este momento. Por favor, añade algunos para verlos aquí';
 
                 // Crear el botón
                 let button = document.createElement('a');
@@ -762,7 +789,6 @@ async function iniciarPerfil() {
 
         function mostrarResenasUsuario() {
             const divReviews = document.getElementById('nav-reviews');
-            console.log(obtenerListResenas);
             if (obtenerListResenas.success) {
                 if (obtenerListResenas.resenas.length > 0) {
                     const fragment = document.createDocumentFragment();
@@ -902,7 +928,7 @@ async function iniciarPerfil() {
                     // Crear el elemento <p> con la clase "card-text" y el texto
                     const text = document.createElement('p');
                     text.className = 'card-text';
-                    text.textContent = 'Comparte tu experiencia con los juegos que has probado. Tu opinión puede ayudar a otros jugadores a elegir sus favoritos.';
+                    text.textContent = 'Comparte tu experiencia con los juegos que has probado. Tu opinión puede ayudar a otros jugadores a elegir sus favoritos';
 
                     // Agregar los elementos al cardBodyDiv
                     cardBodyDiv.appendChild(icon);
@@ -932,7 +958,7 @@ async function iniciarPerfil() {
                 // Crear el texto de la card
                 const cardText = document.createElement('p');
                 cardText.classList.add('card-text');
-                cardText.textContent = 'No pudimos obtener tus reseñas. Por favor, intentalo más tarde.';
+                cardText.textContent = 'No pudimos obtener tus reseñas. Por favor, intentalo más tarde';
 
                 // Crear el ícono de carita triste
                 const sadFace = document.createElement('span');

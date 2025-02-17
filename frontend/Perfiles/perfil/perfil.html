@@ -28,6 +28,7 @@
                     class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
                     <img class="logo" src="/img/logo.png" alt="LOGO">
                 </a>
+
                 <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
                     data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
                     <span class="bi bi-justify text-light"></span>
@@ -93,8 +94,16 @@
     <main>
         <div class="container">
             <div class="row">
-                <div class="col-12 mainPanel d-flex flex-column justify-content-center align-items-center">
+                <div class="col-12 mainPanel d-flex flex-column justify-content-center align-items-center mb-4">
                     <div class="avatar mb-2"> <img id="imgUsuario"></div>
+                    <div class="d-flex flex-nowrap gap-2">
+                        <button id="steamBtn" class="btn steam btnRedesSociales fs-5" disabled><i
+                                class="bi bi-steam"></i></button>
+                        <button id="youtubeBtn" class="btn youtube btnRedesSociales fs-5" disabled><i
+                                class="bi bi-youtube"></i></button>
+                        <button id="discordBtn" class="btn discord btnRedesSociales fs-5" disabled><i
+                                class="bi bi-discord"></i></button>
+                    </div>
                     <h2 id="nombreUsuario"></h2>
                     <p id="registro"></p>
                 </div>
@@ -130,36 +139,75 @@
                             aria-labelledby="nav-home-tab" tabindex="0">
                             <div class="container">
                                 <div class="row g-0">
-                                    <div class="col-4 card vistaGeneral">
+                                    <div class="col-12 col-lg-1 card vistaGeneral">
                                         <div class="card-header text-center">
-                                            <i class="bi bi-speedometer2 fs-1"></i>
+                                            <i class="d-none d-lg-block bi bi-speedometer2 fs-1"></i>
+                                            <h3 class="d-block d-lg-none fw-bold m-0 fs-1">Resumen de actividad</h3>
                                         </div>
                                         <div class="card-body">
-                                            <div class="d-flex flex-column align-items-center">
-                                                <div class="d-flex flex-column align-items-center mb-3">
+                                            <div
+                                                class="d-flex flex-lg-column flex-row justify-content-around align-items-center text-center">
+                                                <div class="d-flex flex-column align-items-center mb-lg-3">
                                                     <h2 class="fw-bold">0</h2>
                                                     <p class="fw-bold">Amigos</p>
                                                 </div>
-                                                <div class="d-flex flex-column align-items-center mb-3">
+                                                <div class="d-flex flex-column align-items-center mb-lg-3">
                                                     <h2 class="fw-bold" id="totalResenas">0</h2>
                                                     <p class="fw-bold">Reseñas</p>
                                                 </div>
                                                 <div class="d-flex flex-column align-items-center">
                                                     <h2 class="fw-bold" id="totalListas">0</h2>
-                                                    <p class="fw-bold">Lista de Juegos</p>
+                                                    <p class="fw-bold">Listas</p>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col card juegosDestacados">
+
+
+                                    <div class="col-12 col-lg card juegosDestacados">
                                         <!-- Usamos 'col' en lugar de 'col-8' para ocupar el espacio restante -->
                                         <div class="card-header fs-1 fw-bold text-center">
-                                            Juegos destacados
+                                            Cuéntanos quién eres
                                         </div>
                                         <div class="card-body">
-                                            <div class="d-flex flex-column align-items-center">
 
-                                            </div>
+                                            <form id="formSobreMi"
+                                                onsubmit="event.preventDefault(); actualizarTarjeta();">
+                                                <div class="row d-flex justify-content-between">
+                                                    <div class="col-md-6">
+                                                        <div class="col-12">
+                                                            <h3 for="sobreMi"
+                                                                class="text-center fw-bold form-label  fw-bold">Sobre
+                                                                mí</h3>
+                                                            <textarea class="form-control" id="sobreMi" rows="9"
+                                                                placeholder="Escribe algo sobre ti..."></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <h3 class="text-center fw-bold">Links de redes sociales</h3>
+                                                        <div class="col-12">
+                                                            <label for="steamLink"
+                                                                class="form-label fw-bold">Steam:</label>
+                                                            <input type="url" class="form-control" id="steamLink"
+                                                                placeholder="https://steamcommunity.com/id/tuperfil">
+                                                        </div>
+                                                        <div class="col-12 mt-2">
+                                                            <label for="youtubeLink"
+                                                                class="form-label fw-bold">YouTube:</label>
+                                                            <input type="url" class="form-control" id="youtubeLink"
+                                                                placeholder="https://www.youtube.com/tucanal">
+                                                        </div>
+                                                        <div class="col-12 mt-2">
+                                                            <label for="discordLink"
+                                                                class="form-label fw-bold">Discord:</label>
+                                                            <input type="url" class="form-control" id="discordLink"
+                                                                placeholder="https://discord.gg/tuinvitación">
+                                                        </div>
+                                                    </div>
+                                                    <button type="submit" class="mt-5 col-12 btn ">Actualizar
+                                                        perfil</button>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -188,7 +236,8 @@
                             <div class="mt-2 card cardLinkAmigo">
                                 <div class="card-body d-flex align-items-center justify-content-between flex-column">
                                     <i class="fs-2 text-center bi bi-person-plus-fill"></i>
-                                    <h5 class="card-title fw-bold text-cente">El enlace de tu perfil para compartir con
+                                    <h5 class="card-title fw-bold text-cente">El enlace de tu perfil para compartir
+                                        con
                                         tus amigos:</h5>
                                     <span class="fw-bold linkAmigo text-cente"
                                         id="linkAmigo">https://www.instant-gaming.com/es/user/gamer-41eb40e
@@ -201,7 +250,8 @@
                                 <div class="card-body text-center">
                                     <i class="fs-2 bi bi-android"></i>
                                     <h5 class="card-title text-cente">¿Aún no tienes amigos?</h5>
-                                    <p class="card-text text-cente">¡Hazlo más divertido! Comparte tu enlace con amigos
+                                    <p class="card-text text-cente">¡Hazlo más divertido! Comparte tu enlace con
+                                        amigos
                                         para que te agreguen y disfruten juntos de tus listas de juegos</p>
                                 </div>
                             </div>

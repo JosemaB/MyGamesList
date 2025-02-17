@@ -25,7 +25,7 @@ try {
         $result = $stmt->get_result();
 
         if ($result->num_rows === 0) {
-            $error = "La lista no existe.";
+            $error = "La lista no existe";
         } else {
             // Verificar si el videojuego ya está en la lista
             $sql_check_game = "SELECT titulo FROM Lista_Videojuegos WHERE id_lista = ? AND titulo = ?";

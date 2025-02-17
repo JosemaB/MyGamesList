@@ -36,6 +36,66 @@
     }
 }
 
+/*Botones de redes sociales*/
+.btnRedesSociales {
+    border: none;
+    border-radius: 100%;
+    /* Bordes redondeados */
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: background-color 0.3s ease;
+}
+
+/* Estilo específico para el botón de Steam */
+.steam {
+    background-color: #1b2838;
+    /* Color azulillo de Steam */
+}
+
+.steam:hover {
+    background-color: #2a475e;
+    /* Color más claro al pasar el ratón */
+}
+
+/* Estilo específico para el botón de YouTube */
+.youtube {
+    background-color: #ff0000;
+    /* Color rojo de YouTube */
+}
+
+.youtube:hover {
+    background-color: #cc0000;
+    /* Color más oscuro al pasar el ratón */
+}
+
+/* Estilo específico para el botón de Discord */
+.discord {
+    background-color: #7289da;
+    /* Color morado de Discord */
+}
+
+.discord:hover {
+    background-color: #5a6da8;
+    /* Color más oscuro al pasar el ratón */
+}
+
+
+/*Perfil seccion sobre mi*/
+#formSobreMi textarea,
+#formSobreMi input {
+    background-color: #121829;
+    caret-color: white;
+    border-color: #7e7ea3;
+}
+
+#formSobreMi textarea::placeholder,
+#formSobreMi input::placeholder {
+    color: #b3abab;
+}
 
 /*Nav*/
 /*Nav*/
@@ -91,11 +151,6 @@
     background-color: #1A233A;
     color: aliceblue;
 }
-
-.vistaGeneral {
-    max-width: 100px;
-}
-
 
 /*Configuracion*/
 .cambioImg button {
@@ -322,7 +377,8 @@
 
 #crearListaModal .modal-footer button,
 #staticBackdrop .modal-footer button,
-#renameListaModal .modal-footer button {
+#renameListaModal .modal-footer button,
+#formSobreMi button {
     background-color: #1d2e59;
     color: white;
     border: 1px solid white;
@@ -330,7 +386,8 @@
 
 #crearListaModal .modal-footer button:hover,
 #staticBackdrop .modal-footer button:hover,
-#renameListaModal .modal-footer button:hover {
+#renameListaModal .modal-footer button:hover,
+#formSobreMi button:hover {
     background-color: #131e3b;
     color: white;
     border: 1px solid white;
