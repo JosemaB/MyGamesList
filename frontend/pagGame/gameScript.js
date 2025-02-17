@@ -21,16 +21,13 @@ async function inicializarJuego(juegoId) {
 }
 
 async function iniciarInfoGame() {
-    document.getElementById('contenidoNav').display = 'none'; //Para que no se vea al cargar la pagina si se cumple se vera el nav
+    ocultarContenidoPrincipal(); /*Ocultamos el contenido principal */
+
     // Obtener el valor del parámetro 'id' desde la URL
     const urlParams = new URLSearchParams(window.location.search);
     await inicializarJuego(urlParams.get('id')); // Esto te dará el ID del juego y la funcion dara las capturas y la informacion 
     if (estado.juego["detail"] === 'Not found.') {
-        const idVisuales = document.querySelector('#juegoNoEncontrado');
-        idVisuales.appendChild(sinResultado());
-        idVisuales.style.marginBottom = "350px";  // Aplica margen de 350px en la parte inferior para el footer
-        document.getElementById('contenidoTotal').style.display = 'none';  // Oculta
-        document.querySelector('footer').style.display = 'block';
+        juegoNoEncontrado();/*Mandariamos el mensaje de error juego no encontrado */
     } else {
 
         /*Los datos del usuario */
@@ -41,8 +38,9 @@ async function iniciarInfoGame() {
             obtenerResenasJuego(urlParams.get('id')),
             mostrarContenidoModal()
         ]);
-        document.getElementById('contenidoNav').style.display = 'flex';
-        document.querySelector('footer').style.display = 'block';
+        /*Mostramos el contenido principal */
+        mostrarContenidoPrincipal();
+
         mostrarVisuales();
         mostrarDescripcion();
         /* Selectores */
@@ -445,7 +443,7 @@ async function iniciarInfoGame() {
                         button.style.display = 'inline-block';
                     });
                 } else {
-                    tarjetaAEliminar.remove(); // Eliminar la tarjeta del DOM
+                    tarjetaAEliminar.remove(); // Eliminar la tarjeta del DOM                   
                 }
             }
 
@@ -950,6 +948,13 @@ async function iniciarInfoGame() {
                 divContenidoModal.appendChild(card);
             }
         }
+        function mostrarContenidoPrincipal() {
+            const divContenidoTotal = document.getElementById('contenidoTotal');
+            borrarSpinner(divContenidoTotal);
+            document.getElementById('contenidoNav').style.display = 'flex';
+            document.querySelector('footer').style.display = 'block';
+        }
+
         async function agregarLista(idLista) {
             const { name, background_image, id } = estado.juego;
             const linkJuego = `/pagGame/infoGame.html?id=${id}`;
@@ -1031,4 +1036,17 @@ async function iniciarInfoGame() {
 
         });
     }
+    function ocultarContenidoPrincipal() {
+        document.getElementById('contenidoNav').display = 'none'; //Para que no se vea al cargar la pagina si se cumple se vera el nav
+        const divContenidoTotal = document.getElementById('contenidoTotal');
+        divContenidoTotal.appendChild(spinner()); //Spiner de carga de la pagina
+    }
+    function juegoNoEncontrado() {
+        const idVisuales = document.querySelector('#juegoNoEncontrado');
+        idVisuales.appendChild(sinResultado());
+        idVisuales.style.marginBottom = "350px";  // Aplica margen de 350px en la parte inferior para el footer
+        document.getElementById('contenidoTotal').style.display = 'none';  // Oculta
+        document.querySelector('footer').style.display = 'block';
+    }
+    
 }

@@ -9,11 +9,9 @@ async function iniciarApp() {
     const currentPath = window.location.pathname;
     if (currentPath === "/pagGame/infoGame.html") {
         document.querySelector('header').style.display = 'none';
-        document.querySelector('main').style.display = 'none';
         document.querySelector('footer').style.display = 'none';
         await iniciarGuardian();
         document.querySelector('header').style.display = 'block';
-        document.querySelector('main').style.display = 'block';
     } else if (currentPath !== "/index.html" && currentPath !== "/") {
         document.querySelector('header').style.display = 'none';
         document.querySelector('main').style.display = 'none';
