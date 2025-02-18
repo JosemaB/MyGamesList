@@ -97,7 +97,7 @@ export function sinResultado() {
     // Crear el texto
     const cardText = document.createElement("p");
     cardText.className = "card-text";
-    cardText.textContent = "No se encontraron coincidencias para tu búsqueda.";
+    cardText.textContent = "No se encontraron coincidencias para tu búsqueda";
 
     // Agregar título y texto al cuerpo de la tarjeta
     cardBody.appendChild(cardTitle);

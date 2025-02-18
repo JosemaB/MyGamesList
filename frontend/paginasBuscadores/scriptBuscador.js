@@ -25,7 +25,6 @@ async function juegosPorResultado(searchValue) {
         const resultadoJuegos = document.querySelector('#resultadoJuegos');
         const juegos = await listaDeJuegosPorNombre(searchValue);
         const juegosFiltrados = await quitarContenidoAdulto(juegos);
-        console.log(juegosFiltrados.length);
 
         if (juegosFiltrados.length > 0) {
             juegosFiltrados.forEach((juego, index) => {

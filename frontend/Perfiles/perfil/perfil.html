@@ -102,8 +102,7 @@
                         <button id="youtubeBtn" class="btn youtube btnRedesSociales fs-5" disabled><i
                                 class="bi bi-youtube"></i></button>
                         <button id="discordBtn" class="btn discord btnRedesSociales fs-5" data-bs-toggle="tooltip"
-                            data-bs-placement="top" data-bs-title="" disabled><i
-                                class="bi bi-discord"></i></button>
+                            data-bs-placement="top" data-bs-title="" disabled><i class="bi bi-discord"></i></button>
                     </div>
                     <h2 id="nombreUsuario"></h2>
                     <p id="registro"></p>
@@ -120,7 +119,8 @@
                                 aria-selected="false">Mis Listas</button>
 
                             <button class="nav-link" id="amigos-tab" data-bs-toggle="tab" data-bs-target="#amigos"
-                                type="button" role="tab" aria-controls="amigos" aria-selected="false">Amigos</button>
+                                type="button" role="tab" aria-controls="amigos"
+                                aria-selected="false">Seguidores</button>
 
                             <button class="nav-link" id="nav-reviews-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-reviews" type="button" role="tab" aria-controls="nav-reviews"
@@ -140,25 +140,28 @@
                             aria-labelledby="nav-home-tab" tabindex="0">
                             <div class="container">
                                 <div class="row g-0">
-                                    <div class="col-12 col-lg-1 card vistaGeneral">
+                                    <div class="col-12 col-xl-1 card vistaGeneral">
                                         <div class="card-header text-center">
-                                            <i class="d-none d-lg-block bi bi-speedometer2 fs-1"></i>
-                                            <h3 class="d-block d-lg-none fw-bold m-0 fs-1">Resumen de actividad</h3>
+                                            <i class="d-none d-xl-block bi bi-speedometer2 fs-1"></i>
+                                            <h3 class="d-block d-xl-none fw-bold m-0 fs-1">Resumen de actividad</h3>
                                         </div>
                                         <div class="card-body">
                                             <div
-                                                class="d-flex flex-lg-column flex-row justify-content-around align-items-center text-center">
-                                                <div class="d-flex flex-column align-items-center mb-lg-3">
-                                                    <h2 class="fw-bold">0</h2>
-                                                    <p class="fw-bold">Amigos</p>
+                                                class="d-flex flex-xl-column flex-row justify-content-around align-items-center text-center">
+                                                <div class="d-flex flex-column align-items-center my-xl-3">
+                                                    <h2 class="fw-bold" id="totalListas">0</h2>
+                                                    <p class="d-none d-xl-block fw-bold">Listas</p>
+                                                    <i class="d-block d-xl-none fs-5 bi bi bi-bookmark-fill"></i>
                                                 </div>
-                                                <div class="d-flex flex-column align-items-center mb-lg-3">
+                                                <div class="d-flex flex-column align-items-center mb-xl-3">
                                                     <h2 class="fw-bold" id="totalResenas">0</h2>
-                                                    <p class="fw-bold">Reseñas</p>
+                                                    <p class="d-none d-xl-block fw-bold">Reseñas</p>
+                                                    <i class="d-block d-xl-none fs-4 bi bi-wechat"></i>
                                                 </div>
                                                 <div class="d-flex flex-column align-items-center">
-                                                    <h2 class="fw-bold" id="totalListas">0</h2>
-                                                    <p class="fw-bold">Listas</p>
+                                                    <h2 class="fw-bold">0</h2>
+                                                    <p class="d-none d-xl-block fw-bold">Seguidores</p>
+                                                    <i class="d-block d-xl-none fs-4 bi bi-people-fill"></i>
                                                 </div>
                                             </div>
                                         </div>

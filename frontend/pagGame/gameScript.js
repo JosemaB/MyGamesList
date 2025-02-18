@@ -1,5 +1,5 @@
 import { detallesDelJuego, mostrarCapturas } from '../js/API.js';
-import { borrarResena, limpiarHTML, obtenerEstrellas, mostrarPlataforma, fotoUsuario, nombreUsuario, sinResultado, obtenerListas, alertDanger, borrarAlerta, spinner, alertSuccess, borrarSpinner } from '../js/funciones.js';
+import { mostrarToast, borrarResena, limpiarHTML, obtenerEstrellas, mostrarPlataforma, fotoUsuario, nombreUsuario, sinResultado, obtenerListas, alertDanger, borrarAlerta, spinner, alertSuccess, borrarSpinner } from '../js/funciones.js';
 
 document.addEventListener('DOMContentLoaded', iniciarInfoGame);
 // Declaración del objeto global de estado
@@ -443,6 +443,7 @@ async function iniciarInfoGame() {
                         button.style.display = 'inline-block';
                     });
                 } else {
+                    mostrarToast('La reseña se ha borrado correctamente', 'success');
                     tarjetaAEliminar.remove(); // Eliminar la tarjeta del DOM                   
                 }
             }
@@ -1048,5 +1049,5 @@ async function iniciarInfoGame() {
         document.getElementById('contenidoTotal').style.display = 'none';  // Oculta
         document.querySelector('footer').style.display = 'block';
     }
-    
+
 }
