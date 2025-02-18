@@ -1,4 +1,4 @@
-import { sinResultado, redesSociales, obtenerDatosUsuario, formatDate, spinner, borrarSpinner } from '../../js/funciones.js';
+import { sinResultado, redesSociales, obtenerDatosUsuario, formatDate, spinner, borrarSpinner, limpiarHTML, alertDanger, alertSuccess } from '../../js/funciones.js';
 
 document.addEventListener('DOMContentLoaded', iniciarUsuario);
 
@@ -18,11 +18,19 @@ async function iniciarUsuario() {
         borrarSpinner(divAlertasUsuario);
         usuarioNoEncontrado();
     } else {
+        /*Los datos del usuario que inicio sesion */
+        const usuarioSession = JSON.parse(localStorage.getItem("usuarioData"));
 
+        const idUsuario = datosUsuario.contenidoUsuario.id_usuario;
         const listasDeJuegos = await obtenerListas(datosUsuario);
-        const obtenerListResenas = await obtenerResenasUsuario(datosUsuario.contenidoUsuario.id_usuario);
-        console.log(listasDeJuegos);
-        console.log(obtenerListResenas);
+        const obtenerListResenas = await obtenerResenasUsuario(idUsuario);
+
+        if (usuarioSession && usuarioSession.id !== idUsuario) {
+            const isSeguimiento = await estadoSeguimiento(usuarioSession.id, idUsuario);
+            if (isSeguimiento.success) {
+                mostrarBotonSeguimiento(isSeguimiento);
+            }
+        }
         perfilInformacion(datosUsuario);
         mostrarListas();
         mostrarResenasUsuario();
@@ -74,7 +82,159 @@ async function iniciarUsuario() {
             }
             redesSociales(discord, steam, youtube);
         }
+        /*Segumiento */
+        function mostrarBotonSeguimiento(isSeguimiento) {
+            const divBoton = document.getElementById('botonSeguimiento');
 
+            if (isSeguimiento.sigue) {
+                const button = document.createElement("button");
+                button.type = "button";
+                button.setAttribute("data-bs-toggle", "modal");
+                button.setAttribute("data-bs-target", "#deleteSeguimiento");
+                button.className = "mb-4 btn btn-outline-danger";
+
+                const icon = document.createElement("i");
+                icon.className = "bi bi-person-x-fill me-1";
+
+                button.appendChild(icon);
+                button.appendChild(document.createTextNode(" Dejar de seguir"));
+
+                divBoton.appendChild(button);
+
+            } else {
+                const button = document.createElement("button");
+                button.type = "button";
+                button.setAttribute("data-bs-toggle", "modal");
+                button.setAttribute("data-bs-target", "#confirmSeguimiento");
+                button.className = "mb-4 btn btn-outline-success";
+
+                const icon = document.createElement("i");
+                icon.className = "bi bi-person-plus-fill me-1";
+
+                button.appendChild(icon);
+                button.appendChild(document.createTextNode(" Seguir"));
+
+                divBoton.appendChild(button);
+            }
+        }
+        async function estadoSeguimiento(usuarioSession, idUsuario) {
+            const datos = {
+                idUsuario: usuarioSession,
+                idSeguido: idUsuario
+            }
+            const response = await fetch('http://localhost:3000/backend/helpers/getEstadoSeguimiento.php', {
+                method: 'POST',
+                credentials: "include",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datos) // Enviamos los datos como JSON
+            });
+            // Verificamos si la respuesta es correcta
+            if (!response.ok) {
+                throw new Error('Error en la respuesta de PHP');
+            }
+
+            // Convertimos la respuesta en JSON
+            const data = await response.json();
+            return data;
+        }
+        /*Agregar seguimiento */
+        document.getElementById('confirmarSeguimientoBTN')?.addEventListener('click', async (e) => {
+            const alerta = document.getElementById('alertaConfirmSeguimiento');
+            e.preventDefault();
+
+            document.querySelectorAll("#confirmSeguimiento .modal-footer button").forEach(button => {
+                button.style.display = "none";
+            });
+
+            const elementSpinner = spinner();
+            elementSpinner.style.margin = 'auto';
+            alerta.appendChild(elementSpinner);
+
+            const data = await agregarSeguimiento(usuarioSession.id, idUsuario);
+            console.log(data);
+            borrarSpinner(alerta);
+
+            if (!data["success"]) {
+                // Mostrar el mensaje de error
+                alerta.appendChild(alertDanger(data.error[key]));
+            } else if (data["success"]) {
+                alerta.appendChild(alertSuccess(data["exito"]));
+            }
+
+        });
+        async function agregarSeguimiento(idUsuario, idSeguido) {
+            const datos = {
+                idUsuario: idUsuario,
+                idSeguido: idSeguido
+            }
+            const response = await fetch('http://localhost:3000/backend/controllers/controllerUsuario/agregarSeguimiento.php', {
+                method: 'POST',
+                credentials: "include",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datos) // Enviamos los datos como JSON
+            });
+            // Verificamos si la respuesta es correcta
+            if (!response.ok) {
+                throw new Error('Error en la respuesta de PHP');
+            }
+
+            // Convertimos la respuesta en JSON
+            const data = await response.json();
+            return data;
+        }
+
+
+        /*Eliminar seguimiento */
+        document.getElementById('eliminarSeguimientoBTN')?.addEventListener('click', async (e) => {
+            const alerta = document.getElementById('alertaDeleteSeguimiento');
+            e.preventDefault();
+
+            document.querySelectorAll("#deleteSeguimiento .modal-footer button").forEach(button => {
+                button.style.display = "none";
+            });
+
+            const elementSpinner = spinner();
+            elementSpinner.style.margin = 'auto';
+            alerta.appendChild(elementSpinner);
+
+            const data = await eliminarSeguimiento(usuarioSession.id, idUsuario);
+            console.log(data);
+            borrarSpinner(alerta);
+
+            if (!data["success"]) {
+                // Mostrar el mensaje de error
+                alerta.appendChild(alertDanger(data.error[key]));
+            } else if (data["success"]) {
+                alerta.appendChild(alertSuccess(data["exito"]));
+            }
+        });
+
+        async function eliminarSeguimiento(idUsuario, idSeguido) {
+            const datos = {
+                idUsuario: idUsuario,
+                idSeguido: idSeguido
+            }
+            const response = await fetch('http://localhost:3000/backend/controllers/controllerUsuario/eliminarSeguimiento.php', {
+                method: 'POST',
+                credentials: "include",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datos) // Enviamos los datos como JSON
+            });
+            // Verificamos si la respuesta es correcta
+            if (!response.ok) {
+                throw new Error('Error en la respuesta de PHP');
+            }
+
+            // Convertimos la respuesta en JSON
+            const data = await response.json();
+            return data;
+        }
         /*Listas */
         function mostrarListas() {
             const divListas = document.getElementById('contenidoUsuarioListas');

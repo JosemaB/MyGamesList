@@ -109,10 +109,7 @@
                     </div>
                     <h2 id="nombreUsuario"></h2>
                     <p id="registro"></p>
-                    <button type="button" class="mb-4 btn btn-outline-success"><i
-                            class="bi bi-person-plus-fill me-1"></i> Seguir</button>
-                    <button type="button" class="mb-4 btn btn-outline-danger"><i class="bi bi-person-x-fill me-1"></i>
-                        Dejar de seguir</button>
+                    <div id="botonSeguimiento"></div>
 
                     <div class="col-12" id="acercaDeMi"></div>
 
@@ -146,29 +143,51 @@
             </div>
         </div>
     </main>
-    <!-- Modal de confirmación de amistad -->
-    <div class="modal fade" id="confirmDeleteResenaModal" tabindex="-1" aria-labelledby="confirmDeleteResenaModalLabel"
+
+    <!-- Modal de confirmación de seguimiento -->
+    <div class="modal fade" id="confirmSeguimiento" tabindex="-1" aria-labelledby="confirmSeguimientoModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="confirmDeleteResenaModalLabel">Confirmar eliminación</h5>
+                    <h5 class="modal-title" id="confirmSeguimientoModalLabel">Confirmar seguimiento</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center">
-                    ¿Estás seguro de que deseas agregar?
+                    ¿Seguro que quieres seguir a esta persona?
                 </div>
                 <div class="modal-footer">
-                    <div class="col-12 m-0 mt-2 p-0 text-center" id="alertaResena"></div>
-                    <div class="col-12 m-0 mt-2 p-0 text-center" id="alertaConfirmResenaDelete"></div>
-                    <div class="col-12 m-0 mt-2 p-0 text-center" id="alertasDeleteResena"></div>
+                    <div class="col-12 m-0 mt-2 p-0 text-center" id="alertaConfirmSeguimiento"></div>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-danger" id="confirmDeleteResenaButton">Eliminar</button>
+                    <button type="button" class="btn btn-success" id="confirmarSeguimientoBTN">Aceptar</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Modal de confirmación de eliminacion de seguimiento -->
+    <div class="modal fade" id="deleteSeguimiento" tabindex="-1" aria-labelledby="deleteSeguimientoModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteSeguimientoModalLabel">Eliminar seguimiento</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    ¿Seguro que quieres dejar de seguir a esta persona?
+                </div>
+                <div class="modal-footer">
+                    <div class="col-12 m-0 mt-2 p-0 text-center" id="alertaDeleteSeguimiento"></div>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="eliminarSeguimientoBTN">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!--Modal para crear una lista nueva de juegos-->
     <div class="modal fade" id="crearListaModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
