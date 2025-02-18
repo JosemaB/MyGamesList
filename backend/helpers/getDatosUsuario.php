@@ -14,7 +14,7 @@ try {
         $conexion = $baseDeDatos->getConnection();
 
         // Consulta SQL para obtener los datos de la tabla usuarios según id_lista
-        $sql = "SELECT sobremi, steam, youtube, discord FROM usuarios WHERE id_usuario = ?";
+        $sql = "SELECT * FROM usuarios WHERE id_usuario = ?";
 
         // Preparar la consulta
         $stmt = $conexion->prepare($sql);

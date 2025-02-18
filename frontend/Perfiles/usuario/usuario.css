@@ -1,0 +1,52 @@
+/*Botones de redes sociales*/
+.btnRedesSociales {
+    border: none;
+    border-radius: 100%;
+    /* Bordes redondeados */
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: background-color 0.3s ease;
+}
+
+/* Estilo específico para el botón de Steam */
+.steam {
+    background-color: #1b2838;
+    /* Color azulillo de Steam */
+}
+
+.steam:hover {
+    background-color: #2a475e;
+    /* Color más claro al pasar el ratón */
+}
+
+/* Estilo específico para el botón de YouTube */
+.youtube {
+    background-color: #ff0000;
+    /* Color rojo de YouTube */
+}
+
+.youtube:hover {
+    background-color: #cc0000;
+    /* Color más oscuro al pasar el ratón */
+}
+
+/* Estilo específico para el botón de Discord */
+.discord {
+    background-color: #7289da;
+    /* Color morado de Discord */
+}
+
+.discord:hover {
+    background-color: #5a6da8;
+    /* Color más oscuro al pasar el ratón */
+}
+
+/*Avatar*/
+.avatar img {
+    border-radius: 100%;
+    width: 200px;
+}

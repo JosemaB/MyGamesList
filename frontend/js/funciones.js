@@ -111,7 +111,57 @@ export function sinResultado() {
 
     return container;
 }
+export function redesSociales(discord, steam, youtube) {
+    if (discord) {
+        document.getElementById("discordBtn").disabled = false;
+        document.getElementById("discordBtn").setAttribute("data-bs-title", discord);
+        
+        /*Inicializamos los tooltips por si tenemos luego bootrap me dio este comando en la documentación */
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+    } else {
+        document.getElementById("discordBtn").disabled = true;
+    }
 
+    if (steam) {
+        document.getElementById("steamBtn").disabled = false;
+        document.getElementById("steamBtn").onclick = function () {
+            window.open(steam, '_blank');
+        };
+    } else {
+        document.getElementById("steamBtn").disabled = true;
+    }
+
+    if (youtube) {
+        document.getElementById("youtubeBtn").disabled = false;
+        document.getElementById("youtubeBtn").onclick = function () {
+            window.open(youtube, '_blank');
+        };
+    } else {
+        document.getElementById("youtubeBtn").disabled = true;
+    }
+}
+export async function obtenerDatosUsuario(idUsuario) {
+    const datos = {
+        idUsuario: idUsuario
+    }
+    const response = await fetch('http://localhost:3000/backend/helpers/getDatosUsuario.php', {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(datos) // Enviamos los datos como JSON
+    });
+    // Verificamos si la respuesta es correcta
+    if (!response.ok) {
+        throw new Error('Error en la respuesta de PHP');
+    }
+
+    // Convertimos la respuesta en JSON
+    const data = await response.json();
+    return data;
+}
 export function mostrarToast(mensaje, tipo) {
     // Buscar el contenedor de toasts
     let toastContainer = document.getElementById('toast-container');

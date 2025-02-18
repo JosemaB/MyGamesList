@@ -1,4 +1,4 @@
-import { mostrarToast, borrarResena, alertDanger, alertSuccess, spinner, borrarAlerta, mostrarPassword, getCookie, formatDate, obtenerListas, limpiarHTML, borrarSpinner } from '../../js/funciones.js';
+import { redesSociales, obtenerDatosUsuario, mostrarToast, borrarResena, alertDanger, alertSuccess, spinner, borrarAlerta, mostrarPassword, getCookie, formatDate, obtenerListas, limpiarHTML, borrarSpinner } from '../../js/funciones.js';
 import { guardarCambiosStorage } from "../../js/guardian.js";
 
 const sesionToken = getCookie('sesion_token');
@@ -11,7 +11,7 @@ async function iniciarPerfil() {
 
         /*Los datos del usuario */
         const usuarioData = JSON.parse(localStorage.getItem("usuarioData"));
-        const datosRedesYSobreMi = await obtenerRedesYSobremi(usuarioData.id);
+        const datosRedesYSobreMi = await obtenerDatosUsuario(usuarioData.id); /*Obtiene los datos de redes sociales y sobre mi lo llame asi porque lo uso en la pagina de usuarios*/
         const listasDeJuegos = await obtenerListas(usuarioData);
         const obtenerListResenas = await obtenerResenasUsuario(usuarioData.id);
         console.log(datosRedesYSobreMi);
@@ -32,9 +32,7 @@ async function iniciarPerfil() {
         /*Cargamos la seccion config */
         configPerfil();
 
-        /*Inicializamos los tooltips por si tenemos luego bootrap me dio este comando en la documentación */
-        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
 
         /*Contenido Main */
         //Obtenemos el formulario
@@ -63,27 +61,6 @@ async function iniciarPerfil() {
 
         }
 
-        async function obtenerRedesYSobremi(idUsuario) {
-            const datos = {
-                idUsuario: idUsuario
-            }
-            const response = await fetch('http://localhost:3000/backend/helpers/getRedesYSobremi.php', {
-                method: 'POST',
-                credentials: "include",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(datos) // Enviamos los datos como JSON
-            });
-            // Verificamos si la respuesta es correcta
-            if (!response.ok) {
-                throw new Error('Error en la respuesta de PHP');
-            }
-
-            // Convertimos la respuesta en JSON
-            const data = await response.json();
-            return data;
-        }
         async function guardarRedesYSobremi(datos) {
             const response = await fetch('http://localhost:3000/backend/controllers/controllerPerfilMain/agregarContenidoUsuario.php', {
                 method: 'POST',
@@ -102,32 +79,7 @@ async function iniciarPerfil() {
             const data = await response.json();
             return data;
         }
-        function redesSociales(discord, steam, youtube) {
-            if (discord) {
-                document.getElementById("discordBtn").disabled = false;
-                document.getElementById("discordBtn").setAttribute("data-bs-title", discord);
-            } else {
-                document.getElementById("discordBtn").disabled = true;
-            }
 
-            if (steam) {
-                document.getElementById("steamBtn").disabled = false;
-                document.getElementById("steamBtn").onclick = function () {
-                    window.open(steam, '_blank');
-                };
-            } else {
-                document.getElementById("steamBtn").disabled = true;
-            }
-            
-            if (youtube) {
-                document.getElementById("youtubeBtn").disabled = false;
-                document.getElementById("youtubeBtn").onclick = function () {
-                    window.open(youtube, '_blank');
-                };
-            } else {
-                document.getElementById("youtubeBtn").disabled = true;
-            }
-        }
         formularioSobreMi.addEventListener('submit', async (e) => {
             e.preventDefault();
             const alerta = document.getElementById('sobreMiAlerta');
@@ -1638,7 +1590,6 @@ async function iniciarPerfil() {
             document.getElementById('nombreUsuario').innerText = nombre;
             document.getElementById('registro').innerText = `Miembro desde: ${formatDate(fecha_registro)}`;
             document.getElementById('imgUsuario').src = (avatar === null ? '/img/avatares/sinAvatar.png' : avatar);  //Por si el avatar es null
-
         }
         function configPerfil() {
             const divEmail = document.getElementById('v-pills-email');
