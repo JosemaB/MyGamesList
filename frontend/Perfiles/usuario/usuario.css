@@ -51,6 +51,129 @@
     width: 200px;
 }
 
+/*  Modal */
+.modal-content {
+    background-color: #1A233A;
+}
+
+.modal-footer button:disabled {
+    background-color: #1A233A;
+    border: 1px solid white;
+}
+
+.modal-footer button {
+    background-color: #1d2e59;
+    color: white;
+    border: 1px solid white;
+}
+
+.modal-footer button:hover {
+    background-color: #131e3b;
+    color: white;
+    border: 1px solid white;
+}
+
+/*Lista de juegos*/
+.cardListaModalJuego {
+    background-color: #1A233A;
+    color: aliceblue;
+}
+
+.tituloLista:hover,
+.fechaListaJuego:hover {
+    color: #0855c7;
+    cursor: pointer;
+}
+
+/*Dentro de la lista la card*/
+.cardListJuego {
+    position: relative;
+    overflow: hidden;
+    height: 300px;
+}
+
+.cardListJuego a {
+    width: 100%;
+    height: 100%;
+}
+
+.cardListJuego .card-img {
+    transition: opacity 0.3s ease-in-out;
+    /* Transición suave para la opacidad */
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+.cardListJuego .card-title {
+    text-wrap: auto;
+}
+
+.cardListJuego:hover .card-img {
+    opacity: 0.6;
+    /* Oscurecer la imagen al pasar el ratón */
+}
+
+.cardListJuego .card-img-overlay {
+    transition: background-color 0.3s ease-in-out;
+    background-color: rgba(0, 0, 0, 0);
+    /* Fondo transparente inicialmente */
+}
+
+.cardListJuego:hover .card-img-overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Fondo oscuro al pasar el ratón */
+}
+
+.titleJuegoList {
+    color: white;
+    /* Color blanco para el texto del título */
+    visibility: hidden;
+    /* Título invisible inicialmente */
+    opacity: 0;
+    /* Título invisible inicialmente */
+    transition: opacity 0.3s ease, visibility 0s ease 0.3s;
+    /* Transición suave */
+    position: absolute;
+    top: 50%;
+    /* Centrado verticalmente */
+    left: 50%;
+    /* Centrado horizontalmente */
+    transform: translate(-50%, -50%);
+    /* Centrado perfecto */
+}
+
+.cardListJuego:hover .titleJuegoList {
+    visibility: visible;
+    /* Hacer visible al pasar el ratón */
+    opacity: 1;
+    /* Hacer el título completamente visible */
+    transition: opacity 0.3s ease, visibility 0s ease 0s;
+    /* Transición de visibilidad y opacidad */
+}
+
+/* Resenas */
+.mensajePersonalizado {
+    background-color: #1a2950;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    color: #e6e1e1;
+    text-align: justify;
+    border-radius: 20px;
+}
+
+.mensajePersonalizado .card-body {
+    background: initial;
+    /* Resetea los estilos heredados */
+    padding: 16px;
+}
+
+.perfil-img {
+    width: 35px;
+    height: 35px;
+    border-radius: 10px;
+    margin-right: 10px;
+}
+
 /*Cards */
 .card {
     border: none;

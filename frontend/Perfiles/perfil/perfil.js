@@ -834,7 +834,7 @@ async function iniciarPerfil() {
 
         }
 
-        /*Reseñas*/
+        /*Resenas*/
         async function obtenerResenasUsuario(idUsuario) {
             const datos = {
                 idUsuario: idUsuario
