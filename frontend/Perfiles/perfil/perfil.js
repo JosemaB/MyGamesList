@@ -1,4 +1,4 @@
-import { borrarResena, alertDanger, alertSuccess, spinner, borrarAlerta, mostrarPassword, getCookie, formatDate, obtenerListas, limpiarHTML, borrarSpinner } from '../../js/funciones.js';
+import { mostrarToast, borrarResena, alertDanger, alertSuccess, spinner, borrarAlerta, mostrarPassword, getCookie, formatDate, obtenerListas, limpiarHTML, borrarSpinner } from '../../js/funciones.js';
 import { guardarCambiosStorage } from "../../js/guardian.js";
 
 const sesionToken = getCookie('sesion_token');
@@ -32,12 +32,16 @@ async function iniciarPerfil() {
         /*Cargamos la seccion config */
         configPerfil();
 
+        /*Inicializamos los tooltips por si tenemos luego bootrap me dio este comando en la documentación */
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
 
         /*Contenido Main */
         //Obtenemos el formulario
         const formularioSobreMi = document.getElementById('formSobreMi');
 
         function mostrarMain() {
+
             const { total_listas } = listasDeJuegos.listas;
             /*Total de listas */
             document.getElementById('totalListas').innerHTML = total_listas;
@@ -45,7 +49,15 @@ async function iniciarPerfil() {
 
             if (datosRedesYSobreMi) {
                 if (datosRedesYSobreMi.success) {
+                    const { discord, sobremi, steam, youtube } = datosRedesYSobreMi.contenidoUsuario;
+                    /*Asignamos el valor sobre mi en el formulario */
+                    document.getElementById('discordTag').value = discord;
+                    document.getElementById('sobreMi').value = sobremi;
+                    document.getElementById('steamLink').value = steam;
+                    document.getElementById('youtubeLink').value = youtube;
 
+                    /*Llamamos a la funcion redesSociales*/
+                    redesSociales(discord, steam, youtube);
                 }
             }
 
@@ -90,7 +102,32 @@ async function iniciarPerfil() {
             const data = await response.json();
             return data;
         }
+        function redesSociales(discord, steam, youtube) {
+            if (discord) {
+                document.getElementById("discordBtn").disabled = false;
+                document.getElementById("discordBtn").setAttribute("data-bs-title", discord);
+            } else {
+                document.getElementById("discordBtn").disabled = true;
+            }
 
+            if (steam) {
+                document.getElementById("steamBtn").disabled = false;
+                document.getElementById("steamBtn").onclick = function () {
+                    window.open(steam, '_blank');
+                };
+            } else {
+                document.getElementById("steamBtn").disabled = true;
+            }
+            
+            if (youtube) {
+                document.getElementById("youtubeBtn").disabled = false;
+                document.getElementById("youtubeBtn").onclick = function () {
+                    window.open(youtube, '_blank');
+                };
+            } else {
+                document.getElementById("youtubeBtn").disabled = true;
+            }
+        }
         formularioSobreMi.addEventListener('submit', async (e) => {
             e.preventDefault();
             const alerta = document.getElementById('sobreMiAlerta');
@@ -446,7 +483,7 @@ async function iniciarPerfil() {
                                         });
                                         // Cerrar el modal después de la acción
                                         renameModal.hide();
-                                        mostrarToast('La lista se ha renombrdo correctamente', 'success');
+                                        mostrarToast('La lista se ha renombrado correctamente', 'success');
                                     }
                                     // Cambiar el nombre de la lista (por ejemplo, actualizar el DOM) "A tiempo real"
                                     title.textContent = nuevoNombre.value;
@@ -1603,56 +1640,6 @@ async function iniciarPerfil() {
             document.getElementById('imgUsuario').src = (avatar === null ? '/img/avatares/sinAvatar.png' : avatar);  //Por si el avatar es null
 
         }
-        function mostrarToast(mensaje, tipo) {
-            // Buscar el contenedor de toasts
-            let toastContainer = document.getElementById('toast-container');
-
-            if (!toastContainer) {
-                // Si no existe, lo creamos y lo agregamos al body
-                toastContainer = document.createElement('div');
-                toastContainer.id = 'toast-container';
-                toastContainer.className = 'position-fixed top-0 end-0 p-3';
-                toastContainer.style.zIndex = 1050;
-                document.body.appendChild(toastContainer);
-            }
-
-            // Crear el toast
-            const toastElement = document.createElement('div');
-            toastElement.classList.add('toast', 'show');
-            toastElement.setAttribute('role', 'alert');
-            toastElement.setAttribute('aria-live', 'assertive');
-            toastElement.setAttribute('aria-atomic', 'true');
-
-            toastElement.innerHTML = `
-                <div class="rounded-3">
-                    <div class="toast-header bg-${tipo} text-white">
-                        <strong class="me-auto">Notificación</strong>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
-                    </div>
-                    <div class="toast-body bg-${tipo}">
-                        ${mensaje}
-                    </div>
-                </div>
-            `;
-
-            // Agregar el toast al contenedor
-            toastContainer.appendChild(toastElement);
-
-            // Inicializar el toast con Bootstrap
-            const toast = new bootstrap.Toast(toastElement, {
-                autohide: true,
-                delay: 3000
-            });
-
-            // Mostrar el toast
-            toast.show();
-
-            // Remover el toast después de que desaparezca
-            toastElement.addEventListener('hidden.bs.toast', () => {
-                toastElement.remove();
-            });
-        }
-
         function configPerfil() {
             const divEmail = document.getElementById('v-pills-email');
             const divContrasena = document.getElementById('v-pills-contrasena');

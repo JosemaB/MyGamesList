@@ -111,6 +111,58 @@ export function sinResultado() {
 
     return container;
 }
+
+export function mostrarToast(mensaje, tipo) {
+    // Buscar el contenedor de toasts
+    let toastContainer = document.getElementById('toast-container');
+
+    if (!toastContainer) {
+        // Si no existe, lo creamos y lo agregamos al body
+        toastContainer = document.createElement('div');
+        toastContainer.id = 'toast-container';
+        toastContainer.className = 'position-fixed top-0 end-0 p-3';
+        toastContainer.style.zIndex = 1050;
+        document.body.appendChild(toastContainer);
+    }
+
+    // Crear el toast
+    const toastElement = document.createElement('div');
+    toastElement.classList.add('toast', 'show');
+    toastElement.setAttribute('role', 'alert');
+    toastElement.setAttribute('aria-live', 'assertive');
+    toastElement.setAttribute('aria-atomic', 'true');
+
+    toastElement.innerHTML = `
+        <div class="rounded-3">
+            <div class="toast-header bg-${tipo} text-white">
+                <strong class="me-auto">Notificación</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body bg-${tipo}">
+                ${mensaje}
+            </div>
+        </div>
+    `;
+
+    // Agregar el toast al contenedor
+    toastContainer.appendChild(toastElement);
+
+    // Inicializar el toast con Bootstrap
+    const toast = new bootstrap.Toast(toastElement, {
+        autohide: true,
+        delay: 3000
+    });
+
+    // Mostrar el toast
+    toast.show();
+
+    // Remover el toast después de que desaparezca
+    toastElement.addEventListener('hidden.bs.toast', () => {
+        toastElement.remove();
+    });
+}
+
+
 export async function borrarResena(datos) {
     const response = await fetch('http://localhost:3000/backend/controllers/controllerResenas/borrarResena.php', {
         method: 'POST',

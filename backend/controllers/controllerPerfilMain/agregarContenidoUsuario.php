@@ -59,7 +59,7 @@ try {
 
                     // Ejecutar la consulta
                     if ($stmt->execute()) {
-                        $exito = "Los datos se han actualizado correctamente";
+                        $exito = "Los datos se actualizaron con éxito. Recarga la página para ver los cambios";
                     } else {
                         $error = "Error al actualizar los datos: " . $stmt->error;
                     }
