@@ -36,6 +36,9 @@ try {
         } else if ($discord && !validarDiscord($discord)) {
             $error = ["discordTag" => "El tag de Discord no es válido"];
 
+        } else if ($sobremi && strlen($sobremi) > 500) {
+            // Si el texto de "sobremi" tiene más de 50 caracteres, se agrega el error.
+            $error["sobremi"] = "El texto de 'Sobre mí' no puede exceder los 500 caracteres";
         } else {
             // Verificar si el usuario existe
             $sql_check_list = "SELECT sobremi, steam, youtube, discord FROM usuarios WHERE id_usuario = ?";
@@ -51,7 +54,7 @@ try {
 
                 } else {
                     //El usuario ya tiene sus datos si quiere enviar nuevos tiene que enviar todos los campos(sus datos completo sino se borran los anteriores)
-                    
+
                     // Consulta SQL para actualizar los campos
                     $sql = "UPDATE usuarios SET sobremi = ?, steam = ?, youtube = ?, discord = ? WHERE id_usuario = ?";
                     $stmt = $conexion->prepare($sql);
