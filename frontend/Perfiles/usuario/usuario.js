@@ -1,4 +1,4 @@
-import { sinResultado, redesSociales, obtenerDatosUsuario, formatDate, spinner, borrarSpinner, limpiarHTML, alertDanger, alertSuccess } from '../../js/funciones.js';
+import { eliminarSeguimiento, sinResultado, redesSociales, obtenerDatosUsuario, formatDate, spinner, borrarSpinner, limpiarHTML, alertDanger, alertSuccess } from '../../js/funciones.js';
 
 document.addEventListener('DOMContentLoaded', iniciarUsuario);
 
@@ -26,7 +26,7 @@ async function iniciarUsuario() {
         const obtenerListResenas = await obtenerResenasUsuario(idUsuario);
         if (usuarioSession && usuarioSession.id !== idUsuario) {
             const isSeguimiento = await estadoSeguimiento(usuarioSession.id, idUsuario);
-            
+
             if (isSeguimiento.success) {
                 mostrarBotonSeguimiento(isSeguimiento);
             }
@@ -202,7 +202,6 @@ async function iniciarUsuario() {
             alerta.appendChild(elementSpinner);
 
             const data = await eliminarSeguimiento(usuarioSession.id, idUsuario);
-            console.log(data);
             borrarSpinner(alerta);
 
             if (!data["success"]) {

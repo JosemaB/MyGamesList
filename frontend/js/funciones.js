@@ -111,11 +111,65 @@ export function sinResultado() {
 
     return container;
 }
+export async function eliminarSeguimiento(idUsuario, idSeguido) {
+    const datos = {
+        idUsuario: idUsuario,
+        idSeguido: idSeguido
+    }
+    const response = await fetch('http://localhost:3000/backend/controllers/controllerUsuario/eliminarSeguimiento.php', {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(datos) // Enviamos los datos como JSON
+    });
+    // Verificamos si la respuesta es correcta
+    if (!response.ok) {
+        throw new Error('Error en la respuesta de PHP');
+    }
+
+    // Convertimos la respuesta en JSON
+    const data = await response.json();
+    return data;
+}
+export function cardMensajeError(mensaje, div) {
+    // Crear el contenedor principal (card)
+    const card = document.createElement('div');
+    card.classList.add('card', 'text-center');
+
+    // Crear el cuerpo de la card
+    const cardBody = document.createElement('div');
+    cardBody.classList.add('card-body', 'bg-danger');
+
+    // Crear el título de la card
+    const cardTitle = document.createElement('h5');
+    cardTitle.classList.add('card-title');
+    cardTitle.textContent = '¡Ups! Algo salió mal';
+
+    // Crear el texto de la card
+    const cardText = document.createElement('p');
+    cardText.classList.add('card-text');
+    cardText.textContent = mensaje;
+
+    // Crear el ícono de carita triste
+    const sadFace = document.createElement('span');
+    sadFace.classList.add('fs-1', 'text-warning');
+    sadFace.innerHTML = '&#128577;'; // Carita triste en código HTML
+
+    // Añadir los elementos a la estructura
+    cardBody.appendChild(cardTitle);
+    cardBody.appendChild(cardText);
+    cardBody.appendChild(sadFace);
+    card.appendChild(cardBody);
+    div.appendChild(card);
+}
+
 export function redesSociales(discord, steam, youtube) {
     if (discord) {
         document.getElementById("discordBtn").disabled = false;
         document.getElementById("discordBtn").setAttribute("data-bs-title", discord);
-        
+
         /*Inicializamos los tooltips por si tenemos luego bootrap me dio este comando en la documentación */
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));

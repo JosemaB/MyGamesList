@@ -141,16 +141,14 @@
 /*Home*/
 .vistaGeneral .card-header,
 .juegosDestacados .card-header,
-.cardListVacia .card-header,
-.cardRelacion .card-header {
+.cardListVacia .card-header {
     background-color: #2c376e;
     color: aliceblue;
 }
 
 .vistaGeneral .card-body,
 .juegosDestacados .card-body,
-.cardListVacia .card-body,
-.cardRelacion .card-body {
+.cardListVacia .card-body {
     background-color: #1A233A;
     color: aliceblue;
 }
@@ -160,6 +158,15 @@
     border-radius: 15px;
     width: 250px;
     margin: 10px;
+    background-color: #1A233A;
+    color: aliceblue;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.cardRelacion:hover {
+    background-color: #121829;
+    color: rgb(190, 197, 204);
+
 }
 
 .cardRelacion img {
@@ -167,6 +174,28 @@
     height: 100px;
     object-fit: cover;
     margin-bottom: 10px;
+}
+
+/*Lista pantallas perqueñas*/
+#tabDropdown {
+    background: #1d2e59;
+    color: white;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="white"><path d="M10 12l5-5H5l5 5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 2px; /* Asegúrate de que el texto no se superponga con la flecha */
+    text-align: center; /* Centra el texto */
+    width: 100%; /* Asegúrate de que el select ocupe todo el ancho disponible */
+    margin-bottom: 10px;
+}
+
+#tabDropdown option {
+    background: #15213f;
+    text-align: center; /* Centra el texto en las opciones */
+}
+
+#tabDropdown:focus {
+    box-shadow: none;
 }
 
 /*Configuracion*/
@@ -242,6 +271,12 @@
     background-color: #1A233A;
     border-radius: 20px;
     color: aliceblue;
+}
+
+.cardLinkAmigo .card-title {
+    text-overflow: ellipsis;
+    text-wrap: initial;
+    overflow: hidden;
 }
 
 .tituloLista:hover,

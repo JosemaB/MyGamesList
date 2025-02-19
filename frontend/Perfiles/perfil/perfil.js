@@ -1,4 +1,4 @@
-import { redesSociales, obtenerDatosUsuario, mostrarToast, borrarResena, alertDanger, alertSuccess, spinner, borrarAlerta, mostrarPassword, getCookie, formatDate, obtenerListas, limpiarHTML, borrarSpinner } from '../../js/funciones.js';
+import { eliminarSeguimiento, cardMensajeError, redesSociales, obtenerDatosUsuario, mostrarToast, borrarResena, alertDanger, alertSuccess, spinner, borrarAlerta, mostrarPassword, getCookie, formatDate, obtenerListas, limpiarHTML, borrarSpinner } from '../../js/funciones.js';
 import { guardarCambiosStorage } from "../../js/guardian.js";
 
 const sesionToken = getCookie('sesion_token');
@@ -29,13 +29,44 @@ async function iniciarPerfil() {
         /*Mostramos las listas */
         mostrarListas();
 
+        /*Relaciones */
+        mostrarRelaciones(relaciones);
+
         /*Mostramos las reseñas del usuario */
         mostrarResenasUsuario()
 
         /*Cargamos la seccion config */
         configPerfil();
 
+        // Sincronizar el <select> al cargar la página
+        syncDropdownWithActiveTab();
 
+        /*Nav para moviles */
+        // Función para sincronizar el <select> con la pestaña activa
+        function syncDropdownWithActiveTab() {
+            // Obtén la pestaña activa
+            const activeTab = document.querySelector('.nav-link.active');
+            if (activeTab) {
+                // Obtén el valor de data-bs-target de la pestaña activa
+                const target = activeTab.getAttribute('data-bs-target');
+                // Establece el valor del <select> para que coincida con la pestaña activa
+                document.getElementById('tabDropdown').value = target;
+            }
+        }
+
+        // Evento para cambiar la pestaña cuando se selecciona una opción en el <select>
+        document.getElementById('tabDropdown').addEventListener('change', function () {
+            const target = this.value;
+            const tabTrigger = new bootstrap.Tab(document.querySelector('[data-bs-target="' + target + '"]'));
+            tabTrigger.show();
+        });
+
+        // Evento para sincronizar el <select> cuando se cambia de pestaña en el <nav>
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('shown.bs.tab', function () {
+                syncDropdownWithActiveTab();
+            });
+        });
 
         /*Contenido Main */
         //Obtenemos el formulario
@@ -46,7 +77,8 @@ async function iniciarPerfil() {
             const { total_listas } = listasDeJuegos.listas;
             /*Total de listas */
             document.getElementById('totalListas').innerHTML = total_listas;
-            document.getElementById('totalResenas').innerHTML = obtenerListResenas.resenas?.length || 0;
+            document.getElementById('totalResenas').innerHTML = obtenerListResenas.resenas?.length;
+            document.getElementById('totalSeguidores').innerHTML = relaciones.seguidores?.length;
 
             if (datosRedesYSobreMi) {
                 if (datosRedesYSobreMi.success) {
@@ -838,12 +870,241 @@ async function iniciarPerfil() {
         }
 
         /*Relaciones */
-
         async function obtenerRelaciones(idUsuario) {
             const datos = {
                 idUsuario: idUsuario
             };
             const response = await fetch('http://localhost:3000/backend/helpers/getRelaciones.php', {
+                method: 'POST',
+                credentials: "include",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datos) // Enviamos los datos como JSON
+            });
+            // Verificamos si la respuesta es correcta
+            if (!response.ok) {
+                throw new Error('Error en la respuesta de PHP');
+            }
+
+            // Convertimos la respuesta en JSON
+            const data = await response.json();
+            return data;
+        }
+
+        function mostrarRelaciones(relaciones) {
+            /*Pongo esto aqui porque esta relacionado con esto */
+            const linkAmigo = document.getElementById('linkAmigo');
+            linkAmigo.href = `http://localhost:5500/Perfiles/usuario/usuario.html?id=${usuarioData.id}`;
+
+
+            const divSeguidores = document.getElementById('seguidoresResultado');
+            const divSeguidos = document.getElementById('seguidosResultado');
+            if (relaciones) {
+                if (relaciones.success) {
+                    /*Mostramos a los seguidores */
+                    if (relaciones.seguidores.length > 0) {
+                        const divContainer = document.createElement('div');
+                        divContainer.className = 'container m-0';
+                        const divRow = document.createElement('div');
+                        divRow.classList.add('row', 'justify-content-center', 'd-flex');
+
+                        const fragment = document.createDocumentFragment();/*Para no maniupular tanto e ldom esto hace mas optimo la aplicacion */
+                        relaciones.seguidores.forEach(seguidor => {
+                            const divCol = document.createElement('div');
+                            divCol.classList.add('col-4', 'card', 'text-center', 'text-white', 'cardRelacion');
+                            divCol.id = `cardSeguidor-${seguidor["id_usuario"]}`;
+
+                            const aTag = document.createElement('a');
+                            aTag.href = `/Perfiles/usuario/usuario.html?id=${seguidor["id_usuario"]}`;
+                            aTag.classList.add('text-decoration-none', 'text-reset');
+
+                            const divCardBody = document.createElement('div');
+                            divCardBody.classList.add('card-body');
+
+                            const imgAvatar = document.createElement('img');
+                            imgAvatar.src = seguidor["avatar"];
+                            imgAvatar.classList.add('rounded-circle', 'mb-2');
+                            imgAvatar.alt = `Imagen de ${seguidor["nombre_usuario"]}`;
+
+                            const h5Title = document.createElement('h5');
+                            h5Title.classList.add('card-title', 'fw-bold');
+                            h5Title.title = seguidor["nombre_usuario"];
+                            h5Title.textContent = seguidor["nombre_usuario"];
+
+                            divCardBody.appendChild(imgAvatar);
+                            divCardBody.appendChild(h5Title);
+                            aTag.appendChild(divCardBody);
+                            divCol.appendChild(aTag);
+                            fragment.appendChild(divCol);
+                        });
+                        divRow.appendChild(fragment);
+                        divContainer.appendChild(divRow);
+                        divSeguidores.appendChild(divContainer);
+
+                    } else {
+                        const card = document.createElement("div");
+                        card.className = "card cardLinkAmigo my-2";
+
+                        const cardBody = document.createElement("div");
+                        cardBody.className = "card-body text-center";
+
+                        const icon = document.createElement("i");
+                        icon.className = "fs-2 bi bi-android";
+
+                        const title = document.createElement("h5");
+                        title.className = "card-title text-center";
+                        title.textContent = "¿Aún no tienes seguidores?";
+
+                        const text = document.createElement("p");
+                        text.className = "card-text text-center";
+                        text.textContent = "¡Hazlo más divertido! Comparte tu enlace con otros para que te sigan y disfruten juntos de tus listas de juegos";
+
+                        cardBody.appendChild(icon);
+                        cardBody.appendChild(title);
+                        cardBody.appendChild(text);
+                        card.appendChild(cardBody);
+                        divSeguidores.appendChild(card); // Puedes cambiar document.body por otro contenedor específico
+                    }
+
+                    /*Mostramos a los seguidos */
+                    if (relaciones.seguidos.length > 0) {
+                        const divContainer = document.createElement('div');
+                        divContainer.className = 'container m-0';
+                        const divRow = document.createElement('div');
+                        divRow.classList.add('row', 'justify-content-center', 'd-flex');
+
+                        const fragment = document.createDocumentFragment();/*Para no maniupular tanto e ldom esto hace mas optimo la aplicacion */
+                        relaciones.seguidos.forEach(siguiendo => {
+                            const divCol = document.createElement('div');
+                            divCol.classList.add('col-4', 'card', 'text-center', 'text-white', 'cardRelacion');
+                            divCol.id = `cardSeguidor-${siguiendo["id_usuario"]}`;
+
+                            const aTag = document.createElement('a');
+                            aTag.href = `/Perfiles/usuario/usuario.html?id=${siguiendo["id_usuario"]}`;
+                            aTag.classList.add('text-decoration-none', 'text-reset');
+
+                            const divCardBody = document.createElement('div');
+                            divCardBody.classList.add('card-body');
+
+                            const imgAvatar = document.createElement('img');
+                            imgAvatar.src = siguiendo["avatar"];
+                            imgAvatar.classList.add('rounded-circle', 'mb-2');
+                            imgAvatar.alt = `Imagen de ${siguiendo["nombre_usuario"]}`;
+
+                            const h5Title = document.createElement('h5');
+                            h5Title.classList.add('card-title', 'fw-bold');
+                            h5Title.title = siguiendo["nombre_usuario"];
+                            h5Title.textContent = siguiendo["nombre_usuario"];
+
+                            const button = document.createElement('button');
+                            button.type = 'button';
+                            button.classList.add('btn', 'btn-outline-danger');
+                            button.textContent = 'Eliminar';
+
+                            // Añadir atributos para abrir el modal
+                            button.setAttribute('data-bs-toggle', 'modal');
+                            button.setAttribute('data-bs-target', '#deleteSeguimiento');
+
+                            // Evitar que se siga el enlace cuando se haga clic en el botón "Eliminar"
+                            button.addEventListener('click', async (e) => {
+                                const alerta = document.getElementById('alertaDeleteSeguimiento');
+                                e.preventDefault();
+                                borrarAlerta(alerta);
+
+                                document.querySelectorAll("#deleteSeguimiento .modal-footer button").forEach(button => {
+                                    button.style.display = "block";
+                                });
+
+                                const idSeguido = divCol.id.split("-").pop(); // Toma la última parte después del "-"
+
+                                // Lógica cuando se confirma la eliminación
+                                const eliminarSeguimientoBTN = document.getElementById('eliminarSeguimientoBTN');
+
+                                //Reiniciamos el valor
+                                eliminarSeguimientoBTN.onclick = async function () {
+
+                                    const elementSpinner = spinner();
+                                    elementSpinner.style.margin = 'auto';
+                                    alerta.appendChild(elementSpinner);
+
+                                    document.querySelectorAll("#deleteSeguimiento .modal-footer button").forEach(button => {
+                                        button.style.display = "none";
+                                    });
+                                    //Enviamos al backend lso datos
+                                    const data = await eliminarSeguimiento(usuarioData.id, idSeguido);
+
+                                    borrarSpinner(alerta);
+
+                                    if (!data["success"]) {
+                                        // Mostrar el mensaje de error
+                                        alerta.appendChild(alertDanger(data.error));
+                                    } else if (data["success"]) {
+                                        mostrarToast('¡Seguimiento eliminado con éxito!', 'success');
+                                        divCol.remove();
+
+                                        // Cerrar el modal correctamente
+                                        const deleteModalElement = document.getElementById('deleteSeguimiento');
+                                        const modalInstance = bootstrap.Modal.getInstance(deleteModalElement);
+
+                                        if (modalInstance) {
+                                            modalInstance.hide();
+                                        }
+                                    }
+                                }
+                            });
+
+
+                            divCardBody.appendChild(imgAvatar);
+                            divCardBody.appendChild(h5Title);
+                            divCardBody.appendChild(button);
+
+                            aTag.appendChild(divCardBody);
+                            divCol.appendChild(aTag);
+                            fragment.appendChild(divCol);
+                        });
+                        divRow.appendChild(fragment);
+                        divContainer.appendChild(divRow);
+                        divSeguidos.appendChild(divContainer);
+
+                    } else {
+                        const cardContainer = document.createElement('div');
+                        cardContainer.classList.add('card', 'cardLinkAmigo', 'my-2');
+
+                        const cardBody = document.createElement('div');
+                        cardBody.classList.add('card-body', 'text-center');
+
+                        const icon = document.createElement('i');
+                        icon.classList.add('fs-2', 'bi-person-fill-up');
+
+                        const title = document.createElement('h5');
+                        title.classList.add('card-title', 'text-center');
+                        title.textContent = '¿Aún no sigues a nadie?';
+
+                        const paragraph = document.createElement('p');
+                        paragraph.classList.add('card-text', 'text-center');
+                        paragraph.textContent = 'Descubre nuevos perfiles y encuentra a otros gamers como tú. ¡Invita a tus amigos y haz crecer la comunidad!';
+
+                        cardBody.appendChild(icon);
+                        cardBody.appendChild(title);
+                        cardBody.appendChild(paragraph);
+                        cardContainer.appendChild(cardBody);
+                        divSeguidos.appendChild(cardContainer);
+                    }
+                }
+
+            } else {
+                cardMensajeError('No pudimos obtener tus seguidores. Por favor, intentalo más tarde', divSeguidores);
+                cardMensajeError('No pudimos obtener tus usuarios seguidos. Por favor, intentalo más tarde', divSeguidos);
+            }
+        }
+
+        async function eliminarSeguimiento(idUsuario, idSeguido) {
+            const datos = {
+                idUsuario: idUsuario,
+                idSeguido: idSeguido
+            }
+            const response = await fetch('http://localhost:3000/backend/controllers/controllerUsuario/eliminarSeguimiento.php', {
                 method: 'POST',
                 credentials: "include",
                 headers: {
@@ -1104,7 +1365,6 @@ async function iniciarPerfil() {
                     alerta.appendChild(alertDanger(data.error));
 
                 } else {
-                    debugger;
                     let totalResenas = Number(document.getElementById('totalResenas').textContent);
                     totalResenas -= 1; // Realizar la resta
                     document.getElementById('totalResenas').innerHTML = totalResenas; // Actualizar el valor del input
