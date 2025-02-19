@@ -16,7 +16,7 @@ try {
         $conexion = $baseDeDatos->getConnection();
 
         // Consulta SQL para verificar si el usuario sigue a otra persona
-        $sql = "SELECT 1 FROM seguidores WHERE id_usuario = ? AND id_seguidor = ? LIMIT 1";
+        $sql = "SELECT 1 FROM relaciones WHERE id_usuario = ? AND id_seguidor = ? LIMIT 1";
 
         // Preparar la consulta
         $stmt = $conexion->prepare($sql);

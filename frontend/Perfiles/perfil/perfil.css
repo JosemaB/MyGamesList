@@ -141,16 +141,32 @@
 /*Home*/
 .vistaGeneral .card-header,
 .juegosDestacados .card-header,
-.cardListVacia .card-header {
+.cardListVacia .card-header,
+.cardRelacion .card-header {
     background-color: #2c376e;
     color: aliceblue;
 }
 
 .vistaGeneral .card-body,
 .juegosDestacados .card-body,
-.cardListVacia .card-body {
+.cardListVacia .card-body,
+.cardRelacion .card-body {
     background-color: #1A233A;
     color: aliceblue;
+}
+
+/*Relacion*/
+.cardRelacion {
+    border-radius: 15px;
+    width: 250px;
+    margin: 10px;
+}
+
+.cardRelacion img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-bottom: 10px;
 }
 
 /*Configuracion*/

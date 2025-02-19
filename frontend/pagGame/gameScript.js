@@ -371,14 +371,12 @@ async function iniciarInfoGame() {
                 const idJuego = estado.juego.id;
                 const imageJuego = estado.juego.background_image;
                 //enviar al backend la resena
-                const { id, nombre, avatar } = usuarioData;
+                const { id } = usuarioData;
 
                 const datos = {
-                    nombreUsuario: nombre,
                     idUsuario: id,
                     idJuego: idJuego,
                     imageJuego: imageJuego,
-                    imageUsuario: avatar,
                     contenido: reviewText,
                 }
                 const spinnerElement = spinner();
@@ -621,7 +619,7 @@ async function iniciarInfoGame() {
 
                         const profileImg = document.createElement('img');
                         profileImg.classList.add('perfil-img');
-                        profileImg.src = resena["image_usuario"];
+                        profileImg.src = resena["avatar"];
                         profileImg.alt = `Imagen usuario de ${resena["nombre_usuario"]}`;
 
                         if (usuarioData && usuarioData.id == resena.id_usuario) {

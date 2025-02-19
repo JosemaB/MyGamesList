@@ -14,6 +14,9 @@ async function iniciarPerfil() {
         const datosRedesYSobreMi = await obtenerDatosUsuario(usuarioData.id); /*Obtiene los datos de redes sociales y sobre mi lo llame asi porque lo uso en la pagina de usuarios*/
         const listasDeJuegos = await obtenerListas(usuarioData);
         const obtenerListResenas = await obtenerResenasUsuario(usuarioData.id);
+        const relaciones = await obtenerRelaciones(usuarioData.id);
+
+        console.log(relaciones);
         console.log(datosRedesYSobreMi);
         console.log(usuarioData);
 
@@ -834,6 +837,29 @@ async function iniciarPerfil() {
 
         }
 
+        /*Relaciones */
+
+        async function obtenerRelaciones(idUsuario) {
+            const datos = {
+                idUsuario: idUsuario
+            };
+            const response = await fetch('http://localhost:3000/backend/helpers/getRelaciones.php', {
+                method: 'POST',
+                credentials: "include",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datos) // Enviamos los datos como JSON
+            });
+            // Verificamos si la respuesta es correcta
+            if (!response.ok) {
+                throw new Error('Error en la respuesta de PHP');
+            }
+
+            // Convertimos la respuesta en JSON
+            const data = await response.json();
+            return data;
+        }
         /*Resenas*/
         async function obtenerResenasUsuario(idUsuario) {
             const datos = {
@@ -904,7 +930,7 @@ async function iniciarPerfil() {
                         userDiv.className = 'd-flex align-items-center';
 
                         const userImg = document.createElement('img');
-                        userImg.src = resena["image_usuario"];
+                        userImg.src = resena["avatar"];
                         userImg.className = 'img-fluid rounded-start perfil-img';
                         userImg.alt = `Imagen de ${resena["nombre_usuario"]}`;
 

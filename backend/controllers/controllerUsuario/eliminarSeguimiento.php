@@ -16,7 +16,7 @@ try {
         $conexion = $baseDeDatos->getConnection();
 
         // Consulta SQL para eliminar la relación de seguimiento
-        $sql = "DELETE FROM seguidores WHERE id_usuario = ? AND id_seguidor = ?";
+        $sql = "DELETE FROM relaciones WHERE id_usuario = ? AND id_seguidor = ?";
 
         // Preparar la consulta
         $stmt = $conexion->prepare($sql);

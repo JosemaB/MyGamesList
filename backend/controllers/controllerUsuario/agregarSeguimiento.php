@@ -16,7 +16,7 @@ try {
         $conexion = $baseDeDatos->getConnection();
 
         // Primero, comprobar si ya existe la relación de seguimiento
-        $sql = "SELECT 1 FROM seguidores WHERE id_usuario = ? AND id_seguidor = ? LIMIT 1";
+        $sql = "SELECT 1 FROM relaciones WHERE id_usuario = ? AND id_seguidor = ? LIMIT 1";
 
         // Preparar la consulta
         $stmt = $conexion->prepare($sql);
@@ -29,7 +29,7 @@ try {
         // Si no existe la relación, entonces insertamos un nuevo registro
         if ($resultado->num_rows == 0) {
             // Consulta para insertar el nuevo seguimiento
-            $insertSql = "INSERT INTO seguidores (id_usuario, id_seguidor, fecha_seguimiento) VALUES (?, ?, NOW())";
+            $insertSql = "INSERT INTO relaciones (id_usuario, id_seguidor, fecha_seguimiento) VALUES (?, ?, NOW())";
 
             // Preparar la consulta de inserción
             $insertStmt = $conexion->prepare($insertSql);

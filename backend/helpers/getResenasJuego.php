@@ -13,7 +13,7 @@ try {
         $conexion = $baseDeDatos->getConnection();
 
         // Consulta SQL para obtener los datos de la tabla lista_videojuegos según id_lista
-        $sql = "SELECT * FROM resenas WHERE id_videojuego_api = ?";
+        $sql = "SELECT r.* , u.nombre_usuario, u.avatar FROM resenas r, usuarios u WHERE r.id_videojuego_api = ? and r.id_usuario = u.id_usuario";
 
         // Preparar la consulta
         $stmt = $conexion->prepare($sql);

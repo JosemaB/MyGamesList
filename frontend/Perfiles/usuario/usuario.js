@@ -24,9 +24,9 @@ async function iniciarUsuario() {
         const idUsuario = datosUsuario.contenidoUsuario.id_usuario;
         const listasDeJuegos = await obtenerListas(datosUsuario);
         const obtenerListResenas = await obtenerResenasUsuario(idUsuario);
-
         if (usuarioSession && usuarioSession.id !== idUsuario) {
             const isSeguimiento = await estadoSeguimiento(usuarioSession.id, idUsuario);
+            
             if (isSeguimiento.success) {
                 mostrarBotonSeguimiento(isSeguimiento);
             }
@@ -560,7 +560,7 @@ async function iniciarUsuario() {
                         userDiv.className = 'd-flex align-items-center';
 
                         const userImg = document.createElement('img');
-                        userImg.src = resena["image_usuario"];
+                        userImg.src = resena["avatar"];
                         userImg.className = 'img-fluid rounded-start perfil-img';
                         userImg.alt = `Imagen de ${resena["nombre_usuario"]}`;
 

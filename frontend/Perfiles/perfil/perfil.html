@@ -118,9 +118,13 @@
                                 data-bs-target="#nav-listas" type="button" role="tab" aria-controls="nav-listas"
                                 aria-selected="false">Mis Listas</button>
 
-                            <button class="nav-link" id="amigos-tab" data-bs-toggle="tab" data-bs-target="#amigos"
-                                type="button" role="tab" aria-controls="amigos"
+                            <button class="nav-link" id="seguidores-tab" data-bs-toggle="tab"
+                                data-bs-target="#seguidores" type="button" role="tab" aria-controls="seguidores"
                                 aria-selected="false">Seguidores</button>
+
+                            <button class="nav-link" id="siguiendo-tab" data-bs-toggle="tab" data-bs-target="#siguiendo"
+                                type="button" role="tab" aria-controls="siguiendo"
+                                aria-selected="false">Siguiendo</button>
 
                             <button class="nav-link" id="nav-reviews-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-reviews" type="button" role="tab" aria-controls="nav-reviews"
@@ -237,17 +241,17 @@
                             <!-- Mostramos las cards -->
                         </div>
 
-                        <div class="tab-pane fade" id="amigos" role="tabpanel" aria-labelledby="amigos-tab"
+                        <div class="tab-pane fade" id="seguidores" role="tabpanel" aria-labelledby="seguidores-tab"
                             tabindex="0">
                             <div class="mt-2 card cardLinkAmigo">
                                 <div class="card-body d-flex align-items-center justify-content-between flex-column">
                                     <i class="fs-2 text-center bi bi-person-plus-fill"></i>
-                                    <h5 class="card-title fw-bold text-cente">El enlace de tu perfil para compartir
-                                        con
-                                        tus amigos:</h5>
-                                    <span class="fw-bold linkAmigo text-cente"
-                                        id="linkAmigo">https://www.instant-gaming.com/es/user/gamer-41eb40e
-                                    </span>
+                                    <h5 class="card-title fw-bold text-cente">Comparte este enlace para que otros puedan
+                                        seguir tu perfil:</h5>
+                                    <a class="fw-bold linkAmigo text-cente"
+                                        href="http://localhost:5500/Perfiles/usuario/usuario.html?id=2"
+                                        id="linkAmigo">http://localhost:5500/Perfiles/usuario/usuario.html?id=2
+                                    </a>
                                 </div>
                             </div>
 
@@ -260,6 +264,37 @@
                                         para que te sigan y disfruten juntos de tus listas de juegos</p>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="siguiendo" role="tabpanel" aria-labelledby="siguiendo-tab"
+                            tabindex="0">
+                            <!--Si no tiene amigos-->
+                            <div class="card cardLinkAmigo my-2">
+                                <div class="card-body text-center">
+                                    <i class="fs-2 bi-person-fill-up"></i>
+                                    <h5 class="card-title text-center">¿Aún no sigues a nadie?</h5>
+                                    <p class="card-text text-center">Descubre nuevos perfiles y encuentra a otros gamers
+                                        como tú. ¡Invita a tus amigos y haz crecer la comunidad!</p>
+                                </div>
+                            </div>
+
+                            <div class="container m-0">
+                                <div class="row justify-content-center d-flex">
+                                    <div class="col-4 card text-center text-white cardRelacion">
+                                        <div class="card-body">
+                                            <img src="../../img/avatares/Cuphead.jpg" class="rounded-circle mb-2" alt="Avatar">
+                                            <h5 class="card-title fw-bold" title="nombre">Nombre usuario</h5>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 card text-center text-white cardRelacion">
+                                        <div class="card-body">
+                                            <img src="../../img/avatares/Cuphead.jpg" class="rounded-circle mb-2" alt="Avatar">
+                                            <h5 class="card-title fw-bold" title="nombre">Nombre usuario</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
 
                         <div class="tab-pane fade" id="nav-reviews" role="tabpanel" aria-labelledby="nav-reviews-tab"
