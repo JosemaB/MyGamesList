@@ -1,4 +1,4 @@
-import { eliminarSeguimiento, cardMensajeError, redesSociales, obtenerDatosUsuario, mostrarToast, borrarResena, alertDanger, alertSuccess, spinner, borrarAlerta, mostrarPassword, getCookie, formatDate, obtenerListas, limpiarHTML, borrarSpinner } from '../../js/funciones.js';
+import { obtenerRelaciones, eliminarSeguimiento, cardMensajeError, redesSociales, obtenerDatosUsuario, mostrarToast, borrarResena, alertDanger, alertSuccess, spinner, borrarAlerta, mostrarPassword, getCookie, formatDate, obtenerListas, limpiarHTML, borrarSpinner } from '../../js/funciones.js';
 import { guardarCambiosStorage } from "../../js/guardian.js";
 
 const sesionToken = getCookie('sesion_token');
@@ -869,29 +869,6 @@ async function iniciarPerfil() {
 
         }
 
-        /*Relaciones */
-        async function obtenerRelaciones(idUsuario) {
-            const datos = {
-                idUsuario: idUsuario
-            };
-            const response = await fetch('http://localhost:3000/backend/helpers/getRelaciones.php', {
-                method: 'POST',
-                credentials: "include",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(datos) // Enviamos los datos como JSON
-            });
-            // Verificamos si la respuesta es correcta
-            if (!response.ok) {
-                throw new Error('Error en la respuesta de PHP');
-            }
-
-            // Convertimos la respuesta en JSON
-            const data = await response.json();
-            return data;
-        }
-
         function mostrarRelaciones(relaciones) {
             /*Pongo esto aqui porque esta relacionado con esto */
             const linkAmigo = document.getElementById('linkAmigo');
@@ -1099,28 +1076,6 @@ async function iniciarPerfil() {
             }
         }
 
-        async function eliminarSeguimiento(idUsuario, idSeguido) {
-            const datos = {
-                idUsuario: idUsuario,
-                idSeguido: idSeguido
-            }
-            const response = await fetch('http://localhost:3000/backend/controllers/controllerUsuario/eliminarSeguimiento.php', {
-                method: 'POST',
-                credentials: "include",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(datos) // Enviamos los datos como JSON
-            });
-            // Verificamos si la respuesta es correcta
-            if (!response.ok) {
-                throw new Error('Error en la respuesta de PHP');
-            }
-
-            // Convertimos la respuesta en JSON
-            const data = await response.json();
-            return data;
-        }
         /*Resenas*/
         async function obtenerResenasUsuario(idUsuario) {
             const datos = {

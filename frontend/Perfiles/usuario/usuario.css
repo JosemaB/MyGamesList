@@ -56,7 +56,28 @@
     background-color: #1A233A;
 }
 
+/*Relacion*/
+.cardRelacion {
+    border-radius: 15px;
+    width: 250px;
+    margin: 10px;
+    background-color: #1A233A;
+    color: aliceblue;
+    transition: opacity 0.3s ease-in-out;
+    border: solid 1px gray !important;
+}
 
+.cardRelacion:hover {
+    color: rgb(190, 197, 204);
+    opacity: 70%;
+}
+
+.cardRelacion img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
 
 /*Lista de juegos*/
 .cardListaModalJuego {
@@ -170,7 +191,8 @@
 
 }
 
-.card-body {
+.card-body,
+.fondoCard {
     background-color: #1A233A;
     color: aliceblue;
 }

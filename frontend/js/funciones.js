@@ -111,12 +111,34 @@ export function sinResultado() {
 
     return container;
 }
+/*Relaciones */
 export async function eliminarSeguimiento(idUsuario, idSeguido) {
     const datos = {
         idUsuario: idUsuario,
         idSeguido: idSeguido
     }
     const response = await fetch('http://localhost:3000/backend/controllers/controllerUsuario/eliminarSeguimiento.php', {
+        method: 'POST',
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(datos) // Enviamos los datos como JSON
+    });
+    // Verificamos si la respuesta es correcta
+    if (!response.ok) {
+        throw new Error('Error en la respuesta de PHP');
+    }
+
+    // Convertimos la respuesta en JSON
+    const data = await response.json();
+    return data;
+}
+export async function obtenerRelaciones(idUsuario) {
+    const datos = {
+        idUsuario: idUsuario
+    };
+    const response = await fetch('http://localhost:3000/backend/helpers/getRelaciones.php', {
         method: 'POST',
         credentials: "include",
         headers: {

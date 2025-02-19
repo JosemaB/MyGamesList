@@ -1,4 +1,4 @@
-import { eliminarSeguimiento, sinResultado, redesSociales, obtenerDatosUsuario, formatDate, spinner, borrarSpinner, limpiarHTML, alertDanger, alertSuccess } from '../../js/funciones.js';
+import { cardMensajeError, obtenerRelaciones, eliminarSeguimiento, sinResultado, redesSociales, obtenerDatosUsuario, formatDate, spinner, borrarSpinner, limpiarHTML, alertDanger, alertSuccess } from '../../js/funciones.js';
 
 document.addEventListener('DOMContentLoaded', iniciarUsuario);
 
@@ -21,9 +21,14 @@ async function iniciarUsuario() {
         /*Los datos del usuario que inicio sesion */
         const usuarioSession = JSON.parse(localStorage.getItem("usuarioData"));
 
+        /*Sacamos el id del usuario */
         const idUsuario = datosUsuario.contenidoUsuario.id_usuario;
+        /* Esperamos a las promesas*/
         const listasDeJuegos = await obtenerListas(datosUsuario);
         const obtenerListResenas = await obtenerResenasUsuario(idUsuario);
+        const relaciones = await obtenerRelaciones(idUsuario);
+        console.log(relaciones);
+
         if (usuarioSession && usuarioSession.id !== idUsuario) {
             const isSeguimiento = await estadoSeguimiento(usuarioSession.id, idUsuario);
 
@@ -34,6 +39,7 @@ async function iniciarUsuario() {
         perfilInformacion(datosUsuario);
         mostrarListas();
         mostrarResenasUsuario();
+        mostrarRelaciones(relaciones);
         borrarSpinner(divAlertasUsuario);
         document.getElementById('contenidoTotal').style.display = 'block';
 
@@ -212,28 +218,6 @@ async function iniciarUsuario() {
             }
         });
 
-        async function eliminarSeguimiento(idUsuario, idSeguido) {
-            const datos = {
-                idUsuario: idUsuario,
-                idSeguido: idSeguido
-            }
-            const response = await fetch('http://localhost:3000/backend/controllers/controllerUsuario/eliminarSeguimiento.php', {
-                method: 'POST',
-                credentials: "include",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(datos) // Enviamos los datos como JSON
-            });
-            // Verificamos si la respuesta es correcta
-            if (!response.ok) {
-                throw new Error('Error en la respuesta de PHP');
-            }
-
-            // Convertimos la respuesta en JSON
-            const data = await response.json();
-            return data;
-        }
         /*Listas */
         function mostrarListas() {
             const divListas = document.getElementById('contenidoUsuarioListas');
@@ -660,6 +644,143 @@ async function iniciarUsuario() {
 
                 // Insertar la card en el DOM, por ejemplo, en el cuerpo del documento
                 divReviews.appendChild(card);
+            }
+        }
+        function mostrarRelaciones(relaciones) {
+            const divSeguidores = document.getElementById('contenidoSeguidores');
+            const divSeguidos = document.getElementById('contenidoSeguidos');
+            if (relaciones) {
+                if (relaciones.success) {
+                    /*Mostramos a los seguidores */
+                    if (relaciones.seguidores.length > 0) {
+                        const divContainer = document.createElement('div');
+                        divContainer.className = 'container m-0 fondoCard';
+                        const divRow = document.createElement('div');
+                        divRow.classList.add('row', 'justify-content-center', 'd-flex');
+
+                        const fragment = document.createDocumentFragment();/*Para no maniupular tanto e ldom esto hace mas optimo la aplicacion */
+                        relaciones.seguidores.forEach(seguidor => {
+                            const divCol = document.createElement('div');
+                            divCol.classList.add('col-4', 'card', 'text-center', 'text-white', 'cardRelacion');
+                            divCol.id = `cardSeguidor-${seguidor["id_usuario"]}`;
+
+                            const aTag = document.createElement('a');
+                            aTag.href = `/Perfiles/usuario/usuario.html?id=${seguidor["id_usuario"]}`;
+                            aTag.classList.add('text-decoration-none', 'text-reset');
+
+                            const divCardBody = document.createElement('div');
+                            divCardBody.classList.add('card-body');
+
+                            const imgAvatar = document.createElement('img');
+                            imgAvatar.src = seguidor["avatar"];
+                            imgAvatar.classList.add('rounded-circle', 'mb-2');
+                            imgAvatar.alt = `Imagen de ${seguidor["nombre_usuario"]}`;
+
+                            const h5Title = document.createElement('h5');
+                            h5Title.classList.add('card-title', 'fw-bold');
+                            h5Title.title = seguidor["nombre_usuario"];
+                            h5Title.textContent = seguidor["nombre_usuario"];
+
+                            divCardBody.appendChild(imgAvatar);
+                            divCardBody.appendChild(h5Title);
+                            aTag.appendChild(divCardBody);
+                            divCol.appendChild(aTag);
+                            fragment.appendChild(divCol);
+                        });
+                        divRow.appendChild(fragment);
+                        divContainer.appendChild(divRow);
+                        divSeguidores.appendChild(divContainer);
+
+                    } else {
+                        const card = document.createElement("div");
+                        card.className = "card cardLinkAmigo";
+
+                        const cardBody = document.createElement("div");
+                        cardBody.className = "card-body text-center";
+
+                        const icon = document.createElement("i");
+                        icon.className = "fs-2 bi bi-people-fill";
+
+                        const title = document.createElement("h5");
+                        title.className = "card-title text-center";
+                        title.textContent = "Aún no tiene seguidores";
+
+                        const text = document.createElement("p");
+                        text.className = "card-text text-center";
+                        text.textContent = "¡Sé su primer seguidor! No te pierdas sus listas de juegos y conéctate con él";
+
+                        cardBody.appendChild(icon);
+                        cardBody.appendChild(title);
+                        cardBody.appendChild(text);
+                        card.appendChild(cardBody);
+                        divSeguidores.appendChild(card); // Puedes cambiar document.body por otro contenedor específico
+                    }
+
+                    /*Mostramos a los seguidos */
+                    if (relaciones.seguidos.length > 0) {
+                        const divContainer = document.createElement('div');
+                        divContainer.className = 'container m-0 fondoCard';
+                        const divRow = document.createElement('div');
+                        divRow.classList.add('row', 'justify-content-center', 'd-flex');
+
+                        const fragment = document.createDocumentFragment();/*Para no maniupular tanto e ldom esto hace mas optimo la aplicacion */
+                        relaciones.seguidos.forEach(siguiendo => {
+                            const divCol = document.createElement('div');
+                            divCol.classList.add('col-4', 'card', 'text-center', 'text-white', 'cardRelacion');
+                            divCol.id = `cardSeguidor-${siguiendo["id_usuario"]}`;
+
+                            const aTag = document.createElement('a');
+                            aTag.href = `/Perfiles/usuario/usuario.html?id=${siguiendo["id_usuario"]}`;
+                            aTag.classList.add('text-decoration-none', 'text-reset');
+
+                            const divCardBody = document.createElement('div');
+                            divCardBody.classList.add('card-body');
+
+                            const imgAvatar = document.createElement('img');
+                            imgAvatar.src = siguiendo["avatar"];
+                            imgAvatar.classList.add('rounded-circle', 'mb-2');
+                            imgAvatar.alt = `Imagen de ${siguiendo["nombre_usuario"]}`;
+
+                            const h5Title = document.createElement('h5');
+                            h5Title.classList.add('card-title', 'fw-bold');
+                            h5Title.title = siguiendo["nombre_usuario"];
+                            h5Title.textContent = siguiendo["nombre_usuario"];
+
+                            divCardBody.appendChild(imgAvatar);
+                            divCardBody.appendChild(h5Title);
+
+                            aTag.appendChild(divCardBody);
+                            divCol.appendChild(aTag);
+                            fragment.appendChild(divCol);
+                        });
+                        divRow.appendChild(fragment);
+                        divContainer.appendChild(divRow);
+                        divSeguidos.appendChild(divContainer);
+
+                    } else {
+                        const cardContainer = document.createElement('div');
+                        cardContainer.classList.add('card', 'cardLinkAmigo');
+
+                        const cardBody = document.createElement('div');
+                        cardBody.classList.add('card-body', 'text-center');
+
+                        const icon = document.createElement('i');
+                        icon.classList.add('fs-2', 'bi-emoji-frown-fill');
+
+                        const title = document.createElement('h5');
+                        title.classList.add('card-title', 'text-center');
+                        title.textContent = 'Este usuario no sigue a nadie';
+
+                        cardBody.appendChild(icon);
+                        cardBody.appendChild(title);
+                        cardContainer.appendChild(cardBody);
+                        divSeguidos.appendChild(cardContainer);
+                    }
+                }
+
+            } else {
+                cardMensajeError('No pudimos obtener tus seguidores. Por favor, intentalo más tarde', divSeguidores);
+                cardMensajeError('No pudimos obtener tus usuarios seguidos. Por favor, intentalo más tarde', divSeguidos);
             }
         }
     }
