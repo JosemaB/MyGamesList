@@ -8,6 +8,13 @@ if (!sesionToken) {
 document.addEventListener('DOMContentLoaded', iniciarPerfil);
 async function iniciarPerfil() {
     try {
+        /*Lo dejo para avisar al usuario esta cargando */
+        const divAlertasUsuario = document.getElementById('alertasPerfilPrincipal');
+        const elementSpinner = spinner();
+        elementSpinner.style.marginBottom = '400px';
+        divAlertasUsuario.appendChild(elementSpinner);
+        document.getElementById('contenidoTotal').style.display = 'none'; /*Ocultamos el contenido principal */
+
 
         /*Los datos del usuario */
         const usuarioData = JSON.parse(localStorage.getItem("usuarioData"));
@@ -15,10 +22,6 @@ async function iniciarPerfil() {
         const listasDeJuegos = await obtenerListas(usuarioData);
         const obtenerListResenas = await obtenerResenasUsuario(usuarioData.id);
         const relaciones = await obtenerRelaciones(usuarioData.id);
-
-        console.log(relaciones);
-        console.log(datosRedesYSobreMi);
-        console.log(usuarioData);
 
         /*Perfil informacion lo que se ve todo el rato*/
         perfilInformacion();
@@ -40,6 +43,10 @@ async function iniciarPerfil() {
 
         // Sincronizar el <select> al cargar la página
         syncDropdownWithActiveTab();
+
+        borrarSpinner(divAlertasUsuario);
+        document.getElementById('contenidoTotal').style.display = 'block';
+
 
         /*Nav para moviles */
         // Función para sincronizar el <select> con la pestaña activa

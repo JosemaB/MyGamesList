@@ -1,5 +1,5 @@
 import { alertDanger, alertSuccess, urlPaginaAnterior, spinner, getCookie } from "../../js/funciones.js";
-
+import { guardarCambiosStorage } from "../../js/guardian.js";
 const sesionToken = getCookie('sesion_token');
 if (sesionToken) {
     window.location.href = "/index.html";
@@ -86,7 +86,8 @@ async function iniciarLogin() {
                 } else if (datos["success"]) { //Lo compruebo asi sin else por si falla los datos y no hacerlo aunque haya generado error
                     //No meto ningun div de exito aunque lo envie en el backend porque se incia sesion mas rapido en el register lo veo un poco 
                     //mas logico esperar por si quiere hacer otra cosa
-                    window.location.href = "/index.html";
+                    await guardarCambiosStorage();
+                    window.location.href = "/Perfiles/perfil/perfil.html";
                 }
             } catch (error) {
                 console.error("Error al enviar los datos:", error);

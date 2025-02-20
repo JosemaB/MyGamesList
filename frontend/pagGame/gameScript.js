@@ -40,7 +40,7 @@ async function iniciarInfoGame() {
         ]);
         /*Mostramos el contenido principal */
         mostrarContenidoPrincipal();
-
+        modalResenas();
         mostrarVisuales();
         mostrarDescripcion();
         /* Selectores */
@@ -194,7 +194,99 @@ async function iniciarInfoGame() {
                 console.log(error);
             }
         }
+        function modalResenas() {
+            const divModalresenas = document.getElementById('contenidoModalReviews');
+            if (!usuarioData) {
+                const div = document.createElement("div");
+                div.className = "mb-3 mt-2 card-body d-flex justify-content-center align-items-center flex-column";
 
+                const icon = document.createElement("i");
+                icon.className = "bi bi-chat-square-dots-fill fs-1";
+
+                const paragraph = document.createElement("p");
+                paragraph.className = "card-text fw-bold fs-5 text-center";
+                paragraph.textContent = "Inicia sesión para reseñar este juego";
+
+                const link = document.createElement("a");
+                link.className = "btn btnIniciarSesion";
+                link.href = "../Acceso/login/login.html";
+                link.textContent = "Iniciar sesión";
+
+                // Agregar elementos al div principal
+                div.appendChild(icon);
+                div.appendChild(paragraph);
+                div.appendChild(link);
+
+                // Agregar el div al documento (ajusta esto según dónde lo quieras insertar)
+                divModalresenas.appendChild(div);
+            } else {
+                // Crear los elementos de la modal
+                const modal = document.createElement("div");
+                modal.classList.add("modal-content");
+
+                // Modal Header
+                const modalHeader = document.createElement("div");
+                modalHeader.classList.add("modal-header");
+
+                const modalTitle = document.createElement("h5");
+                modalTitle.classList.add("modal-title");
+                modalTitle.id = "reviewModalLabel";
+
+                const closeButton = document.createElement("button");
+                closeButton.type = "button";
+                closeButton.classList.add("btn-close", "btn-close-white");
+                closeButton.setAttribute("data-bs-dismiss", "modal");
+                closeButton.setAttribute("aria-label", "Cerrar");
+
+                // Agregar elementos al header
+                modalHeader.appendChild(modalTitle);
+                modalHeader.appendChild(closeButton);
+
+                // Modal Body
+                const modalBody = document.createElement("div");
+                modalBody.classList.add("modal-body");
+
+                const form = document.createElement("form");
+
+                const textAreaDiv = document.createElement("div");
+                const textArea = document.createElement("textarea");
+                textArea.classList.add("form-control");
+                textArea.id = "reviewText";
+                textArea.rows = 4;
+                textArea.placeholder = "Escribe tu reseña aquí...";
+
+                textAreaDiv.appendChild(textArea);
+                form.appendChild(textAreaDiv);
+
+                const alertDiv = document.createElement("div");
+                alertDiv.classList.add("col-12", "m-0", "mt-2", "p-0", "text-center");
+                alertDiv.id = "alertaReview";
+
+                // Agregar elementos al body
+                modalBody.appendChild(form);
+                modalBody.appendChild(alertDiv);
+
+                // Modal Footer
+                const modalFooter = document.createElement("div");
+                modalFooter.classList.add("modal-footer");
+
+                const submitButton = document.createElement("button");
+                submitButton.id = "submitReview";
+                submitButton.type = "button";
+                submitButton.classList.add("col-12", "btn");
+                submitButton.textContent = "Enviar Reseña";
+
+                // Agregar elementos al footer
+                modalFooter.appendChild(submitButton);
+
+                // Agregar todas las partes al modal
+                modal.appendChild(modalHeader);
+                modal.appendChild(modalBody);
+                modal.appendChild(modalFooter);
+
+                divModalresenas.appendChild(modal);
+            }
+        }
         function mostrarDescripcion() {
             try {
                 const divDetalleLista = document.querySelector('#myTabContent #info');
@@ -357,7 +449,9 @@ async function iniciarInfoGame() {
         document.getElementById('reviewModal')?.addEventListener('show.bs.modal', function (event) {
             let modalTitle = document.getElementById('reviewModalLabel');
             const { name } = estado.juego;
-            modalTitle.textContent = name || 'Escribir una Reseña';
+            if (usuarioData) {
+                modalTitle.textContent = name || 'Escribir una Reseña';
+            }
         });
 
         document.getElementById('submitReview')?.addEventListener('click', async function () {
