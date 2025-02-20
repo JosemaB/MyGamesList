@@ -224,7 +224,7 @@ function eliminarDatosStorage() {
     localStorage.removeItem("usuarioData"); // Eliminar solo los datos del usuario
 }
 // Función para cerrar sesión
-async function cerrarSesion() {
+export async function cerrarSesion() {
     try {
         // Ocultar los elementos
         document.querySelector('header').style.display = 'none';

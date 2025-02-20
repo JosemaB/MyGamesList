@@ -58,7 +58,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
                         <li><a class="dropdown-item" href="../../Perfiles/perfil/perfil.html">Perfil</a></li>
-                        <li><a class="dropdown-item" href="/index.html">Cerrar sesión</a></li>
+                        <li><button class="dropdown-item" id="cerrarSesionEscritorio">Cerrar sesión</button></li>
                     </ul>
                 </div>
             </div>
@@ -101,13 +101,12 @@
                     <div class="dropdown">
                         <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                             id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img alt="" width="32" height="32"
-                                class="rounded-circle me-2" id="avatarMovil">
+                            <img alt="" width="32" height="32" class="rounded-circle me-2" id="avatarMovil">
                             <strong class="nombreAvatar" id="nombreMovil">nombre</strong>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
                             <li><a class="dropdown-item" href="../../Perfiles/perfil/perfil.html">Perfil</a></li>
-                            <li><a class="dropdown-item" href="/index.html">Cerrar sesión</a></li>
+                            <li><button class="dropdown-item" id="cerrarSesionMovil">Cerrar sesión</button></li>
                         </ul>
                     </div>
                 </div>
@@ -120,9 +119,58 @@
             <div class="tab-content" id="nav-tabContent">
                 <!-- Home Content -->
                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                    Contenido Home
-                </div>
+                    <div class="container-fluid d-md-flex flex-column align-items-center justify-content-center">
+                        <div class="row g-0 w-100">
+                            <div class="col-12 text-center mb-3">
+                                <h2 class="fw-bold ">Bienvenido, Nombre del Usuario</h2>
+                            </div>
+                            <!-- Gráfico de Barras -->
+                            <div class="col-12">
+                                <div class="card h-100" id="barChartCard">
+                                    <div class="card-header tituloGeneral text-center fw-bold">
+                                        Informe Global de Actividad
+                                    </div>
+                                    <div class="card-body p-0 d-flex">
+                                        <canvas id="barChart" class="w-100 h-100"></canvas>
+                                        <!-- Canvas ocupará todo el tamaño del card -->
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
+
+                    <!-- Scripts para Chart.js -->
+                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                    <script>
+                        // Datos iniciales (puedes cambiarlos dinámicamente)
+                        let totalUsuarios = 2; // Cambia este valor
+                        let totalListas = 1;    // Cambia este valor
+                        let totalReseñas = 3;  // Cambia este valor
+
+                        // Configuración del gráfico de barras
+                        const barCtx = document.getElementById('barChart').getContext('2d');
+                        const barChart = new Chart(barCtx, {
+                            type: 'bar',
+                            data: {
+                                labels: ['Usuarios', 'Listas', 'Reseñas'],
+                                datasets: [{
+                                    label: 'Total',
+                                    data: [totalUsuarios, totalListas, totalReseñas], // Usa las variables aquí
+                                    backgroundColor: ['#007bff', '#28a745', '#ffc107'],
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
+                    </script>
+                </div>
                 <!-- Dashboard Content -->
                 <div class="tab-pane fade" id="nav-usuarios" role="tabpanel" aria-labelledby="nav-usuarios-tab">
                     Contenido usuarios

@@ -1,3 +1,4 @@
+import {cerrarSesion} from '../../js/guardian.js';
 document.addEventListener('DOMContentLoaded', function () {
     // Selecciona todos los botones de navegación en ambos menús
     const navButtonsDesktop = document.querySelectorAll('.sidebar .nav-link');
@@ -29,4 +30,10 @@ document.addEventListener('DOMContentLoaded', function () {
             syncActiveTab(button, navButtonsDesktop);
         });
     });
+    /*Home */
+
+    /*Cerrar sesion desde admin*/
+    document.getElementById('cerrarSesionMovil').addEventListener('click', cerrarSesion);
+    document.getElementById('cerrarSesionEscritorio').addEventListener('click', cerrarSesion);
+
 });

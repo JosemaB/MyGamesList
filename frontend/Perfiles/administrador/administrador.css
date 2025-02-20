@@ -1,4 +1,4 @@
-@media (max-width: 769px) {
+@media (max-width: 766px) {
 
     .main-content {
         padding: 20px;
@@ -6,13 +6,36 @@
 }
 
 /*Pra moviles*/
-@media (min-width: 770px) {
+@media (min-width: 767px) {
 
     /* Ajustar el contenido principal para que comience a la derecha de la barra lateral */
     .main-content {
         margin-left: 280px;
-        padding: 20px;
     }
+}
+
+/*Titulo generales*/
+.tituloGeneral {
+    background-color: #2c376e;
+    color: aliceblue
+}
+
+/*Cards*/
+.bodyCardInformePrincipal {
+    background-color: #1A233A;
+}
+#barChartCard .card-body{
+    background-color: aliceblue;
+}
+
+#cardsInformeGeneral .card .card-header {
+    background-color: #2c376e;
+    color: aliceblue;
+}
+
+#cardsInformeGeneral .card .card-body {
+    background-color: aliceblue;
+    color: #1a2950;
 }
 
 /* Asegurar que la barra lateral ocupe el 100% de la altura de la pantalla */
@@ -88,3 +111,4 @@
     border-radius: 12px;
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.644), 0 0 20px rgba(255, 255, 255, 0.6), 0 0 30px rgba(255, 255, 255, 0.4);
 }
+
