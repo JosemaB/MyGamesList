@@ -7,7 +7,7 @@ if (sesionToken) {
 document.addEventListener('DOMContentLoaded', iniciarLogin);
 
 async function iniciarLogin() {
-    initializeGoogleSignIn(); // Inicializa el inicio de sesión de Google
+
     //Selectores
     document.getElementById('checkbox').addEventListener('click', mostrarPassword);
 
@@ -267,6 +267,17 @@ async function iniciarLogin() {
         }
     }
 
+    // Espera a que Google cargue y luego ejecuta la inicialización /*Para que funcione el boton de google*/
+    waitForGoogle(initializeGoogleSignIn);
+    
+    function waitForGoogle(callback) {
+        const interval = setInterval(() => {
+            if (window.google && window.google.accounts) {
+                clearInterval(interval);
+                callback();
+            }
+        }, 100); // Verifica cada 100ms si Google está disponible
+    }
     // Función para inicializar el Google Sign-In
     function initializeGoogleSignIn() {
         try {
@@ -337,6 +348,8 @@ async function iniciarLogin() {
             console.error('Error al enviar datos:', error);
         }
     }
+
+
 }
 
 
