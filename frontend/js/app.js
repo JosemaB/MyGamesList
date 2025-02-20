@@ -45,7 +45,7 @@ async function iniciarApp() {
         });
 
         // Añadir un event listener para el evento 'input'
-        searchInput.addEventListener('input', () => {
+        searchInput?.addEventListener('input', () => {
 
             // Si ya hay un intervalo en ejecución, lo detenemos
             clearInterval(searchInput.intervalId);
@@ -68,13 +68,13 @@ async function iniciarApp() {
         });
 
         /*Para cuando el usuario quitae el foco*/
-        searchInput.addEventListener('focus', () => {/*Por si hay contenido en el foco buscaria */
+        searchInput?.addEventListener('focus', () => {/*Por si hay contenido en el foco buscaria */
             if (searchInput.value) {
                 mostrarBuscador(searchInput.value);
             }
         });
         /*Para cuando el usuario quitae el foco*/
-        searchInput.addEventListener('focusout', (event) => {
+        searchInput?.addEventListener('focusout', (event) => {
             // Verifica si el foco va hacia un enlace 'A' o un div con una clase específica
             const relatedElement = event.relatedTarget;
 
@@ -88,7 +88,7 @@ async function iniciarApp() {
         });
 
         /*Si ha npresionado enter en el formulario */
-        form.addEventListener("submit", function (event) {
+        form?.addEventListener("submit", function (event) {
             event.preventDefault();
             // Obtén el valor del input de búsqueda
             const searchValue = searchInput.value.trim();

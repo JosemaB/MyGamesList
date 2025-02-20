@@ -1,6 +1,6 @@
+import { mostrarToast } from '/js/funciones.js';
 // Variable global para almacenar la sesión
 let sessionData = null;
-
 // Función para obtener la sesión usando async/await
 async function obtenerSesion() {
     try {
@@ -32,9 +32,15 @@ export async function iniciarGuardian() {
         usuarioNoConectadoEscritorio();
     } else if (sessionData.success) {
         const { usuario } = sessionData.exito;
-        usuarioConectadoMovil(usuario.avatar);
-        usuarioConectadoEscritorio(usuario.avatar);
-        localStorage.setItem("usuarioData", JSON.stringify(usuario));
+
+        if (window.location.pathname === '/Perfiles/administrador/administrador.html') {
+            escritorioAdministrador(usuario);
+            movilAdministrador(usuario);
+        } else {
+            usuarioConectadoMovil(usuario.avatar);
+            usuarioConectadoEscritorio(usuario.avatar);
+            localStorage.setItem("usuarioData", JSON.stringify(usuario));
+        }
     }
 }
 
@@ -133,7 +139,7 @@ function usuarioConectadoMovil(avatar) {
     const logoutLink = document.createElement('a');
     logoutLink.classList.add('dropdown-item', 'text-white', 'fw-bold');
     logoutLink.setAttribute('href', '#');  // Modificar enlace aquí
-    logoutLink.textContent = 'Cerrar Sesion';
+    logoutLink.textContent = 'Cerrar sesión';
     logoutItem.appendChild(logoutLink);
     dropdownMenu.appendChild(logoutItem);
 
@@ -220,6 +226,11 @@ function eliminarDatosStorage() {
 // Función para cerrar sesión
 async function cerrarSesion() {
     try {
+        // Ocultar los elementos
+        document.querySelector('header').style.display = 'none';
+        document.querySelector('footer').style.display = 'none';
+        document.querySelector('main').style.display = 'none';
+
         const response = await fetch('http://localhost:3000/backend/controllers/cerrar_sesion.php', {
             method: 'POST',
             credentials: "include",
@@ -230,11 +241,18 @@ async function cerrarSesion() {
 
         const data = await response.json();
         if (data.success) {
+
+
             eliminarDatosStorage();
             // Recargar la página después de cerrar sesión
             window.location.href = "/index.html";  // Esto recargará la página
         } else {
             console.error(data.error);
+            // Ocultar los elementos
+            document.querySelector('header').style.display = 'block';
+            document.querySelector('footer').style.display = 'block';
+            document.querySelector('main').style.display = 'block';
+            mostrarToast('Error al cerrar sesión', 'danger');
         }
 
     } catch (error) {
@@ -245,7 +263,7 @@ async function cerrarSesion() {
 }
 
 //esto servira para trabajar a "tiempo real" que se guarde la cookie y la tengamos cuadno cargue la pagina
-export async function guardarCambiosStorage() {
+export async function guardarCambiosStorage(usuario) {
     try {
         const response = await fetch('http://localhost:3000/backend/controllers/verificar_sesion.php', {
             method: 'POST',
@@ -261,4 +279,17 @@ export async function guardarCambiosStorage() {
     } catch (error) {
         console.error('Error al obtener la sesión:', error);
     }
+}
+
+function movilAdministrador(usuario) {
+    document.getElementById('avatarMovil').src = usuario["avatar"];
+    document.getElementById('nombreMovil').textContent = usuario["nombre"];
+
+
+
+}
+function escritorioAdministrador(usuario) {
+    document.getElementById('avatarEscriorio').src = usuario["avatar"];
+    document.getElementById('nombreEscritorio').textContent = usuario["nombre"];
+
 }

@@ -13,7 +13,7 @@ try {
         $password = $datos['password'];
         $confirmPassword = $datos['confirmPassword'];
         $avatar = 'http://localhost:5500/img/avatares/sinAvatar.png';
-        $rol = '3'; //Agregammos el rol de usuario cuando creamos la cuenta
+        $rol = '1'; //Agregammos el rol de usuario cuando creamos la cuenta
 
         //Validamos los datos antes de la inserccion en la bdd
         if (!validarCorreo($email)) {
