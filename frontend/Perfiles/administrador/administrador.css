@@ -44,7 +44,9 @@
     }
 
     /* Seccion usuarios */
-    #nav-usuarios .navbar {
+    #nav-usuarios .navbar,
+    #nav-listas .navbar,
+    #nav-resenas .navbar {
         margin: 20px;
     }
 }
@@ -149,7 +151,9 @@
 }
 
 /* Seccion usuarios */
-#formUsuarios {
+#formUsuarios,
+#formListas,
+#formResenas {
     background-color: #2c376e;
     /* Color de fondo */
     border-radius: 10px;
