@@ -1,7 +1,14 @@
 import { cerrarSesion } from '../../js/guardian.js';
+import { limpiarHTML, alertDanger, alertSuccess, mostrarToast, borrarAlerta, borrarSpinner, spinner, sinResultado, cardMensajeError } from '../../js/funciones.js';
+
 document.addEventListener('DOMContentLoaded', iniciarAdministradir);
 
 async function iniciarAdministradir() {
+    /*Selectores resultado */
+    const divtotalUsuariosResultado = document.getElementById('totalUsuariosResultado');
+
+    /*Selectores input */
+    const inputBuscarUsuario = document.getElementById('inputBuscarUsuario');
 
     /*Cargamos los datos */
     const informeGeneral = await obtenerInformeGeneral();
@@ -20,8 +27,7 @@ async function iniciarAdministradir() {
     cargarDatosGrafico(datosUsuarios.length, datosListas.length, datosResenas.length);
 
     async function obtenerInformeGeneral() {
-
-        const response = await fetch('http://localhost:3000/backend/helpers/getInformeGlobal.php', {
+        const response = await fetch('http://localhost:3000/backend/helpers/adminHelpers/getInformeGlobal.php', {
             method: 'POST',
             credentials: "include",
             headers: {
@@ -109,14 +115,13 @@ async function iniciarAdministradir() {
 
     /* Usuarios */
     function mostrarUsuarios(datosUsuarios) {
-        const divtotalUsuariosResultado = document.getElementById('totalUsuariosResultado');
 
         const fragment = document.createDocumentFragment(); // Crear el fragmento
         datosUsuarios.forEach(usuario => {
             // Crear el contenedor principal
             const card = document.createElement('div');
             card.classList.add('card', 'cardUsuario', 'col-12', 'my-1');
-
+            card.id = `cardUsuario-${usuario.id_usuario}`;
             // Crear el cuerpo de la tarjeta
             const cardBody = document.createElement('div');
             cardBody.classList.add('card-body');
@@ -131,7 +136,7 @@ async function iniciarAdministradir() {
 
             // Crear el enlace y la imagen de usuario
             const userLink = document.createElement('a');
-            userLink.href = `/Perfiles/usuario/usuario.html?id=${usuario.id}`;
+            userLink.href = `/Perfiles/usuario/usuario.html?id=${usuario.id_usuario}`;
             const userImage = document.createElement('img');
             userImage.src = usuario.avatar;
             userImage.classList.add('img-fluid');
@@ -235,4 +240,66 @@ async function iniciarAdministradir() {
         divtotalUsuariosResultado.appendChild(fragment);
 
     }
+    async function obtenerrUsuariosPorNombre(nombreUsuario) {
+        const datos = {
+            nombreUsuario: nombreUsuario
+        }
+        const response = await fetch('http://localhost:3000/backend/helpers/adminHelpers/getUsuariosPorNombre.php', {
+            method: 'POST',
+            credentials: "include",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos) // Enviamos los datos como JSON
+        });
+        // Verificamos si la respuesta es correcta
+        if (!response.ok) {
+            throw new Error('Error en la respuesta de PHP');
+        }
+
+        // Convertimos la respuesta en JSON
+        const data = await response.json();
+        return data;
+    }
+    // Añadir un event listener usuario para el evento 'input'
+    inputBuscarUsuario?.addEventListener('input', () => {
+
+        // Si ya hay un intervalo en ejecución, lo detenemos
+        clearInterval(inputBuscarUsuario.intervalId);
+
+        // Iniciar un nuevo intervalo de 500ms
+        inputBuscarUsuario.intervalId = setInterval(async (e) => {
+
+            if (inputBuscarUsuario.value) {
+                limpiarHTML(divtotalUsuariosResultado);
+                const spinnerElement = spinner();
+                spinnerElement.style.margin = 'auto';
+                spinnerElement.style.marginTop = '20px';
+                divtotalUsuariosResultado.appendChild(spinnerElement);
+                /*Enviamos al backend y nos mostrara un resultado de usuarios */
+                const datosUsuarioporNombre = await obtenerrUsuariosPorNombre(inputBuscarUsuario.value);
+                borrarSpinner(divtotalUsuariosResultado);
+                if (datosUsuarioporNombre.success) {
+                    if (datosUsuarioporNombre.usuarios.length > 0) {
+                        mostrarUsuarios(datosUsuarioporNombre.usuarios);
+                    } else {
+                        divtotalUsuariosResultado.appendChild(sinResultado());
+                    }
+                } else {
+                    cardMensajeError('Ups... parece que tenemos un problema técnico. Inténtalo de nuevo más tarde', divtotalUsuariosResultado);
+                }
+
+            } else {
+                limpiarHTML(divtotalUsuariosResultado);
+                mostrarUsuarios(datosUsuarios);
+            }
+        }, 500);
+
+        // Resetear el temporizador para detectar cuando el usuario deja de escribir
+        clearTimeout(inputBuscarUsuario.typingTimer);
+        inputBuscarUsuario.typingTimer = setTimeout(() => {
+            clearInterval(inputBuscarUsuario.intervalId);
+        }, 500);
+    });
+
 }

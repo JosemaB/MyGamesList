@@ -1,9 +1,10 @@
 <?php
-include_once '../config/cors.php';  // Incluye CORS para poder hacer la conexión con tu frontend
-include_once '../config/ConexionBdd.php';  // Para la conexion de la base de datos MyGamesList
-include_once './funciones.php';
+include_once '../../config/cors.php';  // Incluye CORS para poder hacer la conexión con tu frontend
+include_once '../../config/ConexionBdd.php';  // Para la conexion de la base de datos MyGamesList
+include_once '../funciones.php';
 
 try {
+    
     // Creamos la conexión a la base de datos
     $baseDeDatos = new ConexionBdd();
     $conexion = $baseDeDatos->getConnection();

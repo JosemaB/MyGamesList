@@ -150,8 +150,8 @@
                             <form class="d-flex" role="search" id="formBuscarUsuario">
                                 <div class="input-group">
                                     <input type="search" class=" form-control" placeholder="Buscar usuario..."
-                                        aria-label="Search">
-                                    <button type="submit" class="btn-outline-light btn">
+                                        aria-label="Search" id="inputBuscarUsuario">
+                                    <button type="button" class="btn-outline-light btn">
                                         <i class="bi bi-search"></i>
                                     </button>
                                 </div>
@@ -178,6 +178,160 @@
         </div>
     </main>
     <div id="toast-container" class="position-fixed bottom-0 end-0 p-3" style="z-index: 1050;"></div>
+    <!-- Modal de confirmación de eliminacion de usuario -->
+    <div class="modal fade" id="deleteUsuario" tabindex="-1" aria-labelledby="deleteUsuarioModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteUsuarioModalLabel">Eliminar seguimiento</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    ¿Seguro que quieres elimianr a este usuario?
+                </div>
+                <div class="modal-footer">
+                    <div class="col-12 m-0 mt-2 p-0 text-center" id="alertaDeleteUsuario"></div>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="eliminarUsuarioBTN">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal para renombrar usuario -->
+    <div class="modal fade" id="renameUsuarioModal" tabindex="-1" aria-labelledby="renameUsuarioModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="renameUsuarioModalLabel">Renombrar Usuario</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body fw-bold ">
+                    <label for="newUsuarioName" class="mb-2">Nuevo nombre de usuario:</label>
+                    <input type="text" id="newUsuarioName" class="form-control" placeholder="Introduce el nuevo nombre"
+                        required>
+                    <div class="col-12 m-0 mt-2 p-0 text-center" id="alertasRenameUsuario"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="confirmRenameUsuarioButton">Renombrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Modal de confirmación de subir rango -->
+    <div class="modal fade" id="subirRangoModal" tabindex="-1" aria-labelledby="subirRangoModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="subirRangoModalLabel">Confirmar seguimiento</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    ¿Seguro que quieres subir de rango a esta usuario?
+                </div>
+                <div class="modal-footer">
+                    <div class="col-12 m-0 mt-2 p-0 text-center" id="alertaConfirmSubirUsuario"></div>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" id="confirmarSubirUsuarioBTN">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal de confirmación de subir rango -->
+    <div class="modal fade" id="bajarRangoModal" tabindex="-1" aria-labelledby="bajarRangoModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="bajarRangoModalLabel">Confirmar seguimiento</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    ¿Seguro que quieres bajar de rango a esta usuario?
+                </div>
+                <div class="modal-footer">
+                    <div class="col-12 m-0 mt-2 p-0 text-center" id="alertaConfirmBajarUsuario"></div>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" id="confirmarBajarUsuarioBTN">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal para renombrar la lista -->
+    <div class="modal fade" id="renameListaModal" tabindex="-1" aria-labelledby="renameListaModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="renameListaModalLabel">Renombrar lista</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body fw-bold ">
+                    <label for="newListName" class="mb-2">Nuevo nombre de la lista:</label>
+                    <input type="text" id="newListName" class="form-control" placeholder="Introduce el nuevo nombre"
+                        required>
+                    <div class="col-12 m-0 mt-2 p-0 text-center" id="alertasRenameLista"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="confirmRenameButton">Renombrar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Modal de confirmación eliminacion lista -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalLabel">Confirmar acción</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    ¿Estás seguro de que deseas eliminar esta lista?
+                </div>
+                <div class="modal-footer">
+                    <div class="col-12 m-0 mt-2 p-0 text-center" id="alertasDeleteLista"></div>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteButton">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal de eliminar Resena -->
+    <div class="modal fade" id="confirmDeleteResenaModal" tabindex="-1" aria-labelledby="confirmDeleteResenaModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteResenaModalLabel">Confirmar eliminación</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    ¿Estás seguro de que deseas eliminar esta reseña?
+                </div>
+                <div class="modal-footer">
+                    <div class="col-12 m-0 mt-2 p-0 text-center" id="alertaResena"></div>
+                    <div class="col-12 m-0 mt-2 p-0 text-center" id="alertaConfirmResenaDelete"></div>
+                    <div class="col-12 m-0 mt-2 p-0 text-center" id="alertasDeleteResena"></div>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteResenaButton">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <footer></footer>
 </body>
 
