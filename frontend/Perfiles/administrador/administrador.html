@@ -15,7 +15,9 @@
     <!-- Importar JS desde node_modules -->
     <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script>
     <script type="module" src="../../js/app.js"></script>
-    <script type="module" src="administrador.js"></script>
+    <!-- Scripts para Chart.js (Grafico)-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" async></script>
+    <script type="module" src="administrador.js" defer></script>
 </head>
 
 <body>
@@ -119,13 +121,14 @@
             <div class="tab-content" id="nav-tabContent">
                 <!-- Home Content -->
                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                    <div class="container-fluid d-md-flex flex-column align-items-center justify-content-center">
-                        <div class="row g-0 w-100">
+                    <div class="container-fluid">
+                        <div class="row g-0 w-100 justify-content-center">
                             <div class="col-12 text-center mb-3">
-                                <h2 class="fw-bold ">Bienvenido, Nombre del Usuario</h2>
+                                <h2 class="fw-bold" id="nombreAdministrador"></h2>
+                                <img class="avatar" id="avatarAdministrador" alt="Avatar administrador">
                             </div>
                             <!-- Gráfico de Barras -->
-                            <div class="col-12">
+                            <div class="col-12 px-md-5">
                                 <div class="card h-100" id="barChartCard">
                                     <div class="card-header tituloGeneral text-center fw-bold">
                                         Informe Global de Actividad
@@ -134,46 +137,32 @@
                                         <canvas id="barChart" class="w-100 h-100"></canvas>
                                         <!-- Canvas ocupará todo el tamaño del card -->
                                     </div>
-                                    
                                 </div>
                             </div>
                         </div>
                     </div>
-
-
-                    <!-- Scripts para Chart.js -->
-                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                    <script>
-                        // Datos iniciales (puedes cambiarlos dinámicamente)
-                        let totalUsuarios = 2; // Cambia este valor
-                        let totalListas = 1;    // Cambia este valor
-                        let totalReseñas = 3;  // Cambia este valor
-
-                        // Configuración del gráfico de barras
-                        const barCtx = document.getElementById('barChart').getContext('2d');
-                        const barChart = new Chart(barCtx, {
-                            type: 'bar',
-                            data: {
-                                labels: ['Usuarios', 'Listas', 'Reseñas'],
-                                datasets: [{
-                                    label: 'Total',
-                                    data: [totalUsuarios, totalListas, totalReseñas], // Usa las variables aquí
-                                    backgroundColor: ['#007bff', '#28a745', '#ffc107'],
-                                }]
-                            },
-                            options: {
-                                scales: {
-                                    y: {
-                                        beginAtZero: true
-                                    }
-                                }
-                            }
-                        });
-                    </script>
                 </div>
                 <!-- Dashboard Content -->
                 <div class="tab-pane fade" id="nav-usuarios" role="tabpanel" aria-labelledby="nav-usuarios-tab">
-                    Contenido usuarios
+                    <nav class="navbar d-flex justify-content-center align-items-center">
+                        <div class="container-fluid flex-nowrap" id="formUsuarios">
+                            <h3 class="navbar-brand fw-bold text-light m-0 mx-2">Usuarios</h3>
+                            <form class="d-flex" role="search" id="formBuscarUsuario">
+                                <div class="input-group">
+                                    <input type="search" class=" form-control" placeholder="Buscar usuario..."
+                                        aria-label="Search">
+                                    <button type="submit" class="btn-outline-light btn">
+                                        <i class="bi bi-search"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="row w-100 mt-1" id="totalUsuariosResultado">
+
+                        </div>
+
+                    </nav>
                 </div>
 
                 <!-- Orders Content -->

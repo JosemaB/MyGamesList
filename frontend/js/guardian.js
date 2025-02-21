@@ -292,4 +292,7 @@ function escritorioAdministrador(usuario) {
     document.getElementById('avatarEscriorio').src = usuario["avatar"];
     document.getElementById('nombreEscritorio').textContent = usuario["nombre"];
 
+    /*Son del hombre pero para no alargar mas codigo lo pongo aqui */
+    document.getElementById('avatarAdministrador').src = usuario["avatar"];
+    document.getElementById('nombreAdministrador').textContent = `Bienvenido, ${usuario["nombre"]}`;
 }
