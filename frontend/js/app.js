@@ -7,7 +7,9 @@ document.addEventListener('DOMContentLoaded', iniciarApp);
 async function iniciarApp() {
     // Obtener la ruta de la URL sin importar el dominio ni el puerto
     const currentPath = window.location.pathname;
-    if (currentPath === "/pagGame/infoGame.html") {
+    if (currentPath === '/Perfiles/administrador/administrador.html') {
+        await iniciarGuardian();
+    } else if (currentPath === "/pagGame/infoGame.html") {
         document.querySelector('header').style.display = 'none';
         document.querySelector('footer').style.display = 'none';
         await iniciarGuardian();

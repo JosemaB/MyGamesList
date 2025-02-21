@@ -51,6 +51,11 @@
     }
 }
 
+/*Modal*/
+.modal-content {
+    background-color: #1A233A;
+}
+
 /*Titulo generales*/
 .tituloGeneral {
     background-color: #2c376e;
@@ -163,7 +168,6 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     /* Sombra suave que lo resalta */
 }
-
 
 /*Usuario*/
 .cardUsuario {

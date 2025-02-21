@@ -1,9 +1,16 @@
 import { cerrarSesion } from '../../js/guardian.js';
-import { limpiarHTML, alertDanger, alertSuccess, mostrarToast, borrarAlerta, borrarSpinner, spinner, sinResultado, cardMensajeError } from '../../js/funciones.js';
+import { limpiarHTML, getCookie, ocultarBotones, mostrarBotones, alertDanger, alertSuccess, mostrarToast, borrarAlerta, borrarSpinner, spinner, sinResultado, cardMensajeError } from '../../js/funciones.js';
+
+const usuarioData = JSON.parse(localStorage.getItem("usuarioData"));
+const sesionToken = getCookie('sesion_token');
+if (!sesionToken || usuarioData.id_rol !== 2) {
+    window.location.href = "/index.html";
+}
 
 document.addEventListener('DOMContentLoaded', iniciarAdministradir);
 
 async function iniciarAdministradir() {
+    document.querySelector('main').style.display = 'block';
     /*Selectores resultado */
     const divtotalUsuariosResultado = document.getElementById('totalUsuariosResultado');
 
@@ -174,43 +181,97 @@ async function iniciarAdministradir() {
             renameLink.classList.add('dropdown-item');
             renameLink.href = '#';
             renameLink.textContent = 'Renombrar usuario';
+
+            // Agregar atributos para que abra el modal
+            renameLink.setAttribute('data-bs-toggle', 'modal');
+            renameLink.setAttribute('data-bs-target', '#renameUsuarioModal');
+
             renameOption.appendChild(renameLink);
 
             dropdownMenu.appendChild(renameOption);
             if (usuario.id_rol === 1) {
+                // Crear la opción del menú para "Subir rango"
                 const rankOption = document.createElement('li');
                 const rankLink = document.createElement('a');
                 rankLink.classList.add('dropdown-item');
                 rankLink.href = '#';
                 rankLink.textContent = 'Subir rango';
-                rankOption.appendChild(rankLink);
 
-                const deleteOption = document.createElement('li');
-                const deleteLink = document.createElement('a');
-                deleteLink.classList.add('dropdown-item');
-                deleteLink.href = '#';
-                deleteLink.textContent = 'Eliminar usuario';
-                deleteOption.appendChild(deleteLink);
+                rankOption.appendChild(rankLink);
                 dropdownMenu.appendChild(rankOption);
-                dropdownMenu.appendChild(deleteOption);
+                // Asignar los manejadores de clic para el "subir el rango"
+                rankOption.addEventListener("click", function (event) {
+                    event.preventDefault();  // Evitar la acción predeterminada del enlace
+                    const alerta = document.getElementById('alertaConfirmSubirUsuario');
+
+                    mostrarBotones('#subirRangoModal');
+
+                    // Aquí puedes agregar la lógica para renombrar la lista
+                    const cardId = card.id; // Obtener el ID de la tarjeta
+
+                    // Mostramos el modal de rename lista
+                    const subirRangoModal = new bootstrap.Modal(document.getElementById('subirRangoModal'));
+                    subirRangoModal.show();
+
+                    // Lógica cuando se confirma la eliminación
+                    const confirmarSubirUsuarioBTN = document.getElementById('confirmarSubirUsuarioBTN');
+
+                    confirmarSubirUsuarioBTN.onclick = async function () {
+                        borrarSpinner(alerta);
+
+                        const spinnerElement = spinner();
+                        spinnerElement.style.margin = 'auto';
+                        alerta.appendChild(spinnerElement);
+
+                        ocultarBotones('#subirRangoModal');
+
+                        console.log("hola");
+                        //Llamamos a la funcion de cambiar nombre
+                        //const data = await renombrarLista(cardId, nuevoNombre.value)
+
+                        borrarSpinner(alerta);
+
+                        /*if (!data["success"]) {
+                            document.querySelectorAll("#renameListaModal button").forEach(btn => {
+                                if (!btn.classList.contains("btn-close")) {
+                                    btn.style.display = "block";
+                                }
+                            });
+                            // Si error es un string, lo mostramos directamente
+                            alerta.appendChild(alertDanger(data.error));
+                        } else if (data["success"]) {
+                            // Cerrar el modal después de la acción
+                            subirRangoModal.hide();
+                            mostrarToast('La lista se ha renombrado correctamente', 'success');
+                        }*/
+
+                        // Cerrar el modal después de la acción
+                        subirRangoModal.hide();
+                    }
+                });
             } else {
+                // Crear la opción del menú para "Bajar rango"
                 const rankOption = document.createElement('li');
                 const rankLink = document.createElement('a');
                 rankLink.classList.add('dropdown-item');
                 rankLink.href = '#';
                 rankLink.textContent = 'Bajar rango';
-                rankOption.appendChild(rankLink);
 
-                const deleteOption = document.createElement('li');
-                const deleteLink = document.createElement('a');
-                deleteLink.classList.add('dropdown-item');
-                deleteLink.href = '#';
-                deleteLink.textContent = 'Eliminar usuario';
-                deleteOption.appendChild(deleteLink);
+                // Agregar atributos para abrir el modal
+                rankLink.setAttribute('data-bs-toggle', 'modal');
+                rankLink.setAttribute('data-bs-target', '#bajarRangoModal');
+
+                rankOption.appendChild(rankLink);
                 dropdownMenu.appendChild(rankOption);
-                dropdownMenu.appendChild(deleteOption);
             }
 
+            const deleteOption = document.createElement('li');
+            const deleteLink = document.createElement('a');
+            deleteLink.classList.add('dropdown-item');
+            deleteLink.href = '#';
+            deleteLink.textContent = 'Eliminar usuario';
+            deleteOption.appendChild(deleteLink);
+            dropdownMenu.appendChild(deleteOption);
 
             // Añadir el botón y el menú al contenedor del dropdown
             dropdown.appendChild(dropdownButton);

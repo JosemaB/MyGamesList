@@ -51,6 +51,20 @@ export function mostrarPlataforma(game) {
         console.log(error);
     }
 }
+export function ocultarBotones(divId) {
+    document.querySelectorAll(`${divId} button`).forEach(btn => {
+        if (!btn.classList.contains("btn-close")) {
+            btn.style.display = "none";
+        }
+    });
+}
+export function mostrarBotones(divId) {
+    document.querySelectorAll(`${divId} button`).forEach(btn => {
+        if (!btn.classList.contains("btn-close")) {
+            btn.style.display = "block";
+        }
+    });
+}
 /*Obtener listas del usuario */
 export async function obtenerListas(usuarioData) {
     const { id } = usuarioData;

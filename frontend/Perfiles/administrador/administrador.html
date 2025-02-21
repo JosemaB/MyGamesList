@@ -22,7 +22,7 @@
 
 <body>
     <header></header>
-    <main>
+    <main style="display: none;">
         <div id="contenidoNav"></div>
         <!-- Menú para pantallas grandes -->
         <div class="d-none d-md-block">
@@ -265,7 +265,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="subirRangoModalLabel">Confirmar seguimiento</h5>
+                    <h5 class="modal-title" id="subirRangoModalLabel">Confirmar subir rango</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
@@ -280,13 +280,13 @@
             </div>
         </div>
     </div>
-    <!-- Modal de confirmación de subir rango -->
+    <!-- Modal de confirmación de bajar rango -->
     <div class="modal fade" id="bajarRangoModal" tabindex="-1" aria-labelledby="bajarRangoModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="bajarRangoModalLabel">Confirmar seguimiento</h5>
+                    <h5 class="modal-title" id="bajarRangoModalLabel">Confirmar bajar rango</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
@@ -296,7 +296,7 @@
                 <div class="modal-footer">
                     <div class="col-12 m-0 mt-2 p-0 text-center" id="alertaConfirmBajarUsuario"></div>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-success" id="confirmarBajarUsuarioBTN">Aceptar</button>
+                    <button type="button" class="btn btn-danger" id="confirmarBajarUsuarioBTN">Aceptar</button>
                 </div>
             </div>
         </div>
