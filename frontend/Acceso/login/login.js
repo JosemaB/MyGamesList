@@ -79,6 +79,15 @@ async function iniciarLogin() {
                 //El spinnerl o borramos dentro del awwait se que puede ser confuso pero si manda muchas peiticiones le usuario 
                 // con la base de datos caida hay un bug potente de muchos spinner
                 if (!datos["success"]) {
+                    document.getElementById("btnIniciatSesion").style.display = "block";
+                    // Verificamos si ya existe un spinner en el div
+                    var existingSpinner = alertaDiv.querySelector('.spinner'); // Asegúrate de que '.spinner' es un selector único
+
+                    if (existingSpinner) {
+                        // Si existe, lo eliminamos
+                        alertaDiv.removeChild(existingSpinner);
+                    }
+
                     camposLogin.forEach(campo => {
                         campo.classList.add('error');
                     });
@@ -86,6 +95,7 @@ async function iniciarLogin() {
                 } else if (datos["success"]) { //Lo compruebo asi sin else por si falla los datos y no hacerlo aunque haya generado error
                     //No meto ningun div de exito aunque lo envie en el backend porque se incia sesion mas rapido en el register lo veo un poco 
                     //mas logico esperar por si quiere hacer otra cosa
+
                     await guardarCambiosStorage();
                     window.location.href = "/Perfiles/perfil/perfil.html";
                 }
@@ -190,14 +200,6 @@ async function iniciarLogin() {
             const data = await response.json();
 
             const alertaDiv = document.getElementById('alertas');
-            document.getElementById("btnIniciatSesion").style.display = "block";
-            // Verificamos si ya existe un spinner en el div
-            var existingSpinner = alertaDiv.querySelector('.spinner'); // Asegúrate de que '.spinner' es un selector único
-
-            if (existingSpinner) {
-                // Si existe, lo eliminamos
-                alertaDiv.removeChild(existingSpinner);
-            }
 
             //Por si la base de datos esta caida para que no salgan muchas alertas hago esto se que es poner lo mismo pero si no me salta muchisimas
             borrarAlertaForm();
@@ -217,6 +219,7 @@ async function iniciarLogin() {
     }
     async function envidarDatosFormModal(email) {
         try {
+            debugger;
             const datos = {
                 email: email,
             };
@@ -269,7 +272,7 @@ async function iniciarLogin() {
 
     // Espera a que Google cargue y luego ejecuta la inicialización /*Para que funcione el boton de google*/
     waitForGoogle(initializeGoogleSignIn);
-    
+
     function waitForGoogle(callback) {
         const interval = setInterval(() => {
             if (window.google && window.google.accounts) {

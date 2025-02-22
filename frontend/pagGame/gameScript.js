@@ -198,7 +198,29 @@ async function iniciarInfoGame() {
             const divModalresenas = document.getElementById('contenidoModalReviews');
             if (!usuarioData) {
                 const div = document.createElement("div");
-                div.className = "mb-3 mt-2 card-body d-flex justify-content-center align-items-center flex-column";
+                div.className = "modal-content";
+
+                // Modal Header
+                const modalHeader = document.createElement("div");
+                modalHeader.className = "modal-header";
+
+                const modalTitle = document.createElement("h5");
+                modalTitle.className = "modal-title";
+                modalTitle.id = "confirmDeleteResenaModalLabel";
+                modalTitle.textContent = "Escribir reseña";
+
+                const closeButton = document.createElement("button");
+                closeButton.type = "button";
+                closeButton.className = "btn-close btn-close-white";
+                closeButton.setAttribute("data-bs-dismiss", "modal");
+                closeButton.setAttribute("aria-label", "Close");
+
+                modalHeader.appendChild(modalTitle);
+                modalHeader.appendChild(closeButton);
+
+                // Modal Body
+                const modalBody = document.createElement("div");
+                modalBody.className = "modal-body d-flex justify-content-center align-items-center flex-column";
 
                 const icon = document.createElement("i");
                 icon.className = "bi bi-chat-square-dots-fill fs-1";
@@ -212,12 +234,14 @@ async function iniciarInfoGame() {
                 link.href = "../Acceso/login/login.html";
                 link.textContent = "Iniciar sesión";
 
-                // Agregar elementos al div principal
-                div.appendChild(icon);
-                div.appendChild(paragraph);
-                div.appendChild(link);
+                // Agregar elementos
+                modalBody.appendChild(icon);
+                modalBody.appendChild(paragraph);
+                modalBody.appendChild(link);
 
-                // Agregar el div al documento (ajusta esto según dónde lo quieras insertar)
+                div.appendChild(modalHeader);
+                div.appendChild(modalBody);
+
                 divModalresenas.appendChild(div);
             } else {
                 // Crear los elementos de la modal
