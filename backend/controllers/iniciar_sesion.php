@@ -9,7 +9,7 @@ function iniciarSesion($email)
         $baseDeDatos = new ConexionBdd();
         $conexion = $baseDeDatos->getConnection();
 
-        $consultaUsuario = $conexion->prepare("select id_usuario, nombre_usuario, avatar, fecha_registro, id_rol, metodo_registro from usuarios where email = ?");
+        $consultaUsuario = $conexion->prepare("select r.nombre_rol, u.id_usuario, u.nombre_usuario, u.avatar, u.fecha_registro, u.id_rol, u.metodo_registro from usuarios u, roles r where r.id_rol = u.id_rol and email = ?");
         $consultaUsuario->bind_param("s", $email);
         $consultaUsuario->execute();
         $usuarioExiste = $consultaUsuario->get_result();
@@ -22,7 +22,7 @@ function iniciarSesion($email)
             'email' => $email,
             'fecha_registro' => $usuarioResultado['fecha_registro'],
             'metodo_registro' => $usuarioResultado['metodo_registro'],
-            'id_rol' => $usuarioResultado['id_rol'],
+            'rol' => $usuarioResultado['nombre_rol'],
             'avatar' => $usuarioResultado['avatar']
         ];
 

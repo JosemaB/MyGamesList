@@ -7,7 +7,7 @@ try {
     $datos = json_decode(file_get_contents('php://input'), true);
     if ($datos) {
         $id = $datos["idUsuario"];
-        $nombreUsuario = $datos["nombreUsuario"];
+        $nombreUsuario = validarCadena($datos["nombreUsuario"]);
 
         // Creamos la conexión a la base de datos
         $baseDeDatos = new ConexionBdd();
@@ -22,8 +22,23 @@ try {
         $consultaNombreStmt->fetch();
         $consultaNombreStmt->close();
 
-        if ($nombreActual === $nombreUsuario) {
+        // Consulta para verificar si el nuevo nombre de usuario ya existe
+        $verificarNombreQuery = "SELECT COUNT(*) FROM usuarios WHERE nombre_usuario = ?";
+        $verificarNombreStmt = $conexion->prepare($verificarNombreQuery);
+        $verificarNombreStmt->bind_param("s", $nombreUsuario);
+        $verificarNombreStmt->execute();
+        $verificarNombreStmt->bind_result($nombreExiste);
+        $verificarNombreStmt->fetch();
+        $verificarNombreStmt->close();
+
+        if (!$nombreUsuario) {
+            $error = "El nuevo nombre de usuario no puede estar vacío";
+        } else if ($nombreActual === $nombreUsuario) {
             $error = "El nuevo nombre de usuario no puede ser igual al nombre actual";
+        } else if ($nombreExiste > 0) {
+            $error = "El nombre de usuario ya está en uso";
+        } else if (strlen($nombreUsuario) > 15) {
+            $error = "El nombre de usuario no puede tener más de 15 caracteres";
         } else {
             // Consulta para actualizar el nombre de usuario
             $usuariosQuery = "UPDATE usuarios SET nombre_usuario = ? WHERE id_usuario = ?";
@@ -43,7 +58,7 @@ try {
         // Cerrar la conexión
         $conexion->close();
     } else {
-        $error = "Datos no encontrados.";
+        $error = "Datos no encontrados";
     }
 } catch (Exception $e) {
     // Capturar cualquier error y devolverlo

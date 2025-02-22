@@ -2,8 +2,9 @@ import { cerrarSesion } from '../../js/guardian.js';
 import { limpiarHTML, getCookie, ocultarBotones, mostrarBotones, alertDanger, alertSuccess, mostrarToast, borrarAlerta, borrarSpinner, spinner, sinResultado, cardMensajeError } from '../../js/funciones.js';
 
 const usuarioData = JSON.parse(localStorage.getItem("usuarioData"));
+console.log(usuarioData);
 const sesionToken = getCookie('sesion_token');
-if (!sesionToken || usuarioData.id_rol !== 2) {
+if (!sesionToken || usuarioData.rol !== "Administrador") {
     window.location.href = "/index.html";
 }
 
@@ -182,9 +183,51 @@ async function iniciarAdministradir() {
             renameLink.href = '#';
             renameLink.textContent = 'Renombrar usuario';
 
-            // Agregar atributos para que abra el modal
-            renameLink.setAttribute('data-bs-toggle', 'modal');
-            renameLink.setAttribute('data-bs-target', '#renameUsuarioModal');
+            // Asignar los manejadores de click para el "subir el rango"
+            renameLink.addEventListener("click", function (event) {
+                event.preventDefault();  // Evitar la acción predeterminada del enlace
+                document.getElementById('newUsuarioName').value = usuario.nombre_usuario;
+                const alerta = document.getElementById('alertasRenameUsuario');
+                borrarAlerta(alerta);
+                borrarSpinner(alerta);
+                mostrarBotones('#renameUsuarioModal');
+
+                // Aquí puedes agregar la lógica para renombrar la lista
+                const cardId = card.id; // Obtener el ID de la tarjeta
+
+                // Mostramos el modal de rename lista
+                const renameUsuarioModal = new bootstrap.Modal(document.getElementById('renameUsuarioModal'));
+                renameUsuarioModal.show();
+
+                // Lógica cuando se confirma la eliminación
+                const confirmRenameUsuarioButton = document.getElementById('confirmRenameUsuarioButton');
+
+                confirmRenameUsuarioButton.onclick = async function () {
+                    ocultarBotones('#renameUsuarioModal');
+                    borrarAlerta(alerta);
+                    const spinnerElement = spinner();
+                    spinnerElement.style.marginTop = '20px';
+                    spinnerElement.style.marginLeft = 'auto';
+                    spinnerElement.style.marginRight = 'auto';
+                    alerta.appendChild(spinnerElement);
+                    const nombreNuevo = document.getElementById('newUsuarioName').value;
+
+                    //Llamamos a la funcion de cambiar nombre
+                    const data = await renameUsuario(cardId.split('-')[1], nombreNuevo);
+
+                    borrarSpinner(alerta);
+
+                    if (!data["success"]) {
+                        mostrarBotones('#renameUsuarioModal');
+                        // Si error es un string, lo mostramos directamente
+                        alerta.appendChild(alertDanger(data.error));
+                    } else if (data["success"]) {
+                        mostrarToast(data.exito, 'success');
+                        userName.textContent = nombreNuevo;
+                        renameUsuarioModal.hide();
+                    }
+                }
+            });
 
             renameOption.appendChild(renameLink);
 
@@ -199,11 +242,12 @@ async function iniciarAdministradir() {
 
                 rankOption.appendChild(rankLink);
                 dropdownMenu.appendChild(rankOption);
-                // Asignar los manejadores de clic para el "subir el rango"
+                // Asignar los manejadores de click para el "subir el rango"
                 rankOption.addEventListener("click", function (event) {
                     event.preventDefault();  // Evitar la acción predeterminada del enlace
                     const alerta = document.getElementById('alertaConfirmSubirUsuario');
-
+                    borrarAlerta(alerta);
+                    borrarSpinner(alerta);
                     mostrarBotones('#subirRangoModal');
 
                     // Aquí puedes agregar la lógica para renombrar la lista
@@ -217,36 +261,28 @@ async function iniciarAdministradir() {
                     const confirmarSubirUsuarioBTN = document.getElementById('confirmarSubirUsuarioBTN');
 
                     confirmarSubirUsuarioBTN.onclick = async function () {
-                        borrarSpinner(alerta);
+                        borrarAlerta(alerta);
+
 
                         const spinnerElement = spinner();
-                        spinnerElement.style.margin = 'auto';
+                        spinnerElement.style.marginTop = '20px';
+                        spinnerElement.style.marginLeft = 'auto';
+                        spinnerElement.style.marginRight = 'auto';
                         alerta.appendChild(spinnerElement);
 
                         ocultarBotones('#subirRangoModal');
 
-                        console.log("hola");
                         //Llamamos a la funcion de cambiar nombre
-                        //const data = await renombrarLista(cardId, nuevoNombre.value)
+                        const data = await subirRangoUsuario(cardId.split('-')[1]);
 
                         borrarSpinner(alerta);
 
-                        /*if (!data["success"]) {
-                            document.querySelectorAll("#renameListaModal button").forEach(btn => {
-                                if (!btn.classList.contains("btn-close")) {
-                                    btn.style.display = "block";
-                                }
-                            });
+                        if (!data["success"]) {
                             // Si error es un string, lo mostramos directamente
                             alerta.appendChild(alertDanger(data.error));
                         } else if (data["success"]) {
-                            // Cerrar el modal después de la acción
-                            subirRangoModal.hide();
-                            mostrarToast('La lista se ha renombrado correctamente', 'success');
-                        }*/
-
-                        // Cerrar el modal después de la acción
-                        subirRangoModal.hide();
+                            alerta.appendChild(alertSuccess(data.exito));
+                        }
                     }
                 });
             } else {
@@ -257,12 +293,51 @@ async function iniciarAdministradir() {
                 rankLink.href = '#';
                 rankLink.textContent = 'Bajar rango';
 
-                // Agregar atributos para abrir el modal
-                rankLink.setAttribute('data-bs-toggle', 'modal');
-                rankLink.setAttribute('data-bs-target', '#bajarRangoModal');
-
                 rankOption.appendChild(rankLink);
                 dropdownMenu.appendChild(rankOption);
+
+                // Asignar los manejadores de click para el "bajar el rango"
+                rankOption.addEventListener("click", function (event) {
+                    event.preventDefault();  // Evitar la acción predeterminada del enlace
+                    const alerta = document.getElementById('alertaConfirmBajarUsuario');
+                    borrarAlerta(alerta);
+                    borrarSpinner(alerta);
+                    mostrarBotones('#bajarRangoModal');
+
+                    // Aquí puedes agregar la lógica para renombrar la lista
+                    const cardId = card.id; // Obtener el ID de la tarjeta
+
+                    // Mostramos el modal de rename lista
+                    const bajarRangoModal = new bootstrap.Modal(document.getElementById('bajarRangoModal'));
+                    bajarRangoModal.show();
+
+                    // Lógica cuando se confirma la eliminación
+                    const confirmarBajarUsuarioBTN = document.getElementById('confirmarBajarUsuarioBTN');
+
+                    confirmarBajarUsuarioBTN.onclick = async function () {
+                        borrarAlerta(alerta);
+
+
+                        const spinnerElement = spinner();
+                        spinnerElement.style.marginTop = '20px';
+                        spinnerElement.style.marginLeft = 'auto';
+                        spinnerElement.style.marginRight = 'auto';
+                        alerta.appendChild(spinnerElement);
+
+                        ocultarBotones('#bajarRangoModal');
+
+                        //Llamamos a la funcion de cambiar nombre
+                        const data = await bajarRangoUsuario(cardId.split('-')[1]);
+
+                        borrarSpinner(alerta);
+
+                        if (!data["success"]) {
+                            alerta.appendChild(alertDanger(data.error));
+                        } else if (data["success"]) {
+                            alerta.appendChild(alertSuccess(data.exito));
+                        }
+                    }
+                });
             }
 
             const deleteOption = document.createElement('li');
@@ -300,6 +375,71 @@ async function iniciarAdministradir() {
         });
         divtotalUsuariosResultado.appendChild(fragment);
 
+    }
+    async function renameUsuario(idUsuario, nombreUsuario) {
+        const datos = {
+            idUsuario: idUsuario,
+            nombreUsuario: nombreUsuario
+        }
+        const response = await fetch('http://localhost:3000/backend/controllers/controllerAdmin/renameUsuario.php', {
+            method: 'POST',
+            credentials: "include",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos) // Enviamos los datos como JSON
+        });
+        // Verificamos si la respuesta es correcta
+        if (!response.ok) {
+            throw new Error('Error en la respuesta de PHP');
+        }
+
+        // Convertimos la respuesta en JSON
+        const data = await response.json();
+        return data;
+    }
+
+    async function bajarRangoUsuario(idUsuario) {
+        const datos = {
+            idUsuario: idUsuario
+        }
+        const response = await fetch('http://localhost:3000/backend/controllers/controllerAdmin/bajarRango.php', {
+            method: 'POST',
+            credentials: "include",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos) // Enviamos los datos como JSON
+        });
+        // Verificamos si la respuesta es correcta
+        if (!response.ok) {
+            throw new Error('Error en la respuesta de PHP');
+        }
+
+        // Convertimos la respuesta en JSON
+        const data = await response.json();
+        return data;
+    }
+    async function subirRangoUsuario(idUsuario) {
+        const datos = {
+            idUsuario: idUsuario
+        }
+        const response = await fetch('http://localhost:3000/backend/controllers/controllerAdmin/subirRango.php', {
+            method: 'POST',
+            credentials: "include",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos) // Enviamos los datos como JSON
+        });
+        // Verificamos si la respuesta es correcta
+        if (!response.ok) {
+            throw new Error('Error en la respuesta de PHP');
+        }
+
+        // Convertimos la respuesta en JSON
+        const data = await response.json();
+        return data;
     }
     async function obtenerrUsuariosPorNombre(nombreUsuario) {
         const datos = {
