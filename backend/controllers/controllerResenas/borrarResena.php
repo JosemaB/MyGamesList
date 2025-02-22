@@ -7,7 +7,7 @@ try {
     // Obtener los datos enviados en formato JSON
     $datos = json_decode(file_get_contents('php://input'), true);
     if ($datos) {
-        $idUsuario = (int) validarCadena($datos['idUsuario']);
+        $idUsuario =  validarCadena($datos['idUsuario']);
         $idResena = (int) validarCadena($datos['idResena']);
 
         if (!$idUsuario || !$idResena) {
@@ -31,15 +31,15 @@ try {
             // Verificar si la reseña pertenece al usuario
             $checkResenaQuery = "SELECT id_resena FROM resenas WHERE id_resena = ? AND id_usuario = ?";
             $checkResenaStmt = $conexion->prepare($checkResenaQuery);
-            $checkResenaStmt->bind_param("ii", $idResena, $idUsuario);
+            $checkResenaStmt->bind_param("is", $idResena, $idUsuario);
             $checkResenaStmt->execute();
             $checkResenaResult = $checkResenaStmt->get_result();
 
-            if ($checkResenaResult->num_rows > 0) {
+            if ($checkResenaResult->num_rows > 0 || $idUsuario === "Administrador") {
                 // Si la reseña existe y pertenece al usuario, procedemos a eliminarla
-                $deleteResenaQuery = "DELETE FROM resenas WHERE id_resena = ? AND id_usuario = ?";
+                $deleteResenaQuery = "DELETE FROM resenas WHERE id_resena = ?";
                 $deleteResenaStmt = $conexion->prepare($deleteResenaQuery);
-                $deleteResenaStmt->bind_param("ii", $idResena, $idUsuario);
+                $deleteResenaStmt->bind_param("i", $idResena);
                 $deleteResenaStmt->execute();
 
                 if ($deleteResenaStmt->affected_rows > 0) {

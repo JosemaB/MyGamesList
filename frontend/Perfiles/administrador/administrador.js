@@ -1,5 +1,5 @@
 import { cerrarSesion } from '../../js/guardian.js';
-import { sinResultadoMensaje, limpiarHTML, getCookie, ocultarBotones, mostrarBotones, alertDanger, alertSuccess, mostrarToast, borrarAlerta, borrarSpinner, spinner, sinResultado, cardMensajeError } from '../../js/funciones.js';
+import { borrarResena, sinResultadoMensaje, limpiarHTML, getCookie, ocultarBotones, mostrarBotones, alertDanger, alertSuccess, mostrarToast, borrarAlerta, borrarSpinner, spinner, sinResultado, cardMensajeError } from '../../js/funciones.js';
 
 const usuarioData = JSON.parse(localStorage.getItem("usuarioData"));
 console.log(usuarioData);
@@ -11,12 +11,18 @@ if (!sesionToken || usuarioData.rol !== "Administrador") {
 document.addEventListener('DOMContentLoaded', iniciarAdministradir);
 
 async function iniciarAdministradir() {
-    document.querySelector('main').style.display = 'block';
+
     /*Selectores resultado */
     const divtotalUsuariosResultado = document.getElementById('totalUsuariosResultado');
+    const divtotalListasResultado = document.getElementById('totalListasResultado');
+    const divtotalResenasResultado = document.getElementById('totalResenasResultado');
+
 
     /*Selectores input */
     const inputBuscarUsuario = document.getElementById('inputBuscarUsuario');
+    const inputBuscarListas = document.getElementById('inputBuscarListas');
+    const inputBuscarResenas = document.getElementById('inputBuscarResenas');
+
 
     /*Cargamos los datos */
     const informeGeneral = await obtenerInformeGeneral();
@@ -26,6 +32,8 @@ async function iniciarAdministradir() {
 
     mostrarUsuarios(datosUsuarios);
     mostrarListas(datosListas)
+    mostrarResenasUsuario(datosResenas);
+    document.querySelector('main').style.display = 'block';
     console.log(informeGeneral);
 
     /*Cerrar sesion desde admin*/
@@ -52,7 +60,16 @@ async function iniciarAdministradir() {
         const data = await response.json();
         return data;
     }
-
+    /*Prevenimos los enters */
+    document.getElementById("formBuscarUsuario").addEventListener("submit", function (event) {
+        event.preventDefault(); // Evita que el formulario se envíe y recargue la página
+    });
+    document.getElementById("formBuscarListas").addEventListener("submit", function (event) {
+        event.preventDefault(); // Evita que el formulario se envíe y recargue la página
+    });
+    document.getElementById("formBuscarResenas").addEventListener("submit", function (event) {
+        event.preventDefault(); // Evita que el formulario se envíe y recargue la página
+    });
     /*Home */
     function cargarDatosGrafico(totalUsuarios, totalListas, totalReseñas) {
         // Configuración del gráfico de barras
@@ -124,8 +141,11 @@ async function iniciarAdministradir() {
 
     /* Usuarios */
     function mostrarUsuarios(datosUsuarios) {
-
-        if (datosUsuarios.length - 1 === 0) {
+        let usuariostotales = datosUsuarios.length;
+        if (datosUsuarios.some(usuario => usuario.id_usuario === usuarioData.id)) {
+            usuariostotales -= 1;
+        }
+        if (usuariostotales === 0) {
             divtotalUsuariosResultado.appendChild(sinResultadoMensaje('No se han encontrado usuarios registrados'));
         } else {
             const fragment = document.createDocumentFragment(); // Crear el fragmento
@@ -424,163 +444,163 @@ async function iniciarAdministradir() {
             divtotalUsuariosResultado.appendChild(fragment);
 
         }
-        async function renameUsuario(idUsuario, nombreUsuario) {
-            const datos = {
-                idUsuario: idUsuario,
-                nombreUsuario: nombreUsuario
-            }
-            const response = await fetch('http://localhost:3000/backend/controllers/controllerAdmin/renameUsuario.php', {
-                method: 'POST',
-                credentials: "include",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(datos) // Enviamos los datos como JSON
-            });
-            // Verificamos si la respuesta es correcta
-            if (!response.ok) {
-                throw new Error('Error en la respuesta de PHP');
-            }
-
-            // Convertimos la respuesta en JSON
-            const data = await response.json();
-            return data;
-        }
-        async function deleteUsuario(idUsuario) {
-            const datos = {
-                idUsuario: idUsuario
-            }
-            const response = await fetch('http://localhost:3000/backend/controllers/controllerAdmin/eliminarUsuario.php', {
-                method: 'POST',
-                credentials: "include",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(datos) // Enviamos los datos como JSON
-            });
-            // Verificamos si la respuesta es correcta
-            if (!response.ok) {
-                throw new Error('Error en la respuesta de PHP');
-            }
-
-            // Convertimos la respuesta en JSON
-            const data = await response.json();
-            return data;
-        }
-        async function bajarRangoUsuario(idUsuario) {
-            const datos = {
-                idUsuario: idUsuario
-            }
-            const response = await fetch('http://localhost:3000/backend/controllers/controllerAdmin/bajarRango.php', {
-                method: 'POST',
-                credentials: "include",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(datos) // Enviamos los datos como JSON
-            });
-            // Verificamos si la respuesta es correcta
-            if (!response.ok) {
-                throw new Error('Error en la respuesta de PHP');
-            }
-
-            // Convertimos la respuesta en JSON
-            const data = await response.json();
-            return data;
-        }
-        async function subirRangoUsuario(idUsuario) {
-            const datos = {
-                idUsuario: idUsuario
-            }
-            const response = await fetch('http://localhost:3000/backend/controllers/controllerAdmin/subirRango.php', {
-                method: 'POST',
-                credentials: "include",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(datos) // Enviamos los datos como JSON
-            });
-            // Verificamos si la respuesta es correcta
-            if (!response.ok) {
-                throw new Error('Error en la respuesta de PHP');
-            }
-
-            // Convertimos la respuesta en JSON
-            const data = await response.json();
-            return data;
-        }
-        async function obtenerrUsuariosPorNombre(nombreUsuario) {
-            const datos = {
-                nombreUsuario: nombreUsuario
-            }
-            const response = await fetch('http://localhost:3000/backend/helpers/adminHelpers/getUsuariosPorNombre.php', {
-                method: 'POST',
-                credentials: "include",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(datos) // Enviamos los datos como JSON
-            });
-            // Verificamos si la respuesta es correcta
-            if (!response.ok) {
-                throw new Error('Error en la respuesta de PHP');
-            }
-
-            // Convertimos la respuesta en JSON
-            const data = await response.json();
-            return data;
-        }
-        // Añadir un event listener usuario para el evento 'input'
-        inputBuscarUsuario?.addEventListener('input', () => {
-
-            // Si ya hay un intervalo en ejecución, lo detenemos
-            clearInterval(inputBuscarUsuario.intervalId);
-
-            // Iniciar un nuevo intervalo de 500ms
-            inputBuscarUsuario.intervalId = setInterval(async (e) => {
-
-                if (inputBuscarUsuario.value) {
-                    limpiarHTML(divtotalUsuariosResultado);
-                    const spinnerElement = spinner();
-                    spinnerElement.style.margin = 'auto';
-                    spinnerElement.style.marginTop = '20px';
-                    divtotalUsuariosResultado.appendChild(spinnerElement);
-                    /*Enviamos al backend y nos mostrara un resultado de usuarios */
-                    const datosUsuarioporNombre = await obtenerrUsuariosPorNombre(inputBuscarUsuario.value);
-                    borrarSpinner(divtotalUsuariosResultado);
-                    if (datosUsuarioporNombre.success) {
-                        if (datosUsuarioporNombre.usuarios.length > 0) {
-                            mostrarUsuarios(datosUsuarioporNombre.usuarios);
-                        } else {
-                            divtotalUsuariosResultado.appendChild(sinResultado());
-                        }
-                    } else {
-                        cardMensajeError('Ups... parece que tenemos un problema técnico. Inténtalo de nuevo más tarde', divtotalUsuariosResultado);
-                    }
-
-                } else {
-                    limpiarHTML(divtotalUsuariosResultado);
-                    const spinnerElement = spinner();
-                    spinnerElement.style.margin = 'auto';
-                    spinnerElement.style.marginTop = '20px';
-                    divtotalUsuariosResultado.appendChild(spinnerElement);
-                    const informeGeneral = await obtenerInformeGeneral();
-                    borrarSpinner(divtotalUsuariosResultado);
-                    const datosUsuarios = informeGeneral.data.usuarios;
-                    mostrarUsuarios(datosUsuarios);
-                }
-            }, 500);
-
-            // Resetear el temporizador para detectar cuando el usuario deja de escribir
-            clearTimeout(inputBuscarUsuario.typingTimer);
-            inputBuscarUsuario.typingTimer = setTimeout(() => {
-                clearInterval(inputBuscarUsuario.intervalId);
-            }, 500);
-        });
     }
+    async function renameUsuario(idUsuario, nombreUsuario) {
+        const datos = {
+            idUsuario: idUsuario,
+            nombreUsuario: nombreUsuario
+        }
+        const response = await fetch('http://localhost:3000/backend/controllers/controllerAdmin/renameUsuario.php', {
+            method: 'POST',
+            credentials: "include",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos) // Enviamos los datos como JSON
+        });
+        // Verificamos si la respuesta es correcta
+        if (!response.ok) {
+            throw new Error('Error en la respuesta de PHP');
+        }
+
+        // Convertimos la respuesta en JSON
+        const data = await response.json();
+        return data;
+    }
+    async function deleteUsuario(idUsuario) {
+        const datos = {
+            idUsuario: idUsuario
+        }
+        const response = await fetch('http://localhost:3000/backend/controllers/controllerAdmin/eliminarUsuario.php', {
+            method: 'POST',
+            credentials: "include",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos) // Enviamos los datos como JSON
+        });
+        // Verificamos si la respuesta es correcta
+        if (!response.ok) {
+            throw new Error('Error en la respuesta de PHP');
+        }
+
+        // Convertimos la respuesta en JSON
+        const data = await response.json();
+        return data;
+    }
+    async function bajarRangoUsuario(idUsuario) {
+        const datos = {
+            idUsuario: idUsuario
+        }
+        const response = await fetch('http://localhost:3000/backend/controllers/controllerAdmin/bajarRango.php', {
+            method: 'POST',
+            credentials: "include",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos) // Enviamos los datos como JSON
+        });
+        // Verificamos si la respuesta es correcta
+        if (!response.ok) {
+            throw new Error('Error en la respuesta de PHP');
+        }
+
+        // Convertimos la respuesta en JSON
+        const data = await response.json();
+        return data;
+    }
+    async function subirRangoUsuario(idUsuario) {
+        const datos = {
+            idUsuario: idUsuario
+        }
+        const response = await fetch('http://localhost:3000/backend/controllers/controllerAdmin/subirRango.php', {
+            method: 'POST',
+            credentials: "include",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos) // Enviamos los datos como JSON
+        });
+        // Verificamos si la respuesta es correcta
+        if (!response.ok) {
+            throw new Error('Error en la respuesta de PHP');
+        }
+
+        // Convertimos la respuesta en JSON
+        const data = await response.json();
+        return data;
+    }
+    async function obtenerUsuariosPorNombre(nombreUsuario) {
+        const datos = {
+            nombreUsuario: nombreUsuario
+        }
+        const response = await fetch('http://localhost:3000/backend/helpers/adminHelpers/getUsuariosPorNombre.php', {
+            method: 'POST',
+            credentials: "include",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos) // Enviamos los datos como JSON
+        });
+        // Verificamos si la respuesta es correcta
+        if (!response.ok) {
+            throw new Error('Error en la respuesta de PHP');
+        }
+
+        // Convertimos la respuesta en JSON
+        const data = await response.json();
+        return data;
+    }
+    // Añadir un event listener usuario para el evento 'input'
+    inputBuscarUsuario?.addEventListener('input', () => {
+        // Si ya hay un intervalo en ejecución, lo detenemos
+        clearInterval(inputBuscarUsuario.intervalId);
+
+        // Iniciar un nuevo intervalo de 500ms
+        inputBuscarUsuario.intervalId = setInterval(async (e) => {
+
+            if (inputBuscarUsuario.value) {
+                limpiarHTML(divtotalUsuariosResultado);
+                const spinnerElement = spinner();
+                spinnerElement.style.margin = 'auto';
+                spinnerElement.style.marginTop = '20px';
+                divtotalUsuariosResultado.appendChild(spinnerElement);
+                /*Enviamos al backend y nos mostrara un resultado de usuarios */
+                const datosUsuarioporNombre = await obtenerUsuariosPorNombre(inputBuscarUsuario.value);
+                borrarSpinner(divtotalUsuariosResultado);
+                if (datosUsuarioporNombre.success) {
+                    if (datosUsuarioporNombre.usuarios.length > 0) {
+                        mostrarUsuarios(datosUsuarioporNombre.usuarios);
+                    } else {
+                        divtotalUsuariosResultado.appendChild(sinResultado());
+                    }
+                } else {
+                    cardMensajeError('Ups... parece que tenemos un problema técnico. Inténtalo de nuevo más tarde', divtotalUsuariosResultado);
+                }
+
+            } else {
+                limpiarHTML(divtotalUsuariosResultado);
+                const spinnerElement = spinner();
+                spinnerElement.style.margin = 'auto';
+                spinnerElement.style.marginTop = '20px';
+                divtotalUsuariosResultado.appendChild(spinnerElement);
+                const informeGeneral = await obtenerInformeGeneral();
+                borrarSpinner(divtotalUsuariosResultado);
+                const datosUsuarios = informeGeneral.data.usuarios;
+                mostrarUsuarios(datosUsuarios);
+            }
+        }, 500);
+
+        // Resetear el temporizador para detectar cuando el usuario deja de escribir
+        clearTimeout(inputBuscarUsuario.typingTimer);
+        inputBuscarUsuario.typingTimer = setTimeout(() => {
+            clearInterval(inputBuscarUsuario.intervalId);
+        }, 500);
+    });
+
     /* Listas */
     function mostrarListas(listasDeJuegos) {
-        
+
         const divListas = document.getElementById('totalListasResultado');
         if (listasDeJuegos.length == 0) {
             // Crear el contenedor principal
@@ -806,7 +826,7 @@ async function iniciarAdministradir() {
                     confirmDeleteButton.onclick = async function () {
                         // Aquí pones la lógica de eliminar la lista
                         const cardId = card.id;
-                        
+
                         var existingSpinner = alerta.querySelector('.spinner');
                         if (existingSpinner) {
                             // Si existe, lo eliminamos
@@ -861,9 +881,9 @@ async function iniciarAdministradir() {
         }
     }
     async function borrarLista(idLista) {
-        const { id } = usuarioData;
+        const { rol } = usuarioData;
         const datos = {
-            idUsuario: id,
+            idUsuario: rol,
             idLista: idLista
         }
         const response = await fetch('http://localhost:3000/backend/controllers/controllerListas/borrarListas.php', {
@@ -884,9 +904,9 @@ async function iniciarAdministradir() {
         return data;
     }
     async function renombrarLista(idLista, nuevoNombre) {
-        const { id } = usuarioData;
+        const { rol } = usuarioData;
         const datos = {
-            idUsuario: id,
+            idUsuario: rol,
             idLista: idLista,
             nuevoNombre: nuevoNombre
         }
@@ -907,7 +927,72 @@ async function iniciarAdministradir() {
         const data = await response.json();
         return data;
     }
+    // Añadir un event listener listas para el evento 'input'
+    inputBuscarListas?.addEventListener('input', () => {
+        // Si ya hay un intervalo en ejecución, lo detenemos
+        clearInterval(inputBuscarListas.intervalId);
 
+        // Iniciar un nuevo intervalo de 500ms
+        inputBuscarListas.intervalId = setInterval(async (e) => {
+            if (inputBuscarListas.value) {
+                limpiarHTML(divtotalListasResultado);
+                const spinnerElement = spinner();
+                spinnerElement.style.margin = 'auto';
+                spinnerElement.style.marginTop = '20px';
+                divtotalListasResultado.appendChild(spinnerElement);
+                /*Enviamos al backend y nos mostrara un resultado de usuarios */
+                const usuariosListas = await obtenerUsuariosPorListas(inputBuscarListas.value);
+                borrarSpinner(divtotalListasResultado);
+                if (usuariosListas.success) {
+                    if (usuariosListas.listas.length > 0) {
+                        mostrarListas(usuariosListas.listas);
+                    } else {
+                        divtotalListasResultado.appendChild(sinResultado());
+                    }
+                } else {
+                    cardMensajeError('Ups... parece que tenemos un problema técnico. Inténtalo de nuevo más tarde', divtotalListasResultado);
+                }
+
+            } else {
+                limpiarHTML(divtotalListasResultado);
+                const spinnerElement = spinner();
+                spinnerElement.style.margin = 'auto';
+                spinnerElement.style.marginTop = '20px';
+                divtotalListasResultado.appendChild(spinnerElement);
+                const informeGeneral = await obtenerInformeGeneral();
+                borrarSpinner(divtotalListasResultado);
+                const datosListas = informeGeneral.data.listas;
+                mostrarListas(datosListas);
+            }
+        }, 500);
+
+        // Resetear el temporizador para detectar cuando el usuario deja de escribir
+        clearTimeout(inputBuscarListas.typingTimer);
+        inputBuscarListas.typingTimer = setTimeout(() => {
+            clearInterval(inputBuscarListas.intervalId);
+        }, 500);
+    });
+    async function obtenerUsuariosPorListas(nombreUsuario) {
+        const datos = {
+            nombreUsuario: nombreUsuario
+        }
+        const response = await fetch('http://localhost:3000/backend/helpers/adminHelpers/getListasPorNombreUsuario.php', {
+            method: 'POST',
+            credentials: "include",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos) // Enviamos los datos como JSON
+        });
+        // Verificamos si la respuesta es correcta
+        if (!response.ok) {
+            throw new Error('Error en la respuesta de PHP');
+        }
+
+        // Convertimos la respuesta en JSON
+        const data = await response.json();
+        return data;
+    }
     /*Juegos lista */
     document.querySelector("#listJuegos").addEventListener("show.bs.modal", async function (event) {
         // Obtener el botón o el elemento que abrió el modal
@@ -1058,5 +1143,241 @@ async function iniciarAdministradir() {
         }
 
     }
+
+    /* Resenas */
+    // Añadir un event listener resenas para el evento 'input'
+    inputBuscarResenas?.addEventListener('input', () => {
+        // Si ya hay un intervalo en ejecución, lo detenemos
+        clearInterval(inputBuscarResenas.intervalId);
+
+        // Iniciar un nuevo intervalo de 500ms
+        inputBuscarResenas.intervalId = setInterval(async (e) => {
+            if (inputBuscarResenas.value) {
+                limpiarHTML(divtotalResenasResultado);
+                const spinnerElement = spinner();
+                spinnerElement.style.margin = 'auto';
+                spinnerElement.style.marginTop = '20px';
+                divtotalResenasResultado.appendChild(spinnerElement);
+                /*Enviamos al backend y nos mostrara un resultado de usuarios */
+                const usuariosResenas = await obtenerUsuariosPorResenas(inputBuscarResenas.value);
+                borrarSpinner(divtotalResenasResultado);
+                if (usuariosResenas.success) {
+                    if (usuariosResenas.resenas.length > 0) {
+                        mostrarResenasUsuario(usuariosResenas.resenas);
+                    } else {
+                        divtotalResenasResultado.appendChild(sinResultado());
+                    }
+                } else {
+                    cardMensajeError('Ups... parece que tenemos un problema técnico. Inténtalo de nuevo más tarde', divtotalResenasResultado);
+                }
+
+            } else {
+                limpiarHTML(divtotalResenasResultado);
+                const spinnerElement = spinner();
+                spinnerElement.style.margin = 'auto';
+                spinnerElement.style.marginTop = '20px';
+                divtotalResenasResultado.appendChild(spinnerElement);
+                const informeGeneral = await obtenerInformeGeneral();
+                borrarSpinner(divtotalResenasResultado);
+                const datosResenas = informeGeneral.data.resenas;
+                mostrarResenasUsuario(datosResenas);
+            }
+        }, 500);
+
+        // Resetear el temporizador para detectar cuando el usuario deja de escribir
+        clearTimeout(inputBuscarResenas.typingTimer);
+        inputBuscarResenas.typingTimer = setTimeout(() => {
+            clearInterval(inputBuscarResenas.intervalId);
+        }, 500);
+    });
+    function mostrarResenasUsuario(datosResenas) {
+        const divReviews = document.getElementById('totalResenasResultado');
+        const obtenerListResenas = datosResenas;
+
+        if (obtenerListResenas.length > 0) {
+            const fragment = document.createDocumentFragment();
+            obtenerListResenas.forEach(resena => {
+                // Crear el elemento principal
+                const resenaDiv = document.createElement('div');
+                resenaDiv.className = 'mb-2 p-0 col-12 mensajePersonalizado card';
+                resenaDiv.id = `Resena-${resena["id_resena"]}`;
+
+                // Crear la fila
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'row g-0';
+
+                // Columna de la imagen (izquierda)
+                const imgColDiv = document.createElement('div');
+                imgColDiv.className = 'col-md-3';
+
+                const imgLink = document.createElement('a');
+                imgLink.href = `/pagGame/infoGame.html?id=${resena["id_videojuego_api"]}`;
+                imgLink.title = `/pagGame/infoGame.html?id=${resena["id_videojuego_api"]}`;
+
+                const img = document.createElement('img');
+                img.src = resena["img_juego"];
+                img.className = 'imgJuegoResena img-fluid rounded-start';
+                img.alt = `Game`;
+
+                imgLink.appendChild(img);
+                imgColDiv.appendChild(imgLink);
+
+                // Columna del contenido (derecha)
+                const contentColDiv = document.createElement('div');
+                contentColDiv.className = 'col-md-9';
+
+                // Card header
+                const cardHeaderDiv = document.createElement('div');
+                cardHeaderDiv.className = 'card-header fw-bold';
+
+                const headerFlexDiv = document.createElement('div');
+                headerFlexDiv.className = 'd-flex align-items-center justify-content-between';
+
+                // Nombre del usuario
+                const userDiv = document.createElement('div');
+                userDiv.className = 'd-flex align-items-center';
+                const userImg = document.createElement('img');
+                userImg.src = resena["avatar"];
+                userImg.className = 'img-fluid rounded-start perfil-img';
+                userImg.alt = `Imagen de ${resena["nombre_usuario"]}`;
+
+                const userNameSpan = document.createElement('span');
+                userNameSpan.className = 'nombre-usuario ms-2';
+                userNameSpan.textContent = resena["nombre_usuario"];
+
+                userDiv.appendChild(userImg);
+                userDiv.appendChild(userNameSpan);
+
+                // Botón de eliminar
+                const deleteButton = document.createElement('button');
+                deleteButton.className = 'btn';
+                deleteButton.title = 'Eliminar mensaje';
+                deleteButton.setAttribute('data-bs-toggle', 'modal');
+                deleteButton.setAttribute('data-bs-target', '#confirmDeleteResenaModal');
+                deleteButton.setAttribute('data-resena-id', resena["id_resena"]);
+
+                const deleteIcon = document.createElement('i');
+                deleteIcon.className = 'fs-5 text-danger bi bi-x-circle-fill';
+
+                deleteButton.appendChild(deleteIcon);
+
+                // Agregar evento al botón "X" para pasar el ID al modal
+                divReviews.addEventListener('click', function (event) {
+                    // Obtener el modal y los botones
+                    const modalFooterButtons = document.querySelectorAll('#confirmDeleteResenaModal .btn');
+
+                    // Mostrar los botones cuando el modal se abra
+                    modalFooterButtons.forEach(button => {
+                        button.style.display = 'inline-block';
+                    });
+
+                    if (event.target.closest('.btn[data-resena-id]')) {
+                        const deleteButton = event.target.closest('.btn[data-resena-id]');
+                        const resenaId = deleteButton.getAttribute('data-resena-id');
+                        document.getElementById('confirmDeleteResenaButton').setAttribute('data-resena-id', resenaId);
+                    }
+                });
+
+                headerFlexDiv.appendChild(userDiv);
+                headerFlexDiv.appendChild(deleteButton);
+                cardHeaderDiv.appendChild(headerFlexDiv);
+
+                // Card body
+                const cardBodyDiv = document.createElement('div');
+                cardBodyDiv.className = 'card-body';
+
+                const blockquote = document.createElement('blockquote');
+                blockquote.className = 'blockquote mb-0';
+
+                const contentParagraph = document.createElement('p');
+                contentParagraph.textContent = resena["contenido"];
+
+                blockquote.appendChild(contentParagraph);
+                cardBodyDiv.appendChild(blockquote);
+
+                // Añadir todo al contenido de la columna derecha
+                contentColDiv.appendChild(cardHeaderDiv);
+                contentColDiv.appendChild(cardBodyDiv);
+
+                // Añadir las columnas a la fila
+                rowDiv.appendChild(imgColDiv);
+                rowDiv.appendChild(contentColDiv);
+
+                // Añadir la fila al elemento principal
+                resenaDiv.appendChild(rowDiv);
+
+                //Asi no se vuelve mas lento el codigo
+                fragment.appendChild(resenaDiv);
+            });
+            divReviews.appendChild(fragment);
+        } else {
+            divReviews.appendChild(sinResultadoMensaje('No se han encontrado reseñas registradas'));
+        }
+    }
+    async function obtenerUsuariosPorResenas(nombreUsuario) {
+        const datos = {
+            nombreUsuario: nombreUsuario
+        }
+        const response = await fetch('http://localhost:3000/backend/helpers/adminHelpers/getResenasPorNombreUsuario.php', {
+            method: 'POST',
+            credentials: "include",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos) // Enviamos los datos como JSON
+        });
+        // Verificamos si la respuesta es correcta
+        if (!response.ok) {
+            throw new Error('Error en la respuesta de PHP');
+        }
+
+        // Convertimos la respuesta en JSON
+        const data = await response.json();
+        return data;
+    }
+    //Borrar resena 
+    document.getElementById('confirmDeleteResenaButton').addEventListener('click', async function () {
+        const alerta = document.getElementById('alertaResena');
+        borrarSpinner(alerta);
+        borrarAlerta(alerta);
+        // Obtener el modal y los botones
+        const modalFooterButtons = document.querySelectorAll('#confirmDeleteResenaModal .btn');
+
+        // Obtener el ID de la reseña desde el botón de confirmación
+        const resenaId = this.getAttribute('data-resena-id');
+
+        // Eliminar la tarjeta usando el ID
+        const tarjetaAEliminar = document.getElementById(`Resena-${resenaId}`);
+        if (tarjetaAEliminar) {
+            const datos = {
+                idUsuario: usuarioData.rol,
+                idResena: resenaId
+            }
+            const spinnerElement = spinner();
+            spinnerElement.style.margin = 'auto';
+            alerta.appendChild(spinnerElement);
+
+            modalFooterButtons.forEach(button => {
+                button.style.display = 'none';
+            });
+            //Enviamos al backend para borrar la reseña
+            const data = await borrarResena(datos);
+            borrarSpinner(alerta);
+
+            if (!data.success) {
+                alerta.appendChild(alertDanger(data.error));
+
+            } else {
+                // Mostrar un toast de éxito
+                mostrarToast('La reseña se ha borrado correctamente', 'success');
+                tarjetaAEliminar.remove(); // Eliminar la tarjeta del DOM
+            }
+
+        }
+
+        // Cerrar el modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('confirmDeleteResenaModal'));
+        modal.hide();
+    });
 
 }

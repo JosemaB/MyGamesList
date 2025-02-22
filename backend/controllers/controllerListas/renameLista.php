@@ -8,7 +8,7 @@ try {
     $datos = json_decode(file_get_contents('php://input'), true);
 
     if ($datos) {
-        $idUsuario = (int) validarCadena($datos['idUsuario']);
+        $idUsuario = validarCadena($datos['idUsuario']);
 
         // Usamos una expresión regular para extraer el número
         preg_match('/cardLista-(\d+)/', validarCadena($datos['idLista']), $coincidencias);
@@ -28,24 +28,24 @@ try {
         $conexion = $baseDeDatos->getConnection();
 
         // Verificar si la lista pertenece al usuario antes de actualizarla
-        $checkListQuery = "SELECT id_lista, nombre_lista FROM listas WHERE id_lista = ? AND id_usuario = ?";
+        $checkListQuery = "SELECT id_lista, nombre_lista FROM listas WHERE id_lista = ?";
         $checkListStmt = $conexion->prepare($checkListQuery);
-        $checkListStmt->bind_param("ii", $idLista, $idUsuario);
+        $checkListStmt->bind_param("i", $idLista);
         $checkListStmt->execute();
         $checkListResult = $checkListStmt->get_result();
 
-        if ($checkListResult->num_rows > 0) {
+        if ($checkListResult->num_rows > 0 || $idUsuario === "Administrador") {
             $lista = $checkListResult->fetch_assoc();
             $nombreActual = $lista['nombre_lista'];
 
             // Verificar si el nuevo nombre es igual al nombre actual
             if ($nuevoNombre === $nombreActual) {
-                $error = ["El nuevo nombre es igual al nombre actual. No se realizaron cambios."];
+                $error = ["El nuevo nombre es igual al nombre actual. No se realizaron cambios"];
             } else {
                 // Si la lista existe y pertenece al usuario, procedemos a actualizar el nombre
-                $updateListQuery = "UPDATE listas SET nombre_lista = ? WHERE id_lista = ? AND id_usuario = ?";
+                $updateListQuery = "UPDATE listas SET nombre_lista = ? WHERE id_lista = ?";
                 $updateListStmt = $conexion->prepare($updateListQuery);
-                $updateListStmt->bind_param("sii", $nuevoNombre, $idLista, $idUsuario);
+                $updateListStmt->bind_param("si", $nuevoNombre, $idLista);
                 $updateListStmt->execute();
 
                 if ($updateListStmt->affected_rows > 0) {

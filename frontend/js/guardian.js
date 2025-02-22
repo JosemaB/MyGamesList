@@ -32,14 +32,15 @@ export async function iniciarGuardian() {
         usuarioNoConectadoEscritorio();
     } else if (sessionData.success) {
         const { usuario } = sessionData.exito;
-
+        localStorage.removeItem('logout');
+        localStorage.setItem("usuarioData", JSON.stringify(usuario));
+        const usuarioData = JSON.parse(localStorage.getItem("usuarioData"));
         if (window.location.pathname === '/Perfiles/administrador/administrador.html') {
             escritorioAdministrador(usuario);
             movilAdministrador(usuario);
         } else {
-            usuarioConectadoMovil(usuario.avatar);
-            usuarioConectadoEscritorio(usuario.avatar);
-            localStorage.setItem("usuarioData", JSON.stringify(usuario));
+            usuarioConectadoMovil(usuario.avatar, usuarioData);
+            usuarioConectadoEscritorio(usuario.avatar, usuarioData);
         }
     }
 }
@@ -95,7 +96,7 @@ function usuarioNoConectadoEscritorio() {
     divHeaderEscritorio.appendChild(div);  // O puedes especificar otro contenedor
 
 }
-function usuarioConectadoMovil(avatar) {
+function usuarioConectadoMovil(avatar, usuarioData) {
     avatar = avatar === null ? '/img/avatares/sinAvatar.png' : avatar;
     const divHeaderMoviles = document.getElementById('headerMoviles');
     const navItem = document.createElement('div');
@@ -133,7 +134,16 @@ function usuarioConectadoMovil(avatar) {
         dropdownMenu.appendChild(perfilItem);
     }
 
-
+    if (usuarioData && usuarioData.rol === 'Administrador') {
+        // Crear y agregar el tercer item (Perfil)
+        const adminItem = document.createElement('li');
+        const adminLink = document.createElement('a');
+        adminLink.classList.add('dropdown-item', 'text-white', 'fw-bold');
+        adminLink.setAttribute('href', '/Perfiles/administrador/administrador.html');  // Modificar enlace aquí
+        adminLink.textContent = 'Administrador';
+        adminItem.appendChild(adminLink);
+        dropdownMenu.appendChild(adminItem);
+    }
     // Crear y agregar el quinto item (Cerrar sesión)
     const logoutItem = document.createElement('li');
     const logoutLink = document.createElement('a');
@@ -156,7 +166,7 @@ function usuarioConectadoMovil(avatar) {
 
 }
 
-function usuarioConectadoEscritorio(avatar) {
+function usuarioConectadoEscritorio(avatar, usuarioData) {
     avatar = avatar === null ? '/img/avatares/sinAvatar.png' : avatar;
     const divHeaderEscritorio = document.getElementById('headerEscritorio');
 
@@ -198,7 +208,16 @@ function usuarioConectadoEscritorio(avatar) {
 
     }
 
-
+    if (usuarioData && usuarioData["rol"] === 'Administrador') {
+        // Crear y agregar el tercer item (Perfil)
+        const adminItem = document.createElement('li');
+        const adminLink = document.createElement('a');
+        adminLink.classList.add('dropdown-item', 'text-white', 'fw-bold', 'text-center');
+        adminLink.setAttribute('href', '/Perfiles/administrador/administrador.html');  // Modificar enlace aquí
+        adminLink.textContent = 'Administrador';
+        adminItem.appendChild(adminLink);
+        dropdownMenu.appendChild(adminItem);
+    }
     // Crear y agregar el quinto item (Cerrar sesión)
     const logoutItem = document.createElement('li');
     const logoutLink = document.createElement('a');
@@ -244,6 +263,9 @@ export async function cerrarSesion() {
 
 
             eliminarDatosStorage();
+            // Al cerrar sesión, se notifica a las demás pestañas:
+            localStorage.setItem('logout', Date.now());
+
             // Recargar la página después de cerrar sesión
             window.location.href = "/index.html";  // Esto recargará la página
         } else {
@@ -296,3 +318,11 @@ function escritorioAdministrador(usuario) {
     document.getElementById('avatarAdministrador').src = usuario["avatar"];
     document.getElementById('nombreAdministrador').textContent = `Bienvenido, ${usuario["nombre"]}`;
 }
+
+window.addEventListener('storage', (event) => {
+    if (event.key === 'logout') {
+        // Acción al detectar el cierre de sesión en otra pestaña.
+        // Por ejemplo, redirigir a la página de login:
+        window.location.href = '/index.html';
+    }
+});

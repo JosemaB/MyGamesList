@@ -445,7 +445,7 @@
     border: 1px solid white;
 }
 
-/*Para que sepan que google no este permidito cambair el email y la contrasena*/
+/*Para que sepan que google no este permidito cambiar el email y la contrasena*/
 .card-google-login-message {
     background-color: #1A233A;
     border-radius: 20px;

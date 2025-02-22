@@ -80,9 +80,8 @@ async function iniciarApp() {
             // Verifica si el foco va hacia un enlace 'A' o un div con una clase específica
             const relatedElement = event.relatedTarget;
 
-            if (relatedElement && relatedElement.tagName === 'A') {
+            if (relatedElement && relatedElement.tagName === 'A' || relatedElement && relatedElement.tagName === 'BUTTON') {
                 // Si el foco va hacia un enlace, no limpiamos
-                console.log('Foco hacia un enlace');
             } else {
                 // Si no es ninguno de los casos anteriores, limpiamos
                 limpiarHTML(resultadosForm);
@@ -431,7 +430,7 @@ async function iniciarApp() {
                 if (juegosFiltrados.length > 5) {
                     // Crear el botón <button>
                     const buttonElement = document.createElement('button');
-                    buttonElement.type = 'button'; // Tipo de botón
+                    buttonElement.type = 'submit'; // Tipo de botón
                     buttonElement.classList.add('fw-bold', 'btn', 'btn-lg', 'btn-block'); // Clases CSS
                     buttonElement.textContent = 'Más resultados'; // Texto del botón
 
