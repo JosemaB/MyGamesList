@@ -316,8 +316,6 @@ async function iniciarAdministradir() {
 
                     confirmarBajarUsuarioBTN.onclick = async function () {
                         borrarAlerta(alerta);
-
-
                         const spinnerElement = spinner();
                         spinnerElement.style.marginTop = '20px';
                         spinnerElement.style.marginLeft = 'auto';
@@ -348,6 +346,49 @@ async function iniciarAdministradir() {
             deleteOption.appendChild(deleteLink);
             dropdownMenu.appendChild(deleteOption);
 
+            // Eliminar usuario
+            deleteLink.addEventListener("click", function (event) {
+                event.preventDefault();  // Evitar la acción predeterminada del enlace
+                const alerta = document.getElementById('alertaDeleteUsuario');
+                borrarAlerta(alerta);
+                borrarSpinner(alerta);
+                mostrarBotones('#deleteUsuarioModal');
+
+                // Aquí puedes agregar la lógica para renombrar la lista
+                const cardId = card.id; // Obtener el ID de la tarjeta
+
+                // Mostramos el modal de rename lista
+                const deleteUsuarioModal = new bootstrap.Modal(document.getElementById('deleteUsuarioModal'));
+                deleteUsuarioModal.show();
+
+                // Lógica cuando se confirma la eliminación
+                const eliminarUsuarioBTN = document.getElementById('eliminarUsuarioBTN');
+
+                eliminarUsuarioBTN.onclick = async function () {
+                    ocultarBotones('#deleteUsuarioModal');
+                    borrarAlerta(alerta);
+                    const spinnerElement = spinner();
+                    spinnerElement.style.marginTop = '10px';
+                    spinnerElement.style.marginLeft = 'auto';
+                    spinnerElement.style.marginRight = 'auto';
+                    alerta.appendChild(spinnerElement);
+
+                    //Llamamos a la funcion de cambiar nombre
+                    const data = await deleteUsuario(cardId.split('-')[1]);
+
+                    borrarSpinner(alerta);
+
+                    if (!data["success"]) {
+                        mostrarBotones('#deleteUsuarioModal');
+                        // Si error es un string, lo mostramos directamente
+                        alerta.appendChild(alertDanger(data.error));
+                    } else if (data["success"]) {
+                        mostrarToast(data.exito, 'success');
+                        deleteUsuarioModal.hide();
+                        card.remove();
+                    }
+                }
+            });
             // Añadir el botón y el menú al contenedor del dropdown
             dropdown.appendChild(dropdownButton);
             dropdown.appendChild(dropdownMenu);
@@ -398,7 +439,27 @@ async function iniciarAdministradir() {
         const data = await response.json();
         return data;
     }
+    async function deleteUsuario(idUsuario) {
+        const datos = {
+            idUsuario: idUsuario
+        }
+        const response = await fetch('http://localhost:3000/backend/controllers/controllerAdmin/eliminarUsuario.php', {
+            method: 'POST',
+            credentials: "include",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datos) // Enviamos los datos como JSON
+        });
+        // Verificamos si la respuesta es correcta
+        if (!response.ok) {
+            throw new Error('Error en la respuesta de PHP');
+        }
 
+        // Convertimos la respuesta en JSON
+        const data = await response.json();
+        return data;
+    }
     async function bajarRangoUsuario(idUsuario) {
         const datos = {
             idUsuario: idUsuario
@@ -492,6 +553,13 @@ async function iniciarAdministradir() {
 
             } else {
                 limpiarHTML(divtotalUsuariosResultado);
+                const spinnerElement = spinner();
+                spinnerElement.style.margin = 'auto';
+                spinnerElement.style.marginTop = '20px';
+                divtotalUsuariosResultado.appendChild(spinnerElement);
+                const informeGeneral = await obtenerInformeGeneral();
+                borrarSpinner(divtotalUsuariosResultado);
+                const datosUsuarios = informeGeneral.data.usuarios;
                 mostrarUsuarios(datosUsuarios);
             }
         }, 500);

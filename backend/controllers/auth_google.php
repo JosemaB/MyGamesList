@@ -11,7 +11,7 @@ try {
         $email = $datos['email'];
         $avatar = $datos['image_url'];
         $full_name = $datos['given_name'];
-        $rol = '3';
+        $rol = '1';
         $metodoRegistro = 'google';
 
         //Creamos la conexion ya con los campos validados

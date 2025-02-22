@@ -12,19 +12,33 @@ try {
         $baseDeDatos = new ConexionBdd();
         $conexion = $baseDeDatos->getConnection();
 
-        // Consulta 1: Eliminar el usuario
-        $usuariosQuery = "DELETE FROM usuarios WHERE id_usuario = ?";
-        $usuariosStmt = $conexion->prepare($usuariosQuery);
-        $usuariosStmt->bind_param("s", $id);
+        // Consulta para verificar si el usuario existe
+        $consultaUsuarioQuery = "SELECT COUNT(*) FROM usuarios WHERE id_usuario = ?";
+        $consultaUsuarioStmt = $conexion->prepare($consultaUsuarioQuery);
+        $consultaUsuarioStmt->bind_param("s", $id);
+        $consultaUsuarioStmt->execute();
+        $consultaUsuarioStmt->bind_result($usuarioExiste);
+        $consultaUsuarioStmt->fetch();
+        $consultaUsuarioStmt->close();
 
-        if ($usuariosStmt->execute()) {
-            // Devolvemos el resultado
-            $exito = "El usuario ha sido eliminado correctamente";
+        if ($usuarioExiste == 0) {
+            $error = "El usuario no existe";
         } else {
-            $error = "Error al eliminar el usuario";
+            // Consulta para eliminar el usuario
+            $usuariosQuery = "DELETE FROM usuarios WHERE id_usuario = ?";
+            $usuariosStmt = $conexion->prepare($usuariosQuery);
+            $usuariosStmt->bind_param("s", $id);
+
+            if ($usuariosStmt->execute()) {
+                // Devolvemos el resultado
+                $exito = "El usuario ha sido eliminado con éxito. Recarga la página para actualizar los cambios";
+            } else {
+                $error = "Error al eliminar el usuario";
+            }
+
+            $usuariosStmt->close();
         }
 
-        $usuariosStmt->close();
         // Cerrar la conexión
         $conexion->close();
     } else {
