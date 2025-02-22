@@ -125,6 +125,42 @@ export function sinResultado() {
 
     return container;
 }
+export function sinResultadoMensaje(mensaje) {
+    // Crear el contenedor principal
+    const container = document.createElement("div");
+    container.className = "d-flex justify-content-center align-items-center mt-5";
+    container.id = "sinResultado";
+    // Crear la tarjeta
+    const card = document.createElement("div");
+    card.className = "sinResultadoPersonalizado card text-center shadow";
+
+
+    // Crear el cuerpo de la tarjeta
+    const cardBody = document.createElement("div");
+    cardBody.className = "card-body";
+
+    // Crear el título
+    const cardTitle = document.createElement("h5");
+    cardTitle.className = "card-title fw-bold";
+    cardTitle.textContent = "Sin resultados";
+
+    // Crear el texto
+    const cardText = document.createElement("p");
+    cardText.className = "card-text";
+    cardText.textContent = mensaje;
+
+    // Agregar título y texto al cuerpo de la tarjeta
+    cardBody.appendChild(cardTitle);
+    cardBody.appendChild(cardText);
+
+    // Agregar el cuerpo a la tarjeta
+    card.appendChild(cardBody);
+
+    // Agregar la tarjeta al contenedor principal
+    container.appendChild(card);
+
+    return container;
+}
 /*Relaciones */
 export async function eliminarSeguimiento(idUsuario, idSeguido) {
     const datos = {
