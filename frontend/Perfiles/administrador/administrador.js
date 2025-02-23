@@ -603,39 +603,7 @@ async function iniciarAdministradir() {
 
         const divListas = document.getElementById('totalListasResultado');
         if (listasDeJuegos.length == 0) {
-            // Crear el contenedor principal
-            const cardDiv = document.createElement('div');
-            cardDiv.classList.add('card', 'mt-2', 'cardSinListaDeJuegos');
-
-            // Crear el cuerpo de la tarjeta
-            const cardBodyDiv = document.createElement('div');
-            cardBodyDiv.classList.add('card-body', 'd-flex', 'align-items-center', 'justify-content-between', 'flex-column');
-
-            // Crear el icono
-            const icon = document.createElement('i');
-            icon.classList.add('text-center', 'fs-2', 'bi', 'bi-bookmark-heart-fill');
-
-            // Crear el título
-            const cardTitle = document.createElement('h5');
-            cardTitle.classList.add('card-title', 'fw-bold', 'text-center');
-            cardTitle.textContent = 'No hay listas disponibles en este momento';
-
-            // Crear el texto descriptivo
-            const cardText = document.createElement('p');
-            cardText.classList.add('card-text', 'text-center');
-            cardText.textContent = '¡Vuelve más tarde para comprobar si se ha creado alguna lista!';
-
-            // Agregar los elementos al cuerpo de la tarjeta
-            cardBodyDiv.appendChild(icon);
-            cardBodyDiv.appendChild(cardTitle);
-            cardBodyDiv.appendChild(cardText);
-
-            // Agregar el cuerpo de la tarjeta al contenedor principal
-            cardDiv.appendChild(cardBodyDiv);
-
-            // Agregar la tarjeta al cuerpo del documento (o a otro elemento específico)
-            divListas.appendChild(cardDiv);
-
+            divListas.appendChild(sinResultadoMensaje('No se han encontrado listas registradas'));
         } else {
             const fragment = document.createDocumentFragment(); // Crear el fragmento
             listasDeJuegos.forEach(lista => {

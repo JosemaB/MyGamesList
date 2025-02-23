@@ -1,8 +1,8 @@
-CREATE DATABASE SuperGamesList;
-USE SuperGamesList;
+CREATE DATABASE mygameslist;
+USE mygameslist;
 
 -- Tabla de Roles
-CREATE TABLE Roles (
+CREATE TABLE roles (
     id_rol INT PRIMARY KEY AUTO_INCREMENT,
     nombre_rol VARCHAR(50) NOT NULL,
     descripcion TEXT
@@ -24,11 +24,12 @@ CREATE TABLE usuarios (
     discord VARCHAR(255) DEFAULT NULL,
     PRIMARY KEY (id_usuario),
     UNIQUE KEY email (email),
-    KEY id_rol (id_rol) FOREIGN KEY (id_rol) REFERENCES roles(id_rol) ON UPDATE CASCADE ON DELETE CASCADE
+    KEY id_rol (id_rol),
+    FOREIGN KEY (id_rol) REFERENCES roles(id_rol) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 -- Tabla de Listas
-CREATE TABLE Listas (
+CREATE TABLE listas (
     id_lista INT PRIMARY KEY AUTO_INCREMENT,
     id_usuario INT NOT NULL,
     nombre_lista VARCHAR(100) NOT NULL,
@@ -37,30 +38,30 @@ CREATE TABLE Listas (
 );
 
 -- Tabla de Lista_Videojuegos
-CREATE TABLE Lista_Videojuegos (
+CREATE TABLE lista_videojuegos (
     id_juego INT NOT NULL AUTO_INCREMENT,
     id_lista INT NOT NULL,
     titulo VARCHAR(255) NOT NULL,
     image VARCHAR(500) NOT NULL,
     PRIMARY KEY (id_juego),
-    FOREIGN KEY (id_lista) REFERENCES Listas(id_lista) ON DELETE CASCADE On UPDATE
+    FOREIGN KEY (id_lista) REFERENCES Listas(id_lista) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 
 -- Tabla de Seguidores
 CREATE TABLE relaciones (
-    id_seguimiento INT(11) PRIMARY KEY AUTO_INCREMENT,  -- Identificador único para cada relación
-    id_usuario INT(11) NOT NULL,      -- El usuario que está siguiendo a otro
-    id_seguidor INT(11) NOT NULL,    -- El usuario que está siendo seguido
-    fecha_seguimiento DATETIME DEFAULT CURRENT_TIMESTAMP,  -- Fecha en la que se empezó a seguir
-    UNIQUE KEY unique_follow (id_usuario, id_seguidor),   -- Para evitar duplicados (un usuario no puede seguir a otro más de una vez)
-    FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE ON UPDATE CASCADE,  -- Eliminar o actualizar seguidores cuando se elimina o actualiza el usuario
-    FOREIGN KEY (id_seguidor) REFERENCES usuarios(id) ON DELETE CASCADE ON UPDATE CASCADE  -- Eliminar o actualizar cuando se elimina o actualiza el seguidor
+    id_seguimiento INT(11) PRIMARY KEY AUTO_INCREMENT,
+    id_usuario INT(11) NOT NULL,
+    id_seguidor INT(11) NOT NULL,
+    fecha_seguimiento DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY unique_follow (id_usuario, id_seguidor),
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (id_seguidor) REFERENCES usuarios(id_usuario) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 
 -- Tabla de Reseñas
-CREATE TABLE Resenas (
+CREATE TABLE resenas (
     id_resena INT PRIMARY KEY AUTO_INCREMENT,
     id_usuario INT,
     id_videojuego_api VARCHAR(100) NOT NULL,
@@ -71,12 +72,23 @@ CREATE TABLE Resenas (
         ON DELETE CASCADE
 );
 
-//Tabla password_resets 
+-- Crear la tabla sin el valor por defecto para expires_at
 CREATE TABLE password_resets (
     id INT(11) AUTO_INCREMENT PRIMARY KEY,              -- ID único para la solicitud de restablecimiento
     email VARCHAR(100) NOT NULL,                        -- Email del usuario que está recuperando la contraseña
     token VARCHAR(255) NOT NULL,                        -- Token único generado para la recuperación
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,     -- Fecha y hora en la que se creó la solicitud
-    expires_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP + INTERVAL 1 HOUR, -- Fecha de expiración del token (1 hora desde la creación)
+    expires_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,     -- Fecha de expiración del token (se actualizará por el trigger)
     UNIQUE (token)                                      -- Asegura que el token sea único
 );
+
+-- Crear el trigger para calcular expires_at automáticamente
+DELIMITER //
+
+CREATE TRIGGER set_expires_at BEFORE INSERT ON password_resets
+FOR EACH ROW
+BEGIN
+    SET NEW.expires_at = NOW() + INTERVAL 1 HOUR;
+END; //
+
+DELIMITER ;
